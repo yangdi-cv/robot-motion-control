@@ -60,4 +60,4 @@ python3 tools/audit_saved_results.py
 
 ## English edition
 
-[Complete English PDF — 177 pages](english/build/main_en.pdf) · [LaTeX sources and build instructions](english/README.md). All chapters, appendices, tables and captions are translated. Original experiment figures and videos are shared with the Chinese edition.
+[Complete English PDF — 160 pages](english/build/main_en.pdf) · [LaTeX sources and build instructions](english/README.md). All chapters, appendices, tables and captions are translated. Original experiment figures and videos are shared with the Chinese edition.

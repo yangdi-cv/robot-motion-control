@@ -7,15 +7,15 @@
   },
   {
     "path": "PROJECT_LOG.md",
-    "bytes": 174950,
-    "sha256": "c8963f3a03e8f530805bd9ce7725d58108168579a3ba55d5c099949212bbfef2",
+    "bytes": 175385,
+    "sha256": "6f81f06d121155fb933b022e25e47d5cabea33e8433dbc02ea746ac8e2c4e6f9",
     "original_sha256": "73e0c4a5b405e239d6e3900cd421e095ebbcde70d8621b1262a581b23eee1280",
     "changed_for_export": false
   },
   {
     "path": "README.md",
     "bytes": 5721,
-    "sha256": "61cc9404ee30e87bd04faf76f94c312fef7eeeb6a5e7ab4217954167c8e6ff52",
+    "sha256": "8fd72c1d2eb2fb73be76f62d85bd8da30d710aad3b54991b2df4f18203fa0cd5",
     "added_for_repository": true
   },
   {
@@ -4239,7 +4239,7 @@
   {
     "path": "reports/bytedance_engineering/README.md",
     "bytes": 4803,
-    "sha256": "2cb8c3f1ec3b7e3f17703ff6dd6610662009edfc7ca32808d81eba7de1324983",
+    "sha256": "b92d5c4ff502a258857000ec3f6d00840a1401745a9db98229df1e87efc63087",
     "original_sha256": "a96027e9a3dc11c17a41ab308df166635ddb19a5eea7ff7fb5c92cf5cbfcad1c",
     "changed_for_export": false
   },
@@ -4602,13 +4602,19 @@
     "path": "reports/bytedance_engineering/english/BUILD_DIAGNOSTICS.json",
     "added_for_repository": true,
     "bytes": 213,
-    "sha256": "3b5666ab789ba0b9a5ae5a55f648d23290f98fd2ab46d82a7d8d5ca5ea06682f"
+    "sha256": "b31d2d25aee108469c68a1e1275857691207895e4d42d9f3db0fc6c8a3a2d36b"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/FONT_INFO.json",
+    "added_for_repository": true,
+    "bytes": 533,
+    "sha256": "fc430edd3c35cb2f7fbb8caf6abb35d601e34a612bec8eda3ee2f31898eb69e7"
   },
   {
     "path": "reports/bytedance_engineering/english/README.md",
     "added_for_repository": true,
-    "bytes": 1509,
-    "sha256": "eb72354d2e9157e1fb379de8a064b189e551bc7ebe4d31f1959778a2ec042008"
+    "bytes": 1674,
+    "sha256": "441e9dbe2a0ce17c1571f736ad4da392162e8564153855cec51963dee57fb030"
   },
   {
     "path": "reports/bytedance_engineering/english/TRANSLATION_CHECK.json",
@@ -4620,7 +4626,7 @@
     "path": "reports/bytedance_engineering/english/VALIDATION.json",
     "added_for_repository": true,
     "bytes": 4421,
-    "sha256": "1313d65447c6b815bd45f3065e9420fbf0ca85f66f1af4b01ea0c2116c90c593"
+    "sha256": "9bb724c482fdcf80274f2f945c84343f6d925d7bfb90acfe837e259abdffe907"
   },
   {
     "path": "reports/bytedance_engineering/english/appendices/code_map.tex",
@@ -4655,8 +4661,8 @@
   {
     "path": "reports/bytedance_engineering/english/build/main_en.pdf",
     "added_for_repository": true,
-    "bytes": 22981457,
-    "sha256": "9a5eb8263191264604a4c41607e9176383cb3ce760cceac1cb9ad15b952791c0"
+    "bytes": 22979784,
+    "sha256": "0afa35f48c0aca0dfcbf47e674e701580c531cc9970ecd10845e735eaa5bfebf"
   },
   {
     "path": "reports/bytedance_engineering/english/chapters/00_abstract.tex",
@@ -4685,8 +4691,8 @@
   {
     "path": "reports/bytedance_engineering/english/chapters/04_contact.tex",
     "added_for_repository": true,
-    "bytes": 41767,
-    "sha256": "41269b816d749b386920acfd0b23f41537d79fb81a539190d1d39ceb6f18db5c"
+    "bytes": 41799,
+    "sha256": "9a38e00d1dd2d12f4a3ed8eae7c663fec246095b88cf0437505b8a60e861afa1"
   },
   {
     "path": "reports/bytedance_engineering/english/chapters/05_optimization.tex",
@@ -4703,8 +4709,8 @@
   {
     "path": "reports/bytedance_engineering/english/chapters/07_biped.tex",
     "added_for_repository": true,
-    "bytes": 38550,
-    "sha256": "2104e8a2fe8a8100dda58b100744b997ff480613aef6bf33cf945d9af7f48b93"
+    "bytes": 38582,
+    "sha256": "acbf6fcfe7af2e5618c99b533e9ab0a99bd40c02879ee12f9e7721c7e7c5bae4"
   },
   {
     "path": "reports/bytedance_engineering/english/chapters/08_humanoid.tex",
@@ -4733,8 +4739,8 @@
   {
     "path": "reports/bytedance_engineering/english/preamble.tex",
     "added_for_repository": true,
-    "bytes": 1752,
-    "sha256": "3d0c214f1f700f5b9d172bf6b1a25e38dffc456789838502843f8f3f1bb5f4e3"
+    "bytes": 1807,
+    "sha256": "f507a3684711fb84e21ffaa057ae5b80540f54ed0dfd46bddf129289ce8bf399"
   },
   {
     "path": "reports/bytedance_engineering/english/references.tex",

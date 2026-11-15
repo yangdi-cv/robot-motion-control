@@ -270,7 +270,7 @@ Joint trajectories are completed within 0–5 seconds, after which the end-effec
 
 \subsection{Control Methods and Code}\label{s11-detail-2}
 
-The fifth-order interpolation s(u) = 10u³ − 15u⁴ + 6u⁵, where u = t/5. The output of the standard PID is directly used as joint torque, with the D term using measured angular velocity to avoid differential impact caused by target jumps. The seven-axis gains are configured according to inertia differences, and both main conditions are identical. Gravity is uniformly disabled to isolate the trajectory from contact behavior in this phase. Gain units are: Kp: Nm/rad, Kd: Nm·s/rad, Ki: Nm/(rad·s).
+The fifth-order interpolation s(u) = 10u³ − 15u\textsuperscript{4} + 6u\textsuperscript{5}, where u = t/5. The output of the standard PID is directly used as joint torque, with the D term using measured angular velocity to avoid differential impact caused by target jumps. The seven-axis gains are configured according to inertia differences, and both main conditions are identical. Gravity is uniformly disabled to isolate the trajectory from contact behavior in this phase. Gain units are: Kp: Nm/rad, Kd: Nm·s/rad, Ki: Nm/(rad·s).
 
 \begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
 error = q_reference - q

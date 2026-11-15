@@ -25,7 +25,7 @@
     {
       "source": "chapters/04_contact.tex",
       "source_sha256": "09b4bbd817b5d51dec5481c6052487ccfbe3b0e94163512b587ee1250d6db3d7",
-      "english_sha256": "41269b816d749b386920acfd0b23f41537d79fb81a539190d1d39ceb6f18db5c"
+      "english_sha256": "9a38e00d1dd2d12f4a3ed8eae7c663fec246095b88cf0437505b8a60e861afa1"
     },
     {
       "source": "chapters/05_optimization.tex",
@@ -40,7 +40,7 @@
     {
       "source": "chapters/07_biped.tex",
       "source_sha256": "228338d0081fdc9e5b57fb4fce9ca8a290d026d9cd3f967829cd92991388f97b",
-      "english_sha256": "2104e8a2fe8a8100dda58b100744b997ff480613aef6bf33cf945d9af7f48b93"
+      "english_sha256": "acbf6fcfe7af2e5618c99b533e9ab0a99bd40c02879ee12f9e7721c7e7c5bae4"
     },
     {
       "source": "chapters/08_humanoid.tex",
@@ -89,8 +89,8 @@
   "longtables": 81,
   "unique_figure_assets": 97,
   "video_references": 22,
-  "english_pdf_pages": 177,
-  "english_pdf_sha256": "9a5eb8263191264604a4c41607e9176383cb3ce760cceac1cb9ad15b952791c0",
+  "english_pdf_pages": 160,
+  "english_pdf_sha256": "0afa35f48c0aca0dfcbf47e674e701580c531cc9970ecd10845e735eaa5bfebf",
   "chinese_pdf_sha256": "f89c287e17d38e79e46e9c59067dcdb1fad276c1bfed157e2bd9b071d2323d9a",
   "original_embedded_screenshot_text_retained": true,
   "checks": "All source files, section counts, table cells, figure/video paths, citations, labels and font glyphs passed."
