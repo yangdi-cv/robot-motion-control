@@ -1,0 +1,3647 @@
+{
+  "totals": {
+    "network": {
+      "n": 1188,
+      "passed": 692,
+      "reasons": {
+        "support_reach_exceeded": 399,
+        "stale_feedback": 68,
+        "terminal_balance_not_recovered": 27,
+        "route_shift_exceeded": 2
+      }
+    },
+    "gait": {
+      "n": 423,
+      "passed": 175,
+      "reasons": {
+        "cop_rate_infeasible": 135,
+        "support_reach_exceeded": 95,
+        "initial_swing_infeasible": 18
+      }
+    },
+    "biped": {
+      "n": 51,
+      "passed": 50,
+      "reasons": {
+        "body_tilt_or_height": 1
+      }
+    }
+  },
+  "network_rates": [
+    {
+      "method": "capture",
+      "sensor": 25,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 75.0,
+      "age95_ms": 50.00000000000001
+    },
+    {
+      "method": "capture",
+      "sensor": 25,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 87.5,
+      "age95_ms": 55.0
+    },
+    {
+      "method": "capture",
+      "sensor": 100,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    },
+    {
+      "method": "capture",
+      "sensor": 100,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 50.10869565217392,
+      "age95_ms": 25.000000000000004
+    },
+    {
+      "method": "capture",
+      "sensor": 200,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    },
+    {
+      "method": "capture",
+      "sensor": 200,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 25,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 75.0,
+      "age95_ms": 50.00000000000001
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 25,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 87.5,
+      "age95_ms": 55.0
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 100,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 100,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 50.10869565217392,
+      "age95_ms": 25.000000000000004
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 200,
+      "hz": 100,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    },
+    {
+      "method": "capture_predict",
+      "sensor": 200,
+      "hz": 200,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "repeat_pct": 0.21739130434782608,
+      "age95_ms": 20.0
+    }
+  ],
+  "traffic_methods": {
+    "capture": {
+      "n": 288,
+      "passed": 140,
+      "reasons": {
+        "support_reach_exceeded": 148
+      }
+    },
+    "lqr_predict": {
+      "n": 288,
+      "passed": 140,
+      "reasons": {
+        "support_reach_exceeded": 142,
+        "stale_feedback": 6
+      }
+    },
+    "capture_predict": {
+      "n": 288,
+      "passed": 280,
+      "reasons": {
+        "stale_feedback": 8
+      }
+    }
+  },
+  "noise": [
+    {
+      "method": "capture",
+      "mode": "white",
+      "n": 24,
+      "passed": 12,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    {
+      "method": "capture",
+      "mode": "colored",
+      "n": 24,
+      "passed": 12,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    {
+      "method": "capture",
+      "mode": "drift",
+      "n": 24,
+      "passed": 3,
+      "reasons": {
+        "terminal_balance_not_recovered": 7,
+        "support_reach_exceeded": 14
+      }
+    },
+    {
+      "method": "lqr_predict",
+      "mode": "white",
+      "n": 24,
+      "passed": 12,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    {
+      "method": "lqr_predict",
+      "mode": "colored",
+      "n": 24,
+      "passed": 12,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    {
+      "method": "lqr_predict",
+      "mode": "drift",
+      "n": 24,
+      "passed": 3,
+      "reasons": {
+        "terminal_balance_not_recovered": 6,
+        "support_reach_exceeded": 15
+      }
+    },
+    {
+      "method": "capture_predict",
+      "mode": "white",
+      "n": 24,
+      "passed": 24,
+      "reasons": {}
+    },
+    {
+      "method": "capture_predict",
+      "mode": "colored",
+      "n": 24,
+      "passed": 24,
+      "reasons": {}
+    },
+    {
+      "method": "capture_predict",
+      "mode": "drift",
+      "n": 24,
+      "passed": 6,
+      "reasons": {
+        "terminal_balance_not_recovered": 14,
+        "support_reach_exceeded": 4
+      }
+    }
+  ],
+  "bursts": [
+    {
+      "method": "capture",
+      "max_age": 0.15,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.72,
+        2.72,
+        2.72
+      ]
+    },
+    {
+      "method": "capture",
+      "max_age": 0.3,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.87,
+        2.87,
+        2.87
+      ]
+    },
+    {
+      "method": "capture",
+      "max_age": 1.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "stop_times_s": [
+        3.107,
+        3.107,
+        3.083
+      ]
+    },
+    {
+      "method": "lqr_predict",
+      "max_age": 0.15,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.72,
+        2.72,
+        2.72
+      ]
+    },
+    {
+      "method": "lqr_predict",
+      "max_age": 0.3,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.87,
+        2.87,
+        2.87
+      ]
+    },
+    {
+      "method": "lqr_predict",
+      "max_age": 1.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "stop_times_s": [
+        3.299,
+        3.295,
+        3.285
+      ]
+    },
+    {
+      "method": "capture_predict",
+      "max_age": 0.15,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.72,
+        2.72,
+        2.72
+      ]
+    },
+    {
+      "method": "capture_predict",
+      "max_age": 0.3,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "stale_feedback": 3
+      },
+      "stop_times_s": [
+        2.87,
+        2.87,
+        2.87
+      ]
+    },
+    {
+      "method": "capture_predict",
+      "max_age": 1.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "stop_times_s": [
+        3.298,
+        3.295,
+        3.285
+      ]
+    }
+  ],
+  "support": [
+    {
+      "method": "fixed",
+      "ds": 0.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    },
+    {
+      "method": "fixed",
+      "ds": 0.12,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    },
+    {
+      "method": "fixed",
+      "ds": 0.2,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "duration_mean_s": 7.400000000000001,
+      "route_error_mean_m": 0.0008461658832504708
+    },
+    {
+      "method": "spatial",
+      "ds": 0.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    },
+    {
+      "method": "spatial",
+      "ds": 0.12,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "duration_mean_s": 7.400000000000001,
+      "route_error_mean_m": 0.06866754507243132
+    },
+    {
+      "method": "spatial",
+      "ds": 0.2,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    },
+    {
+      "method": "timing",
+      "ds": 0.0,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    },
+    {
+      "method": "timing",
+      "ds": 0.12,
+      "n": 3,
+      "passed": 3,
+      "reasons": {},
+      "duration_mean_s": 7.45,
+      "route_error_mean_m": 0.12731631028298038
+    },
+    {
+      "method": "timing",
+      "ds": 0.2,
+      "n": 3,
+      "passed": 0,
+      "reasons": {
+        "support_reach_exceeded": 3
+      },
+      "duration_mean_s": null,
+      "route_error_mean_m": null
+    }
+  ],
+  "swing_limits": [
+    {
+      "method": "fixed",
+      "speed": 1.2,
+      "n": 9,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "initial_swing_infeasible": 6
+      }
+    },
+    {
+      "method": "fixed",
+      "speed": 1.8,
+      "n": 9,
+      "passed": 3,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "support_reach_exceeded": 3
+      }
+    },
+    {
+      "method": "fixed",
+      "speed": 2.4,
+      "n": 9,
+      "passed": 3,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "support_reach_exceeded": 3
+      }
+    },
+    {
+      "method": "spatial",
+      "speed": 1.2,
+      "n": 9,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "initial_swing_infeasible": 6
+      }
+    },
+    {
+      "method": "spatial",
+      "speed": 1.8,
+      "n": 9,
+      "passed": 5,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "support_reach_exceeded": 1
+      }
+    },
+    {
+      "method": "spatial",
+      "speed": 2.4,
+      "n": 9,
+      "passed": 6,
+      "reasons": {
+        "cop_rate_infeasible": 3
+      }
+    },
+    {
+      "method": "timing",
+      "speed": 1.2,
+      "n": 9,
+      "passed": 0,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "initial_swing_infeasible": 6
+      }
+    },
+    {
+      "method": "timing",
+      "speed": 1.8,
+      "n": 9,
+      "passed": 5,
+      "reasons": {
+        "cop_rate_infeasible": 3,
+        "support_reach_exceeded": 1
+      }
+    },
+    {
+      "method": "timing",
+      "speed": 2.4,
+      "n": 9,
+      "passed": 6,
+      "reasons": {
+        "cop_rate_infeasible": 3
+      }
+    }
+  ],
+  "timing_samples": [
+    {
+      "method": "fixed",
+      "config": {
+        "method": "fixed",
+        "ds": 0.12,
+        "step_time": 0.6,
+        "step_length": 0.18,
+        "step_width": 0.14,
+        "steps": 10,
+        "settle": 2.0,
+        "dt": 0.001,
+        "hz": 100,
+        "height": 0.8,
+        "impulse_x": 12.0,
+        "impulse_y": 0.0,
+        "push_time": 2.7,
+        "push_duration": 0.1,
+        "seed": 0,
+        "noise_position": 0.001,
+        "noise_velocity": 0.01,
+        "swing_speed": 1.8,
+        "swing_acceleration": 30.0,
+        "cop_speed": 5.0,
+        "mass": 30.0,
+        "friction": 0.6
+      },
+      "success": false,
+      "reason": "support_reach_exceeded",
+      "duration_s": 4.179,
+      "touchdowns": [
+        [
+          0.6,
+          0.18,
+          -0.07,
+          0.0,
+          0.0
+        ],
+        [
+          1.2,
+          0.36,
+          0.07,
+          0.0,
+          0.0
+        ],
+        [
+          1.8,
+          0.54,
+          -0.07,
+          0.0,
+          0.0
+        ],
+        [
+          2.4,
+          0.72,
+          0.07,
+          0.0,
+          0.0
+        ],
+        [
+          3.0,
+          0.8999999999999999,
+          -0.07,
+          0.0,
+          0.0
+        ],
+        [
+          3.6,
+          1.08,
+          0.07,
+          0.0,
+          0.0
+        ]
+      ],
+      "plans": 0,
+      "terminal_distance_m": 0.3509306591554862,
+      "terminal_speed_m_s": 0.9890366145934221,
+      "terminal_original_route_error_m": 0.20964402618604563,
+      "max_swing_speed_bound_m_s": 1.4823176532039255,
+      "max_swing_acceleration_bound_m_s2": 10.842010413886117,
+      "max_physics_cop_jump_m": 0.050000000000000044,
+      "initial_swing_bounds": [
+        1.4823176532039246,
+        10.8420104138861
+      ],
+      "tail_distance_rmse_m": 0.20457033119186935,
+      "source_sha256": "81ffc22d39ee9ec36a5ff67fa4802c3a3530b947d52541f24061902161855491"
+    },
+    {
+      "method": "spatial",
+      "config": {
+        "method": "spatial",
+        "ds": 0.12,
+        "step_time": 0.6,
+        "step_length": 0.18,
+        "step_width": 0.14,
+        "steps": 10,
+        "settle": 2.0,
+        "dt": 0.001,
+        "hz": 100,
+        "height": 0.8,
+        "impulse_x": 12.0,
+        "impulse_y": 0.0,
+        "push_time": 2.7,
+        "push_duration": 0.1,
+        "seed": 0,
+        "noise_position": 0.001,
+        "noise_velocity": 0.01,
+        "swing_speed": 1.8,
+        "swing_acceleration": 30.0,
+        "cop_speed": 5.0,
+        "mass": 30.0,
+        "friction": 0.6
+      },
+      "success": true,
+      "reason": null,
+      "duration_s": 7.4,
+      "touchdowns": [
+        [
+          0.6,
+          0.18,
+          -0.07,
+          0.0,
+          0.0
+        ],
+        [
+          1.2,
+          0.357819714665893,
+          0.07063165552614703,
+          -0.0021802853341069683,
+          0.0006316555261470236
+        ],
+        [
+          1.8,
+          0.5301308767903214,
+          -0.07037442828094659,
+          -0.009869123209678587,
+          -0.00037442828094658154
+        ],
+        [
+          2.4,
+          0.7101308767903214,
+          0.06962557171905343,
+          -0.009869123209678587,
+          -0.00037442828094658154
+        ],
+        [
+          3.0,
+          0.9669728092743739,
+          -0.07034242776476168,
+          0.06697280927437399,
+          -0.0003424277647616769
+        ],
+        [
+          3.6,
+          1.1568400017785874,
+          0.06867872605583339,
+          0.0768400017785873,
+          -0.0013212739441666177
+        ],
+        [
+          4.2,
+          1.3368400017785873,
+          -0.07132127394416662,
+          0.0768400017785873,
+          -0.0013212739441666177
+        ],
+        [
+          4.8,
+          1.5168400017785872,
+          0.06867872605583339,
+          0.0768400017785873,
+          -0.0013212739441666177
+        ],
+        [
+          5.4,
+          1.6968400017785872,
+          -0.07132127394416662,
+          0.0768400017785873,
+          -0.0013212739441666177
+        ]
+      ],
+      "plans": 20,
+      "terminal_distance_m": 0.0007553079089560159,
+      "terminal_speed_m_s": 0.00157399476024473,
+      "terminal_original_route_error_m": 0.0766736661314521,
+      "max_swing_speed_bound_m_s": 1.7696255622995287,
+      "max_swing_acceleration_bound_m_s2": 17.185356374247984,
+      "max_physics_cop_jump_m": 0.050000000000000044,
+      "initial_swing_bounds": [
+        1.4823176532039246,
+        10.8420104138861
+      ],
+      "tail_distance_rmse_m": 0.0008584269223496269,
+      "source_sha256": "81ffc22d39ee9ec36a5ff67fa4802c3a3530b947d52541f24061902161855491"
+    },
+    {
+      "method": "timing",
+      "config": {
+        "method": "timing",
+        "ds": 0.12,
+        "step_time": 0.6,
+        "step_length": 0.18,
+        "step_width": 0.14,
+        "steps": 10,
+        "settle": 2.0,
+        "dt": 0.001,
+        "hz": 100,
+        "height": 0.8,
+        "impulse_x": 12.0,
+        "impulse_y": 0.0,
+        "push_time": 2.7,
+        "push_duration": 0.1,
+        "seed": 0,
+        "noise_position": 0.001,
+        "noise_velocity": 0.01,
+        "swing_speed": 1.8,
+        "swing_acceleration": 30.0,
+        "cop_speed": 5.0,
+        "mass": 30.0,
+        "friction": 0.6
+      },
+      "success": true,
+      "reason": null,
+      "duration_s": 7.45,
+      "touchdowns": [
+        [
+          0.6,
+          0.18,
+          -0.07,
+          0.0,
+          0.0
+        ],
+        [
+          1.2,
+          0.357819714665893,
+          0.07063165552614703,
+          -0.0021802853341069683,
+          0.0006316555261470236
+        ],
+        [
+          1.8,
+          0.5301308767903214,
+          -0.07037442828094659,
+          -0.009869123209678587,
+          -0.00037442828094658154
+        ],
+        [
+          2.4,
+          0.7101308767903214,
+          0.06962557171905343,
+          -0.009869123209678587,
+          -0.00037442828094658154
+        ],
+        [
+          3.0,
+          1.013486938596496,
+          -0.07194975871656001,
+          0.11348693859649606,
+          -0.0019497587165600017
+        ],
+        [
+          3.65,
+          1.1999683727554518,
+          0.0695025265547218,
+          0.11996837275545169,
+          -0.0004974734452782015
+        ],
+        [
+          4.25,
+          1.3799683727554517,
+          -0.07049747344527821,
+          0.11996837275545169,
+          -0.0004974734452782015
+        ],
+        [
+          4.8500000000000005,
+          1.5599683727554516,
+          0.0695025265547218,
+          0.11996837275545169,
+          -0.0004974734452782015
+        ],
+        [
+          5.45,
+          1.7399683727554516,
+          -0.07049747344527821,
+          0.11996837275545169,
+          -0.0004974734452782015
+        ]
+      ],
+      "plans": 21,
+      "terminal_distance_m": 0.0008361218101889708,
+      "terminal_speed_m_s": 0.0018038975736183252,
+      "terminal_original_route_error_m": 0.11980807257409072,
+      "max_swing_speed_bound_m_s": 1.7619045633471564,
+      "max_swing_acceleration_bound_m_s2": 29.773609029435033,
+      "max_physics_cop_jump_m": 0.050000000000000044,
+      "initial_swing_bounds": [
+        1.4823176532039246,
+        10.8420104138861
+      ],
+      "tail_distance_rmse_m": 0.0008049890079269838,
+      "source_sha256": "81ffc22d39ee9ec36a5ff67fa4802c3a3530b947d52541f24061902161855491"
+    }
+  ],
+  "biped_cases": [
+    {
+      "id": "3b3cca2924c01f1e",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6194154454990296,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.12392676891471595,
+      "contact_samples_above5N": [
+        3995,
+        3265
+      ],
+      "max_dynamics_qp_residual": 3.8353866067555864e-05,
+      "qp_solve_p95_ms": 0.9481458501795714,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.807986300045885,
+      "terminal_foot_error_m": 0.002132704610845755,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        10.31640594808055,
+        50.89623218094934,
+        19.053207672836727,
+        10.358409118584392,
+        46.63650830483014,
+        19.009637784842422
+      ],
+      "max_poststart_torque_step_Nm": 52.91666425657397,
+      "max_measured_foot_speed_m_s": 0.6671474700981387
+    },
+    {
+      "id": "0d804283b37fdfe8",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6194153790674635,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4296979739685349,
+      "contact_samples_above5N": [
+        3995,
+        3265
+      ],
+      "max_dynamics_qp_residual": 3.835155511922039e-05,
+      "qp_solve_p95_ms": 1.0005948997786618,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.807939892332759,
+      "terminal_foot_error_m": 0.0021321742091784616,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        10.3164318676791,
+        50.89609066893297,
+        19.053207672836727,
+        10.358044998226944,
+        46.63650830483014,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.91649340975764,
+      "max_measured_foot_speed_m_s": 0.6671474700981387
+    },
+    {
+      "id": "91d3d98d2aa47686",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6194154214273597,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.1939654213207876,
+      "contact_samples_above5N": [
+        3998,
+        3265
+      ],
+      "max_dynamics_qp_residual": 3.835303771123483e-05,
+      "qp_solve_p95_ms": 1.1137122497530074,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.8079694266842457,
+      "terminal_foot_error_m": 0.0021325122154565983,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        10.316422755403478,
+        50.89618094076038,
+        19.053207672836727,
+        10.358277050086544,
+        46.63650830483014,
+        24.8323519346183
+      ],
+      "max_poststart_torque_step_Nm": 52.91660238195356,
+      "max_measured_foot_speed_m_s": 0.6671474700981387
+    },
+    {
+      "id": "8bc8420a879d7888",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6192883716429041,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.06111611117951076,
+      "contact_samples_above5N": [
+        4021,
+        3289
+      ],
+      "max_dynamics_qp_residual": 4.538416921141125e-05,
+      "qp_solve_p95_ms": 0.9416960001999541,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.4283192678431633,
+      "terminal_foot_error_m": 0.0010902646796517386,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.716973314225717,
+        50.643210788780436,
+        18.192121167586272,
+        9.758108493523233,
+        46.190159629035534,
+        18.20628686878224
+      ],
+      "max_poststart_torque_step_Nm": 52.47316838865784,
+      "max_measured_foot_speed_m_s": 0.6526128950605817
+    },
+    {
+      "id": "7417473ac4c1611b",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.61928836269103,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.20670080714835504,
+      "contact_samples_above5N": [
+        4023,
+        3289
+      ],
+      "max_dynamics_qp_residual": 4.5622897424046904e-05,
+      "qp_solve_p95_ms": 0.9513467005035635,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.4283192678431633,
+      "terminal_foot_error_m": 0.0010901193995139626,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.717086482809721,
+        50.64317261415631,
+        18.194578680903735,
+        9.758061918725804,
+        46.190159629035534,
+        24.046064223072026
+      ],
+      "max_poststart_torque_step_Nm": 52.47312472093845,
+      "max_measured_foot_speed_m_s": 0.6526128950605817
+    },
+    {
+      "id": "2a9d0ef849175a7c",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6192883528620715,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4347159854185489,
+      "contact_samples_above5N": [
+        4021,
+        3289
+      ],
+      "max_dynamics_qp_residual": 4.538416921141125e-05,
+      "qp_solve_p95_ms": 0.9783657501429839,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.4314852742432307,
+      "terminal_foot_error_m": 0.0010899343598514072,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.717213595309513,
+        50.64312464013001,
+        18.197660437368743,
+        9.758001790827786,
+        46.190159629035534,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.473069771700125,
+      "max_measured_foot_speed_m_s": 0.6526128950605817
+    },
+    {
+      "id": "74ba0a4c0de849ac",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6192118158302594,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.02983777559170191,
+      "contact_samples_above5N": [
+        4020,
+        3297
+      ],
+      "max_dynamics_qp_residual": 1.3309056214438897e-05,
+      "qp_solve_p95_ms": 0.9585226003764545,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.3875150345747045,
+      "terminal_foot_error_m": 0.0006902411169008803,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.492718440609332,
+        50.51566241418703,
+        17.865307267473078,
+        9.533664171185093,
+        45.95310012948519,
+        17.876010163391847
+      ],
+      "max_poststart_torque_step_Nm": 52.20959730821021,
+      "max_measured_foot_speed_m_s": 0.6460279950792104
+    },
+    {
+      "id": "9158ef6359f6707f",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.6192118051027738,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.215755927475606,
+      "contact_samples_above5N": [
+        4021,
+        3297
+      ],
+      "max_dynamics_qp_residual": 1.2861713059919566e-05,
+      "qp_solve_p95_ms": 0.9549921000598259,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.3875150345747045,
+      "terminal_foot_error_m": 0.0006900748884340897,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.49287302436933,
+        50.51561596870206,
+        17.865307267473078,
+        9.533608949228102,
+        45.95310012948519,
+        23.709557000220773
+      ],
+      "max_poststart_torque_step_Nm": 52.20954499530371,
+      "max_measured_foot_speed_m_s": 0.6460279950792104
+    },
+    {
+      "id": "760c720b0bb43104",
+      "config": {
+        "walk": true,
+        "step_length": 0.08,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.61921178592092,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4404307101697315,
+      "contact_samples_above5N": [
+        4018,
+        3297
+      ],
+      "max_dynamics_qp_residual": 3.975233014319457e-05,
+      "qp_solve_p95_ms": 0.934048049748526,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.3910979339507032,
+      "terminal_foot_error_m": 0.00068992119181933,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.492936554137755,
+        50.515570022688365,
+        17.867110762872404,
+        9.533560870880544,
+        45.95310012948519,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.2094935088805,
+      "max_measured_foot_speed_m_s": 0.6469247392489889
+    },
+    {
+      "id": "b1b55a061f037b0e",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370878105463674,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.17451272374902047,
+      "contact_samples_above5N": [
+        3997,
+        3264
+      ],
+      "max_dynamics_qp_residual": 1.4499545955004578e-05,
+      "qp_solve_p95_ms": 1.0510249496746837,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.8229667869659414,
+      "terminal_foot_error_m": 0.0009162085527352377,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        12.44052661418583,
+        50.723630074502054,
+        21.92093049556167,
+        12.499475841059857,
+        48.61572427698539,
+        21.850247094706155
+      ],
+      "max_poststart_torque_step_Nm": 52.66314523037398,
+      "max_measured_foot_speed_m_s": 0.9582173646026774
+    },
+    {
+      "id": "defd4118e279400a",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370877597185704,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.17428980642930322,
+      "contact_samples_above5N": [
+        4001,
+        3264
+      ],
+      "max_dynamics_qp_residual": 1.4514667896037281e-05,
+      "qp_solve_p95_ms": 0.9785486998225679,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.82296587349209,
+      "terminal_foot_error_m": 0.0009160372779133695,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        12.440617809590588,
+        50.72365592692199,
+        21.92093049556167,
+        12.499417933408537,
+        48.61572427698539,
+        22.889517418262134
+      ],
+      "max_poststart_torque_step_Nm": 52.66315591976034,
+      "max_measured_foot_speed_m_s": 0.9582173646026774
+    },
+    {
+      "id": "7fd57960d5eecaec",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370876580282745,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4052809299713092,
+      "contact_samples_above5N": [
+        3999,
+        3264
+      ],
+      "max_dynamics_qp_residual": 1.4826862980044098e-05,
+      "qp_solve_p95_ms": 0.9972881004614464,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.822964404363182,
+      "terminal_foot_error_m": 0.0009154870600123449,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        12.440422562623185,
+        50.723594975784025,
+        21.92093049556167,
+        12.499370206191221,
+        48.61572427698539,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.6630788383535,
+      "max_measured_foot_speed_m_s": 0.9582173646026774
+    },
+    {
+      "id": "62055a32b79deef1",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370273281741898,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.19459527037853896,
+      "contact_samples_above5N": [
+        4024,
+        3288
+      ],
+      "max_dynamics_qp_residual": 2.306692670582533e-05,
+      "qp_solve_p95_ms": 0.9377971004596474,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620555948328147,
+      "terminal_foot_error_m": 0.0007909223148719166,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.746292218959011,
+        51.046018905917485,
+        20.762733747455435,
+        11.806666773194443,
+        48.11449538854276,
+        22.051541320780856
+      ],
+      "max_poststart_torque_step_Nm": 51.5342754611302,
+      "max_measured_foot_speed_m_s": 0.9471226370758862
+    },
+    {
+      "id": "d5f4a37cdbdd87b0",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370272989585261,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.42377185181791827,
+      "contact_samples_above5N": [
+        4025,
+        3288
+      ],
+      "max_dynamics_qp_residual": 1.819050375406056e-05,
+      "qp_solve_p95_ms": 0.9375340005135513,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620555948328147,
+      "terminal_foot_error_m": 0.0007906122001265346,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.74664878561181,
+        51.04609555176772,
+        20.762733747455435,
+        11.806500097023495,
+        48.11449538854276,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 51.534338857043366,
+      "max_measured_foot_speed_m_s": 0.9479263961437234
+    },
+    {
+      "id": "50fd7bf306b7228d",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370284362604548,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.08634693702621961,
+      "contact_samples_above5N": [
+        4023,
+        3288
+      ],
+      "max_dynamics_qp_residual": 4.218546911261001e-05,
+      "qp_solve_p95_ms": 0.9495431007508158,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620555948328147,
+      "terminal_foot_error_m": 0.0007912003282992806,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.74618054307185,
+        51.046069280221005,
+        20.762733747455435,
+        11.806775853408608,
+        48.11449538854276,
+        20.731762714339208
+      ],
+      "max_poststart_torque_step_Nm": 51.53436562636781,
+      "max_measured_foot_speed_m_s": 0.9471226370758862
+    },
+    {
+      "id": "b92237eff8f9460c",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9369688285514243,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.04171974530381278,
+      "contact_samples_above5N": [
+        4013,
+        3290
+      ],
+      "max_dynamics_qp_residual": 1.1548202942662789e-05,
+      "qp_solve_p95_ms": 0.9316530499745568,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.577208179555488,
+      "terminal_foot_error_m": 0.0005583029254635892,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.484147511021813,
+        50.987079941415175,
+        20.246532252144174,
+        11.543920647568399,
+        47.833906815357885,
+        20.251711251325656
+      ],
+      "max_poststart_torque_step_Nm": 50.90790786185524,
+      "max_measured_foot_speed_m_s": 0.9418249452721364
+    },
+    {
+      "id": "4a77f5877b3e03af",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9369688291448565,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.2112105615398923,
+      "contact_samples_above5N": [
+        4014,
+        3290
+      ],
+      "max_dynamics_qp_residual": 1.1415497983016665e-05,
+      "qp_solve_p95_ms": 0.9464885500619857,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.577208179555488,
+      "terminal_foot_error_m": 0.0005580670681631011,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.484396670762187,
+        50.98715591101736,
+        20.246532252144174,
+        11.543802347409397,
+        47.833906815357885,
+        21.673678557246525
+      ],
+      "max_poststart_torque_step_Nm": 50.907981294878994,
+      "max_measured_foot_speed_m_s": 0.9421037552997955
+    },
+    {
+      "id": "20455e8a99fa108f",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9369685808764222,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4370199954618336,
+      "contact_samples_above5N": [
+        4015,
+        3291
+      ],
+      "max_dynamics_qp_residual": 1.5505787789416026e-05,
+      "qp_solve_p95_ms": 0.939442999606399,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.577208179555488,
+      "terminal_foot_error_m": 0.0005577697506932527,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.483341096380862,
+        50.98706656217894,
+        20.246532252144174,
+        11.543712920573924,
+        47.833906815357885,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 50.90776784214817,
+      "max_measured_foot_speed_m_s": 0.9436104939066755
+    },
+    {
+      "id": "21a44f4c09883612",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2547535083927737,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.22700145153626314,
+      "contact_samples_above5N": [
+        3997,
+        3319
+      ],
+      "max_dynamics_qp_residual": 5.797497840465127e-06,
+      "qp_solve_p95_ms": 0.9483017001002736,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.4893139435027014,
+      "terminal_foot_error_m": 0.0007830224252244975,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        14.719411903335907,
+        50.42211062551935,
+        25.019204131058824,
+        14.793965060530244,
+        50.707376447211956,
+        24.883650126764902
+      ],
+      "max_poststart_torque_step_Nm": 48.2873826917346,
+      "max_measured_foot_speed_m_s": 1.2783219928471554
+    },
+    {
+      "id": "16a7bc1efaafb3e5",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2547534485220704,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.22670143748686603,
+      "contact_samples_above5N": [
+        4001,
+        3319
+      ],
+      "max_dynamics_qp_residual": 5.797837588195076e-06,
+      "qp_solve_p95_ms": 0.9840233004524636,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.489312822049071,
+      "terminal_foot_error_m": 0.0007826970809619219,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        14.719510404563453,
+        50.42670863847983,
+        25.019204131058824,
+        14.793814210518477,
+        50.707376447211956,
+        24.882716387500768
+      ],
+      "max_poststart_torque_step_Nm": 48.287397918517996,
+      "max_measured_foot_speed_m_s": 1.2790403650262767
+    },
+    {
+      "id": "70066e05062dd3a3",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 50,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2547533851923687,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.38224207124831117,
+      "contact_samples_above5N": [
+        4000,
+        3319
+      ],
+      "max_dynamics_qp_residual": 5.798197166118069e-06,
+      "qp_solve_p95_ms": 0.9631766503389372,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.4893116358601226,
+      "terminal_foot_error_m": 0.0007823536412321298,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        14.719601151470277,
+        50.46618158718818,
+        25.019204131058824,
+        14.793653879639349,
+        50.707376447211956,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 48.287413710676695,
+      "max_measured_foot_speed_m_s": 1.2803135487917985
+    },
+    {
+      "id": "b70d12dbf61ad8f0",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2546723392554824,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.11191506112993477,
+      "contact_samples_above5N": [
+        4021,
+        3343
+      ],
+      "max_dynamics_qp_residual": 0.00028351310564214693,
+      "qp_solve_p95_ms": 0.9370809499614552,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.883519246597185,
+      "terminal_foot_error_m": 0.00042874174512134083,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.966963536268539,
+        50.0772649952892,
+        23.474513123821712,
+        14.042477380101042,
+        50.12842279194234,
+        23.437970509725332
+      ],
+      "max_poststart_torque_step_Nm": 47.12907216544077,
+      "max_measured_foot_speed_m_s": 1.2631786003732721
+    },
+    {
+      "id": "faa33c88719bbbce",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2546723513453968,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.18312181594728819,
+      "contact_samples_above5N": [
+        4023,
+        3343
+      ],
+      "max_dynamics_qp_residual": 0.00028351310564214693,
+      "qp_solve_p95_ms": 0.9620380498745361,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.883519246597185,
+      "terminal_foot_error_m": 0.00042926895198856525,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.967199649522374,
+        50.077113361329936,
+        23.474513123821712,
+        14.042356005745901,
+        50.12842279194234,
+        23.437091372834647
+      ],
+      "max_poststart_torque_step_Nm": 47.129171575357155,
+      "max_measured_foot_speed_m_s": 1.263496123933945
+    },
+    {
+      "id": "955227ab35c8f994",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2546723825150428,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.41347767867889534,
+      "contact_samples_above5N": [
+        4024,
+        3343
+      ],
+      "max_dynamics_qp_residual": 0.00028351310564214693,
+      "qp_solve_p95_ms": 0.947880050398453,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.883519246597185,
+      "terminal_foot_error_m": 0.0004295788990722838,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.967541299194293,
+        50.07689746338313,
+        23.474513123821712,
+        14.042183866817997,
+        50.12842279194234,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 47.12931355622452,
+      "max_measured_foot_speed_m_s": 1.2650216725920693
+    },
+    {
+      "id": "020565b282606577",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.254635795359079,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.05387900831117463,
+      "contact_samples_above5N": [
+        4019,
+        3357
+      ],
+      "max_dynamics_qp_residual": 6.3430619551829714e-06,
+      "qp_solve_p95_ms": 0.9287364994634117,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.8374557437812515,
+      "terminal_foot_error_m": 0.0003104625928835205,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.632927476019857,
+        50.54395797522157,
+        22.80455319767168,
+        13.710323979161817,
+        49.82769636830597,
+        22.81043103516968
+      ],
+      "max_poststart_torque_step_Nm": 46.45456657486629,
+      "max_measured_foot_speed_m_s": 1.2559450388435351
+    },
+    {
+      "id": "4a667382fa87cd9c",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2546356491546806,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.20697048427762327,
+      "contact_samples_above5N": [
+        4020,
+        3358
+      ],
+      "max_dynamics_qp_residual": 6.05220703475684e-06,
+      "qp_solve_p95_ms": 0.969782549464071,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.8374557437812515,
+      "terminal_foot_error_m": 0.0003101327487245222,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.63225415315203,
+        50.54397405972928,
+        22.80455319767168,
+        13.710036429159413,
+        49.82769636830597,
+        22.809855302103045
+      ],
+      "max_poststart_torque_step_Nm": 46.45452029471327,
+      "max_measured_foot_speed_m_s": 1.2567191866835628
+    },
+    {
+      "id": "edcf6c11d47d76cc",
+      "config": {
+        "walk": true,
+        "step_length": 0.16,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 200,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 1.2546356943282544,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.43396902225788075,
+      "contact_samples_above5N": [
+        4020,
+        3358
+      ],
+      "max_dynamics_qp_residual": 2.069524509806797e-05,
+      "qp_solve_p95_ms": 0.93677704962829,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.8374557437812515,
+      "terminal_foot_error_m": 0.0003101616068947824,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        13.63279918928445,
+        50.544128455668876,
+        22.80455319767168,
+        13.709632316927818,
+        49.82769636830597,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 46.45464784631102,
+      "max_measured_foot_speed_m_s": 1.258513629175913
+    },
+    {
+      "id": "e525c8a0b3842d18",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.2,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370471674091779,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.08709373146291112,
+      "contact_samples_above5N": [
+        4019,
+        3283
+      ],
+      "max_dynamics_qp_residual": 1.6990967208418972e-05,
+      "qp_solve_p95_ms": 0.9565526004735148,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.62472561393973,
+      "terminal_foot_error_m": 0.001401675178944746,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.76532984908576,
+        51.154131657346966,
+        20.72654654100033,
+        11.822396085983533,
+        48.117861980591485,
+        20.708128954548584
+      ],
+      "max_poststart_torque_step_Nm": 52.072871909528175,
+      "max_measured_foot_speed_m_s": 0.9460310594216905
+    },
+    {
+      "id": "ce189ca945c61433",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.2,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370471550416276,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.194333754081383,
+      "contact_samples_above5N": [
+        4022,
+        3282
+      ],
+      "max_dynamics_qp_residual": 2.6183161702802993e-05,
+      "qp_solve_p95_ms": 0.958403949471176,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.62472561393973,
+      "terminal_foot_error_m": 0.001401559918180864,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.765448067041246,
+        51.15413308838952,
+        20.72654654100033,
+        11.822275634386735,
+        48.117861980591485,
+        22.018752245562776
+      ],
+      "max_poststart_torque_step_Nm": 52.07288594386114,
+      "max_measured_foot_speed_m_s": 0.9460310594216905
+    },
+    {
+      "id": "0cd1113f1c35c239",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.2,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370471140645451,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.423180849564784,
+      "contact_samples_above5N": [
+        4011,
+        3283
+      ],
+      "max_dynamics_qp_residual": 1.6990967208418972e-05,
+      "qp_solve_p95_ms": 0.9700490500108572,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.62472561393973,
+      "terminal_foot_error_m": 0.0014014526221617317,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.761356624355082,
+        51.15398911587663,
+        20.72654654100033,
+        11.822252212216407,
+        48.117861980591485,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.072603574894,
+      "max_measured_foot_speed_m_s": 0.9460310594216905
+    },
+    {
+      "id": "ab801d1c740ee5c0",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.4,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370061218553392,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.08638258595347811,
+      "contact_samples_above5N": [
+        4024,
+        3288
+      ],
+      "max_dynamics_qp_residual": 7.808915097134994e-06,
+      "qp_solve_p95_ms": 0.9368696002184151,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620196782714218,
+      "terminal_foot_error_m": 0.0007852575714087693,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.749630377287136,
+        51.09705478112171,
+        20.760310113000052,
+        11.809502951797882,
+        48.084417435108534,
+        20.747247784298256
+      ],
+      "max_poststart_torque_step_Nm": 51.84629893876743,
+      "max_measured_foot_speed_m_s": 0.9469450824447581
+    },
+    {
+      "id": "a446ab06e34ea4e0",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.4,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370061112966117,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.19480808329545848,
+      "contact_samples_above5N": [
+        4026,
+        3288
+      ],
+      "max_dynamics_qp_residual": 7.808350346999449e-06,
+      "qp_solve_p95_ms": 0.9355090493500029,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620196782714218,
+      "terminal_foot_error_m": 0.000785140757521581,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.749730973747027,
+        51.09707828694764,
+        20.760310113000052,
+        11.80938011325355,
+        48.084417435108534,
+        22.080519316012722
+      ],
+      "max_poststart_torque_step_Nm": 51.846318015438705,
+      "max_measured_foot_speed_m_s": 0.9469450824447581
+    },
+    {
+      "id": "7488ae6c9b0d8ee5",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.4,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370061462381055,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.42432605712520305,
+      "contact_samples_above5N": [
+        4026,
+        3286
+      ],
+      "max_dynamics_qp_residual": 7.80740912947886e-06,
+      "qp_solve_p95_ms": 0.9427287001471994,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620196782714218,
+      "terminal_foot_error_m": 0.0007849642438282403,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.749939270436203,
+        51.09711646376968,
+        20.760310113000052,
+        11.809194403837154,
+        48.084417435108534,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 51.846350017895126,
+      "max_measured_foot_speed_m_s": 0.9475130551872208
+    },
+    {
+      "id": "7b809edae324af7d",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 0.5,
+        "record": false,
+        "seed": 0
+      },
+      "success": false,
+      "failure": "body_tilt_or_height",
+      "duration_s": 4.190999999999734,
+      "progress_m": 1.0829630576891534,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.41812630133179157,
+      "contact_samples_above5N": [
+        2760,
+        2739
+      ],
+      "max_dynamics_qp_residual": 2.2061025291009173e-06,
+      "qp_solve_p95_ms": 1.1144288498144304,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false
+      ],
+      "max_joint_velocity_rad_s": 7.505272700310231,
+      "terminal_foot_error_m": 0.24412156142700397,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        40.0,
+        40.0,
+        15.0,
+        40.0,
+        40.0,
+        15.0
+      ],
+      "max_poststart_torque_step_Nm": 43.03388362842241,
+      "max_measured_foot_speed_m_s": 0.9482444979744249
+    },
+    {
+      "id": "3d2628a56fe5a2ba",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 0.5,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9360754590603435,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.09153759174168664,
+      "contact_samples_above5N": [
+        4093,
+        3628
+      ],
+      "max_dynamics_qp_residual": 2.41402977830818e-05,
+      "qp_solve_p95_ms": 1.008910049449696,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.422186216492971,
+      "terminal_foot_error_m": 0.0004410832728881013,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        23.849937722529294,
+        40.0,
+        15.0,
+        23.831899580605207,
+        40.0,
+        15.0
+      ],
+      "max_poststart_torque_step_Nm": 41.70929219550475,
+      "max_measured_foot_speed_m_s": 0.9473482678620477
+    },
+    {
+      "id": "c0366c4b30882192",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 0.5,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9360361602957236,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.18647715663528966,
+      "contact_samples_above5N": [
+        4073,
+        3633
+      ],
+      "max_dynamics_qp_residual": 3.248480841155921e-05,
+      "qp_solve_p95_ms": 1.0045255002296472,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.544548914515406,
+      "terminal_foot_error_m": 0.00043964701448862806,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        23.849937722529294,
+        40.0,
+        15.0,
+        23.99476070191112,
+        40.0,
+        15.0
+      ],
+      "max_poststart_torque_step_Nm": 41.44927866593332,
+      "max_measured_foot_speed_m_s": 0.9473482678620477
+    },
+    {
+      "id": "72447a4f496cd8ce",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 0.75,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370273014385525,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.08634693702621961,
+      "contact_samples_above5N": [
+        4023,
+        3288
+      ],
+      "max_dynamics_qp_residual": 1.819050375406056e-05,
+      "qp_solve_p95_ms": 0.9457180993194925,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620555948328147,
+      "terminal_foot_error_m": 0.0007911277426810459,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.74618054307185,
+        51.04596040819034,
+        20.762733747455435,
+        11.806773528008195,
+        48.11449538854276,
+        20.732059304354028
+      ],
+      "max_poststart_torque_step_Nm": 51.534223752805836,
+      "max_measured_foot_speed_m_s": 0.9471226370758862
+    },
+    {
+      "id": "8b1b8cac94e34776",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 20.0,
+        "friction": 0.8,
+        "torque_scale": 0.75,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370273281741898,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.19459527037853896,
+      "contact_samples_above5N": [
+        4024,
+        3288
+      ],
+      "max_dynamics_qp_residual": 2.306692670582533e-05,
+      "qp_solve_p95_ms": 0.9417540002232272,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.620555948328147,
+      "terminal_foot_error_m": 0.0007909223148719166,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.746292218959011,
+        51.046018905917485,
+        20.762733747455435,
+        11.806666773194443,
+        48.11449538854276,
+        22.051541320780856
+      ],
+      "max_poststart_torque_step_Nm": 51.5342754611302,
+      "max_measured_foot_speed_m_s": 0.9471226370758862
+    },
+    {
+      "id": "acc5ae908e4c3b98",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 0.75,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9370373270546835,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.42472987177387356,
+      "contact_samples_above5N": [
+        4039,
+        3287
+      ],
+      "max_dynamics_qp_residual": 1.819050375406056e-05,
+      "qp_solve_p95_ms": 0.94526209986725,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.637183440335967,
+      "terminal_foot_error_m": 0.0007906272337229423,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        29.511291203677125,
+        51.06341439033285,
+        21.95513888830618,
+        28.40997125894403,
+        48.11449538854276,
+        22.5
+      ],
+      "max_poststart_torque_step_Nm": 51.54991730560341,
+      "max_measured_foot_speed_m_s": 0.9558893334622243
+    },
+    {
+      "id": "677fe035a1d233ab",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.0,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9382527884565965,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.08004676198550553,
+      "contact_samples_above5N": [
+        3625,
+        2925
+      ],
+      "max_dynamics_qp_residual": 3.377751933042461e-06,
+      "qp_solve_p95_ms": 0.9323454999503156,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.017380109416347,
+      "terminal_foot_error_m": 0.00028305061690788195,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        8.474504010120796,
+        45.01739641652761,
+        16.992118162446353,
+        8.525679975804017,
+        45.088722639927674,
+        16.99270400298796
+      ],
+      "max_poststart_torque_step_Nm": 41.552632286385595,
+      "max_measured_foot_speed_m_s": 0.7533410157444391
+    },
+    {
+      "id": "52d89aec49f3b175",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.0,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.938252757698986,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.41217071393621707,
+      "contact_samples_above5N": [
+        3625,
+        2926
+      ],
+      "max_dynamics_qp_residual": 3.3777639524557035e-06,
+      "qp_solve_p95_ms": 0.9134840498063568,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.3169758412527024,
+      "terminal_foot_error_m": 0.0002829157062587494,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        8.473990807487226,
+        45.15112545947867,
+        23.116085388001128,
+        8.525401792263683,
+        45.088722639927674,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 41.552632286385595,
+      "max_measured_foot_speed_m_s": 0.7552352613175327
+    },
+    {
+      "id": "5638ae7afd2cea04",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.06,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9376403866345612,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.0835208341910312,
+      "contact_samples_above5N": [
+        3812,
+        3095
+      ],
+      "max_dynamics_qp_residual": 7.67537372217686e-06,
+      "qp_solve_p95_ms": 0.9302122996814431,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.2894430860141557,
+      "terminal_foot_error_m": 0.00029659119394090323,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.826440443997976,
+        50.95089009252815,
+        18.97685364970357,
+        9.881345504025154,
+        46.32903948258475,
+        18.97654559196588
+      ],
+      "max_poststart_torque_step_Nm": 51.35826943739656,
+      "max_measured_foot_speed_m_s": 0.8392379732329461
+    },
+    {
+      "id": "e5be08f63842adf2",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.06,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9376403167381784,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.41829843940421746,
+      "contact_samples_above5N": [
+        3810,
+        3096
+      ],
+      "max_dynamics_qp_residual": 7.67537372217686e-06,
+      "qp_solve_p95_ms": 0.9335115496014622,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.2894430860141557,
+      "terminal_foot_error_m": 0.00029589335243534174,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        9.826295195278515,
+        50.95089610311637,
+        19.15912768739629,
+        9.881114576332232,
+        46.32903948258475,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 51.358249781421435,
+      "max_measured_foot_speed_m_s": 0.8407823446368329
+    },
+    {
+      "id": "908a12e57eecdf75",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.2,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9359904241579847,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.091499375298352,
+      "contact_samples_above5N": [
+        4260,
+        3513
+      ],
+      "max_dynamics_qp_residual": 2.969573102890033e-05,
+      "qp_solve_p95_ms": 0.9423871500985114,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.223868000406023,
+      "terminal_foot_error_m": 0.0012832562904764515,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        15.984247248410187,
+        51.687818235617165,
+        24.752187336777702,
+        16.050886209816113,
+        51.81894628901164,
+        24.71014578571816
+      ],
+      "max_poststart_torque_step_Nm": 52.0937566532817,
+      "max_measured_foot_speed_m_s": 1.1436275338697726
+    },
+    {
+      "id": "0c25f79e634877f1",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.2,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": 0.9359904879375172,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.42909436835591513,
+      "contact_samples_above5N": [
+        4264,
+        3514
+      ],
+      "max_dynamics_qp_residual": 2.969573102890033e-05,
+      "qp_solve_p95_ms": 0.9501450500010833,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 3.223868000406023,
+      "terminal_foot_error_m": 0.0012854672597156162,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        15.984938448733521,
+        51.729239961406215,
+        24.752187336777702,
+        16.050007007988004,
+        51.81894628901164,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 52.09474476648289,
+      "max_measured_foot_speed_m_s": 1.1436275338697726
+    },
+    {
+      "id": "039ad3e0d588ef2e",
+      "config": {
+        "walk": false,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 0.5,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": -0.01649719261616553,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.008771871256464553,
+      "contact_samples_above5N": [
+        6000,
+        6000
+      ],
+      "max_dynamics_qp_residual": 1.1368683772161603e-13,
+      "qp_solve_p95_ms": 1.1813014498784458,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [],
+      "max_joint_velocity_rad_s": 0.07994894187667556,
+      "terminal_foot_error_m": 2.1869345194931403e-05,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        0.8279342211786257,
+        18.914983105155255,
+        15.0,
+        0.8279342211786436,
+        18.914983105155255,
+        15.0
+      ],
+      "max_poststart_torque_step_Nm": 0.005734958617366281,
+      "max_measured_foot_speed_m_s": 0.001031297032934236
+    },
+    {
+      "id": "b558f3b9990985ba",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.0005,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 5.999999999999394,
+      "progress_m": 0.937056391768082,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.0893749114918683,
+      "contact_samples_above5N": [
+        8043,
+        6573
+      ],
+      "max_dynamics_qp_residual": 1.7944307513666213e-05,
+      "qp_solve_p95_ms": 0.9729261504617169,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.6243268280868906,
+      "terminal_foot_error_m": 0.0007634112365000117,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.758313176654932,
+        51.075358315490924,
+        20.777095297354837,
+        11.820165568939727,
+        48.1281976967178,
+        20.760501995021205
+      ],
+      "max_poststart_torque_step_Nm": 51.547683780460986,
+      "max_measured_foot_speed_m_s": 0.9476927518230414
+    },
+    {
+      "id": "eaa8222df6bf70a4",
+      "config": {
+        "walk": true,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.0005,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 5.999999999999394,
+      "progress_m": 0.9370563618193075,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.42054827825511115,
+      "contact_samples_above5N": [
+        8050,
+        6574
+      ],
+      "max_dynamics_qp_residual": 1.7944307513666213e-05,
+      "qp_solve_p95_ms": 0.9578872000020054,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "max_joint_velocity_rad_s": 2.6243268280868906,
+      "terminal_foot_error_m": 0.0007635717037453083,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        11.758604784366481,
+        51.07550271608962,
+        20.777095297354837,
+        11.819813529890824,
+        48.1281976967178,
+        30.0
+      ],
+      "max_poststart_torque_step_Nm": 51.547805323658416,
+      "max_measured_foot_speed_m_s": 0.9484129454848808
+    },
+    {
+      "id": "4dbb4d22bb5b075b",
+      "config": {
+        "walk": false,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 0.5,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": -0.016483792174878092,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.44146308947124674,
+      "contact_samples_above5N": [
+        6000,
+        6000
+      ],
+      "max_dynamics_qp_residual": 1.1368683772161603e-13,
+      "qp_solve_p95_ms": 0.8821936497497517,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [],
+      "max_joint_velocity_rad_s": 0.10012384108023072,
+      "terminal_foot_error_m": 6.442732747544578e-05,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        1.3338398806127507,
+        19.150076903583653,
+        15.0,
+        1.3338398806044394,
+        19.150076903584587,
+        15.0
+      ],
+      "max_poststart_torque_step_Nm": 2.992495144670894,
+      "max_measured_foot_speed_m_s": 0.001031297032934236
+    },
+    {
+      "id": "4f4c429360c06efd",
+      "config": {
+        "walk": false,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 0.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": -0.01649700512500042,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.00875182019595661,
+      "contact_samples_above5N": [
+        6000,
+        6000
+      ],
+      "max_dynamics_qp_residual": 1.1368683772161603e-13,
+      "qp_solve_p95_ms": 0.8872869994320354,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [],
+      "max_joint_velocity_rad_s": 0.07981660833144716,
+      "terminal_foot_error_m": 2.187350974896776e-05,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        0.976025985993709,
+        18.912679214645042,
+        16.376065735592203,
+        0.9760259859937092,
+        18.912679214645042,
+        16.376065735592203
+      ],
+      "max_poststart_torque_step_Nm": 0.005601334229504928,
+      "max_measured_foot_speed_m_s": 0.0010478752364696637
+    },
+    {
+      "id": "c1f3644f44722834",
+      "config": {
+        "walk": false,
+        "step_length": 0.12,
+        "step_time": 0.6,
+        "ds": 0.12,
+        "steps": 8,
+        "hz": 100,
+        "dt": 0.001,
+        "duration": 6.0,
+        "push": 40.0,
+        "friction": 0.8,
+        "torque_scale": 1.0,
+        "record": false,
+        "seed": 0
+      },
+      "success": true,
+      "failure": null,
+      "duration_s": 6.000000000000338,
+      "progress_m": -0.016480639147902137,
+      "com_height_initial_m": 0.7347088149056268,
+      "mass_kg": 27.2,
+      "max_body_pitch_deg": 0.4410785272420811,
+      "contact_samples_above5N": [
+        6000,
+        6000
+      ],
+      "max_dynamics_qp_residual": 1.1368683772161603e-13,
+      "qp_solve_p95_ms": 0.8805494994703622,
+      "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+      "verified_landings": [],
+      "max_joint_velocity_rad_s": 0.08501231998848767,
+      "terminal_foot_error_m": 7.806423253627882e-05,
+      "source_sha256": "fde5661c8f8f9339fc06b90420bf7ba334d74b488d88f5645466396999186734",
+      "peak_applied_torque_Nm": [
+        1.4886174183288112,
+        19.091297655001156,
+        16.47183026315209,
+        1.488617418322059,
+        19.091297654999863,
+        16.471830263152807
+      ],
+      "max_poststart_torque_step_Nm": 2.9924955105187143,
+      "max_measured_foot_speed_m_s": 0.0010478752364696637
+    }
+  ]
+}

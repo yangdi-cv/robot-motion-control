@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../.." && pwd)"
+SIM_ENV="$PROJECT_ROOT/.venvs/isaacsim51"
+SIM_PACKAGE="$SIM_ENV/lib/python3.11/site-packages/isaacsim"
+unset PYTHONPATH PYTHONHOME AMENT_PREFIX_PATH CMAKE_PREFIX_PATH COLCON_PREFIX_PATH ROS_PACKAGE_PATH
+export LD_LIBRARY_PATH="$SIM_PACKAGE/exts/isaacsim.ros2.bridge/humble/lib"
+export ROS_DISTRO=humble RMW_IMPLEMENTATION=rmw_fastrtps_cpp ROS_DOMAIN_ID=71 ROS_LOCALHOST_ONLY=1
+export OMNI_KIT_ACCEPT_EULA=YES
+exec "$SIM_ENV/bin/python" "$@"

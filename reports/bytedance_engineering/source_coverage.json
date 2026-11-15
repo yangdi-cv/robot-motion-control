@@ -1,0 +1,350 @@
+[
+  {
+    "stage": "s01",
+    "source": "experiments/panda_task1/REPORT.md",
+    "section": "1. 问题与本次完成内容",
+    "source_sha256": "be4822d12e791f2c069d456f615375022da25fe70d8aab553f2cb657118558c9"
+  },
+  {
+    "stage": "s01",
+    "source": "experiments/panda_task1/REPORT.md",
+    "section": "2. 环境与隔离",
+    "source_sha256": "be4822d12e791f2c069d456f615375022da25fe70d8aab553f2cb657118558c9"
+  },
+  {
+    "stage": "s02",
+    "source": "experiments/panda_task1/REPORT.md",
+    "section": "3. 模型、关节与通信",
+    "source_sha256": "be4822d12e791f2c069d456f615375022da25fe70d8aab553f2cb657118558c9"
+  },
+  {
+    "stage": "s03",
+    "source": "experiments/panda_task1/REPORT.md",
+    "section": "4. 五次轨迹与记录方法",
+    "source_sha256": "be4822d12e791f2c069d456f615375022da25fe70d8aab553f2cb657118558c9"
+  },
+  {
+    "stage": "s03",
+    "source": "experiments/panda_task1/REPORT.md",
+    "section": "5. 结果",
+    "source_sha256": "be4822d12e791f2c069d456f615375022da25fe70d8aab553f2cb657118558c9"
+  },
+  {
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "2. 驱动增益与速度前馈",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "3. 不同运动幅度的验证",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "6. Panda外环频率补充实验",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s05",
+    "source": "experiments/imu_week2/REPORT.md",
+    "section": "1. 原任务覆盖与成果来源",
+    "source_sha256": "fea6720cc3cf33f7cfc10fdb2d5293d7fc796dd6af59d133f8c27e0e22b096b4"
+  },
+  {
+    "stage": "s05",
+    "source": "experiments/imu_week2/REPORT.md",
+    "section": "2. 仿真及实际 ROS2 链路",
+    "source_sha256": "fea6720cc3cf33f7cfc10fdb2d5293d7fc796dd6af59d133f8c27e0e22b096b4"
+  },
+  {
+    "stage": "s05",
+    "source": "experiments/imu_week2/REPORT.md",
+    "section": "3. 反馈频率、误差与响应结果",
+    "source_sha256": "fea6720cc3cf33f7cfc10fdb2d5293d7fc796dd6af59d133f8c27e0e22b096b4"
+  },
+  {
+    "stage": "s06",
+    "source": "experiments/imu_week2/REPORT.md",
+    "section": "4. 虚拟 IMU 因果滤波与噪声/滞后权衡",
+    "source_sha256": "fea6720cc3cf33f7cfc10fdb2d5293d7fc796dd6af59d133f8c27e0e22b096b4"
+  },
+  {
+    "stage": "s06",
+    "source": "experiments/imu_week2/REPORT.md",
+    "section": "5. 实际 ROS2 IMU 原始/滤波发布验证",
+    "source_sha256": "fea6720cc3cf33f7cfc10fdb2d5293d7fc796dd6af59d133f8c27e0e22b096b4"
+  },
+  {
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "4. 公开真实IMU与六轴滤波",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "7. 静止频谱与Allan曲线",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s08",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "5. 50/100/200Hz反馈测试",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s08",
+    "source": "experiments/control_feedback_task2/REPORT.md",
+    "section": "8. Jetson实体IMU测试",
+    "source_sha256": "0d78a7679162dc36c41cefee551f50d75620739ea101bc8c9e8d915cb4fe8ffe"
+  },
+  {
+    "stage": "s09",
+    "source": "experiments/bytedance_week3/REPORT.md",
+    "section": "1. 模型、接触与执行接口",
+    "source_sha256": "0895b7ecec3093aa9bb8f968fc23112393b94bdd216d3c19688bc0a6d351370e"
+  },
+  {
+    "stage": "s09",
+    "source": "experiments/bytedance_week3/REPORT.md",
+    "section": "2. 位置控制与导纳控制",
+    "source_sha256": "0895b7ecec3093aa9bb8f968fc23112393b94bdd216d3c19688bc0a6d351370e"
+  },
+  {
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/REPORT.md",
+    "section": "3. 稳定接触和关节跟踪结果",
+    "source_sha256": "0895b7ecec3093aa9bb8f968fc23112393b94bdd216d3c19688bc0a6d351370e"
+  },
+  {
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/REPORT.md",
+    "section": "4. 噪声、频率与延迟",
+    "source_sha256": "0895b7ecec3093aa9bb8f968fc23112393b94bdd216d3c19688bc0a6d351370e"
+  },
+  {
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/REPORT.md",
+    "section": "5. 接近速度与首次冲击",
+    "source_sha256": "0895b7ecec3093aa9bb8f968fc23112393b94bdd216d3c19688bc0a6d351370e"
+  },
+  {
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "1. 场景和参数",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "2. 控制方法与代码",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "3. 主要对比结果",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "4. 参数对照与问题分析",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s12",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "7. 恒力稳定性排查与改进",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s13",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "1. 反馈对应的改动",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s13",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "2. 控制与接触模型",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s13",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "3. 重力及几何对照",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "4. 接近与力切换优化",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "5. 环境与周期扰动",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s16",
+    "source": "experiments/panda_contact_isaac/REPORT.md",
+    "section": "6. 扩展：学习策略动作执行接口",
+    "source_sha256": "90d364900d443677c7080fcd5bb08ae254597033090a8124c53706326ecf555a"
+  },
+  {
+    "stage": "s17",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "1. 研究问题与工作范围",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s17",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "2. 模型、步态与输入约束",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s17",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "3. 控制器及因果延迟预测",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s18",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "4. 对照设计与评价方法",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s18",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "5. 主要结果与稳定边界",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s18",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "6. 独立条件与数值检查",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s19",
+    "source": "experiments/lipm_balance/REPORT.md",
+    "section": "7. 有限脚掌非线性接触验证",
+    "source_sha256": "17e28d1db9c2dd57a3385abf04fbb22177fff08ee52556a7f643a2909d06fd5a"
+  },
+  {
+    "stage": "s20",
+    "source": "experiments/lipm_extension/REPORT.md",
+    "section": "2. 固定采样率与反馈时序",
+    "source_sha256": "e4f42e2098a7979b4ae2f9a8c0164ab1a3bc852c4326e2eb4768e2203a958224"
+  },
+  {
+    "stage": "s20",
+    "source": "experiments/lipm_extension/REPORT.md",
+    "section": "3. 双支撑、连续摆脚与步时调整",
+    "source_sha256": "e4f42e2098a7979b4ae2f9a8c0164ab1a3bc852c4326e2eb4768e2203a958224"
+  },
+  {
+    "stage": "s21",
+    "source": "experiments/lipm_extension/REPORT.md",
+    "section": "4. 关节力矩驱动的平面双足",
+    "source_sha256": "e4f42e2098a7979b4ae2f9a8c0164ab1a3bc852c4326e2eb4768e2203a958224"
+  },
+  {
+    "stage": "s21",
+    "source": "experiments/lipm_extension/REPORT.md",
+    "section": "5. 独立检查与实现修正",
+    "source_sha256": "e4f42e2098a7979b4ae2f9a8c0164ab1a3bc852c4326e2eb4768e2203a958224"
+  },
+  {
+    "stage": "s22",
+    "source": "experiments/biped_feedback/REPORT.md",
+    "section": "1. 反馈对应的问题与本轮范围",
+    "source_sha256": "abc380929dfc062eda9d39adedf3f36a626f978b40589ceab6199c091eed5a4d"
+  },
+  {
+    "stage": "s22",
+    "source": "experiments/biped_feedback/REPORT.md",
+    "section": "2. ZMP到六关节力矩的统一接口",
+    "source_sha256": "abc380929dfc062eda9d39adedf3f36a626f978b40589ceab6199c091eed5a4d"
+  },
+  {
+    "stage": "s23",
+    "source": "experiments/biped_feedback/REPORT.md",
+    "section": "3. 摆腿与双支撑的物理执行",
+    "source_sha256": "abc380929dfc062eda9d39adedf3f36a626f978b40589ceab6199c091eed5a4d"
+  },
+  {
+    "stage": "s24",
+    "source": "experiments/biped_feedback/REPORT.md",
+    "section": "4. 频率、推扰和延迟对照",
+    "source_sha256": "abc380929dfc062eda9d39adedf3f36a626f978b40589ceab6199c091eed5a4d"
+  },
+  {
+    "stage": "s24",
+    "source": "experiments/biped_feedback/REPORT.md",
+    "section": "5. 运行核验与失败边界",
+    "source_sha256": "abc380929dfc062eda9d39adedf3f36a626f978b40589ceab6199c091eed5a4d"
+  },
+  {
+    "stage": "s25",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "1. 从平面到三维：模型与控制接口",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s25",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "2. 站立、重心转移与单脚支撑",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s26",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "3. 三维慢速交替行走",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s27",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "4. QP后端对照与运行时间",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s28",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "5. 冻结条件下的结果与失效边界",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s28",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "6. 独立核验与保存机制",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s28",
+    "source": "experiments/humanoid_control/REPORT.md",
+    "section": "7. 当前范围与后续工作",
+    "source_sha256": "5a0a212832564edcf89afae3c7bc34069dd6c3068fc25b44231ed21aad30ffcf"
+  },
+  {
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "6. 结果边界和失败分析（分段）",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  },
+  {
+    "stage": "s16",
+    "source": "experiments/panda_contact_optimization/REPORT.md",
+    "section": "6. 结果边界和失败分析（分段）",
+    "source_sha256": "a69c6941d82a9b73725c7fba3fd99b7ef229b3bf97aace67638ca16549285a1d"
+  }
+]

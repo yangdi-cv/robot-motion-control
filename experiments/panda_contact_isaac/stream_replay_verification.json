@@ -1,0 +1,9 @@
+{
+  "oracle": 0.0,
+  "delayed_naive": 0.0,
+  "delayed_timestamp": 0.0,
+  "jitter_raw": 0.0,
+  "jitter_limited": 0.0,
+  "outage_stale": 0.0,
+  "outage_hold": 0.0
+}

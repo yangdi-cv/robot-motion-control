@@ -1,0 +1,8 @@
+{
+  "returncode": 0,
+  "stdout": "",
+  "stderr": ".........\n----------------------------------------------------------------------\nRan 9 tests in 0.760s\n\nOK\n",
+  "environment": "Fresh Python3.11 CPU venv; five core requirements; no GPU model, no workspace imports",
+  "package_crc_and_sha256": true,
+  "extracted": "/tmp/g1_unpacked_chdlqldu"
+}

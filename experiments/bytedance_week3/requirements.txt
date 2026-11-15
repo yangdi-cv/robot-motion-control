@@ -1,0 +1,6 @@
+numpy==1.26.4
+mujoco==2.3.7
+av==17.1.0
+pillow
+requests
+matplotlib

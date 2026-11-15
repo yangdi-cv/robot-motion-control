@@ -1,0 +1,8 @@
+[
+  {
+    "group": "contact_metrics",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ".\n----------------------------------------------------------------------\nRan 1 test in 0.095s\n\nOK\n"
+  }
+]

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../../.." && pwd)"
+unset PYTHONPATH PYTHONHOME
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 MKL_NUM_THREADS=1
+export MUJOCO_GL=egl
+exec "${LIPM_PYTHON:-$PROJECT_ROOT/.venvs/lipm-balance/bin/python}" "$@"

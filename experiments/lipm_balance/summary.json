@@ -1,0 +1,3977 @@
+{
+  "unique_runs": 1458,
+  "successes": 848,
+  "integrated_time_s": 9667.691499999966,
+  "groups": {
+    "grid": {
+      "n": 675,
+      "successes": 418,
+      "rate": 0.6192592592592593,
+      "recovery_mean_s": 0.6861229508196719,
+      "recovery_n": 244,
+      "successful_route_error_mean_m": 0.026899291171254204,
+      "reasons": {
+        "support_reach_exceeded": 257
+      }
+    },
+    "boundary": {
+      "n": 360,
+      "successes": 180,
+      "rate": 0.5,
+      "recovery_mean_s": 0.6710652173913041,
+      "recovery_n": 138,
+      "successful_route_error_mean_m": 0.027516711195112186,
+      "reasons": {
+        "support_reach_exceeded": 180
+      }
+    },
+    "domain": {
+      "n": 160,
+      "successes": 134,
+      "rate": 0.8375,
+      "recovery_mean_s": 0.46606716417910427,
+      "recovery_n": 134,
+      "successful_route_error_mean_m": 0.014396379009344904,
+      "reasons": {
+        "friction_infeasible": 15,
+        "support_reach_exceeded": 9,
+        "terminal_balance_not_recovered": 2
+      }
+    },
+    "numerical": {
+      "n": 10,
+      "successes": 4,
+      "rate": 0.4,
+      "recovery_mean_s": 0.3819999999999997,
+      "recovery_n": 4,
+      "successful_route_error_mean_m": 0.09999999989505326,
+      "reasons": {
+        "support_reach_exceeded": 6
+      }
+    },
+    "showcases": {
+      "n": 20,
+      "successes": 14,
+      "rate": 0.7,
+      "recovery_mean_s": 0.2682499999999998,
+      "recovery_n": 8,
+      "successful_route_error_mean_m": 0.020905681300495502,
+      "reasons": {
+        "support_reach_exceeded": 6
+      }
+    },
+    "phase_validation": {
+      "n": 180,
+      "successes": 86,
+      "rate": 0.4777777777777778,
+      "recovery_mean_s": 0.3892325581395348,
+      "recovery_n": 86,
+      "successful_route_error_mean_m": 0.03487989109277886,
+      "reasons": {
+        "support_reach_exceeded": 93,
+        "route_shift_exceeded": 1
+      }
+    },
+    "gait_validation": {
+      "n": 60,
+      "successes": 15,
+      "rate": 0.25,
+      "recovery_mean_s": 0.36393333333333305,
+      "recovery_n": 15,
+      "successful_route_error_mean_m": 0.07932004982563781,
+      "reasons": {
+        "support_reach_exceeded": 45
+      }
+    }
+  },
+  "grid": {
+    "pd": {
+      "50_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0013160645393626963,
+        "reasons": {}
+      },
+      "50_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.5946666666666666,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0013160644416412481,
+        "reasons": {}
+      },
+      "50_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.001426077808276625,
+        "reasons": {}
+      },
+      "50_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 1.0803333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0014260779812785872,
+        "reasons": {}
+      },
+      "50_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.001569615321853508,
+        "reasons": {}
+      },
+      "50_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 4.241666666666666,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00156961533988117,
+        "reasons": {}
+      },
+      "50_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0008028683084616743,
+        "reasons": {}
+      },
+      "100_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.5716666666666663,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0008028686352893667,
+        "reasons": {}
+      },
+      "100_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0008677194108227803,
+        "reasons": {}
+      },
+      "100_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 1.0796666666666666,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0008677192712330857,
+        "reasons": {}
+      },
+      "100_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0009605655431170144,
+        "reasons": {}
+      },
+      "100_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 4.238333333333333,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0009605654422812304,
+        "reasons": {}
+      },
+      "100_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0005138170363457221,
+        "reasons": {}
+      },
+      "200_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.5769999999999998,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0005138193668687525,
+        "reasons": {}
+      },
+      "200_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0004997568337546601,
+        "reasons": {}
+      },
+      "200_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 1.0866666666666664,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.000499755839909643,
+        "reasons": {}
+      },
+      "200_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0005034077875772439,
+        "reasons": {}
+      },
+      "200_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 4.246999999999999,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0005034064539872273,
+        "reasons": {}
+      },
+      "200_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      }
+    },
+    "lqr": {
+      "50_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0007287727494682032,
+        "reasons": {}
+      },
+      "50_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.033666666666666366,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0007287727508319993,
+        "reasons": {}
+      },
+      "50_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0007483857902452892,
+        "reasons": {}
+      },
+      "50_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.31633333333333313,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0007483857955722942,
+        "reasons": {}
+      },
+      "50_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0008738297626642152,
+        "reasons": {}
+      },
+      "50_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 3.1589999999999994,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.000873829697342111,
+        "reasons": {}
+      },
+      "50_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00046157713372539975,
+        "reasons": {}
+      },
+      "100_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02799999999999958,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00046157713087311493,
+        "reasons": {}
+      },
+      "100_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0004175261585708887,
+        "reasons": {}
+      },
+      "100_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.28699999999999976,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00041752615530916596,
+        "reasons": {}
+      },
+      "100_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00038230027995839986,
+        "reasons": {}
+      },
+      "100_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 3.328333333333333,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0003823002655637608,
+        "reasons": {}
+      },
+      "100_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00033102188215928933,
+        "reasons": {}
+      },
+      "200_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02699999999999969,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00033102189934279845,
+        "reasons": {}
+      },
+      "200_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00028687960974091626,
+        "reasons": {}
+      },
+      "200_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.2803333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0002868796327407895,
+        "reasons": {}
+      },
+      "200_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0003821591305082623,
+        "reasons": {}
+      },
+      "200_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 3.3206666666666664,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0003821591647415274,
+        "reasons": {}
+      },
+      "200_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      }
+    },
+    "capture": {
+      "50_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.007532379201794487,
+        "reasons": {}
+      },
+      "50_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.033666666666666366,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.008001033623044334,
+        "reasons": {}
+      },
+      "50_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.35633333333333317,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10119973942114158,
+        "reasons": {}
+      },
+      "50_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00746229338541796,
+        "reasons": {}
+      },
+      "50_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.006300661770508851,
+        "reasons": {}
+      },
+      "50_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.33233333333333315,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09441864684801109,
+        "reasons": {}
+      },
+      "50_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.014936450106296809,
+        "reasons": {}
+      },
+      "50_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.040071698798138065,
+        "reasons": {}
+      },
+      "50_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 2.682,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.12027080426722166,
+        "reasons": {}
+      },
+      "50_0.08_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00694237565590217,
+        "reasons": {}
+      },
+      "100_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02799999999999958,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.007436196904432888,
+        "reasons": {}
+      },
+      "100_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.38999999999999985,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09982943974782522,
+        "reasons": {}
+      },
+      "100_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0055440524072173794,
+        "reasons": {}
+      },
+      "100_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.22299999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00793449981547786,
+        "reasons": {}
+      },
+      "100_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.31633333333333313,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09673850172733578,
+        "reasons": {}
+      },
+      "100_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.011053998343757037,
+        "reasons": {}
+      },
+      "100_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0322038077057936,
+        "reasons": {}
+      },
+      "100_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 2.4363333333333332,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10808717285219625,
+        "reasons": {}
+      },
+      "100_0.08_0.0": {
+        "n": 3,
+        "successes": 1,
+        "rate": 0.3333333333333333,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.19181907689624847,
+        "reasons": {
+          "support_reach_exceeded": 2
+        }
+      },
+      "100_0.08_6.0": {
+        "n": 3,
+        "successes": 1,
+        "rate": 0.3333333333333333,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.27498907884541174,
+        "reasons": {
+          "support_reach_exceeded": 2
+        }
+      },
+      "100_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.009870213776893256,
+        "reasons": {}
+      },
+      "200_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02699999999999969,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.006671800533633248,
+        "reasons": {}
+      },
+      "200_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.39866666666666656,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09416870548131485,
+        "reasons": {}
+      },
+      "200_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.005533216848119789,
+        "reasons": {}
+      },
+      "200_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.008480059542450973,
+        "reasons": {}
+      },
+      "200_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3103333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10195116415387435,
+        "reasons": {}
+      },
+      "200_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.009374080318452339,
+        "reasons": {}
+      },
+      "200_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.028381558602114002,
+        "reasons": {}
+      },
+      "200_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 2.4429999999999996,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10778359883033135,
+        "reasons": {}
+      },
+      "200_0.08_0.0": {
+        "n": 3,
+        "successes": 1,
+        "rate": 0.3333333333333333,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.12378086521579687,
+        "reasons": {
+          "support_reach_exceeded": 2
+        }
+      },
+      "200_0.08_6.0": {
+        "n": 3,
+        "successes": 1,
+        "rate": 0.3333333333333333,
+        "recovery_mean_s": 5.539,
+        "recovery_n": 1,
+        "successful_route_error_mean_m": 0.17762782653337367,
+        "reasons": {
+          "support_reach_exceeded": 2
+        }
+      },
+      "200_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_0.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_6.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      }
+    },
+    "lqr_predict": {
+      "50_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0007287727494682032,
+        "reasons": {}
+      },
+      "50_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.033666666666666366,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0007287727508319993,
+        "reasons": {}
+      },
+      "50_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0008425485041439472,
+        "reasons": {}
+      },
+      "50_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.056999999999999794,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0008425485010005924,
+        "reasons": {}
+      },
+      "50_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0009690299980249631,
+        "reasons": {}
+      },
+      "50_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.2459999999999997,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0009690299874271234,
+        "reasons": {}
+      },
+      "50_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0013404877417432057,
+        "reasons": {}
+      },
+      "50_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.4763333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0013404877097565777,
+        "reasons": {}
+      },
+      "50_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "50_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0016049109119997994,
+        "reasons": {}
+      },
+      "50_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.7176666666666666,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0016049108298381556,
+        "reasons": {}
+      },
+      "50_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00046157713372539975,
+        "reasons": {}
+      },
+      "100_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02799999999999958,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00046157713087311493,
+        "reasons": {}
+      },
+      "100_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0005060973482566853,
+        "reasons": {}
+      },
+      "100_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.05099999999999971,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0005060973413155076,
+        "reasons": {}
+      },
+      "100_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0005711180987309272,
+        "reasons": {}
+      },
+      "100_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.21066666666666656,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0005711180871657934,
+        "reasons": {}
+      },
+      "100_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0008607108561645051,
+        "reasons": {}
+      },
+      "100_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.4499999999999999,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0008607108391568424,
+        "reasons": {}
+      },
+      "100_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "100_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0011300996276245494,
+        "reasons": {}
+      },
+      "100_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.6806666666666664,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0011300995912823953,
+        "reasons": {}
+      },
+      "100_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00033102188215928933,
+        "reasons": {}
+      },
+      "200_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02699999999999969,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.00033102189934279845,
+        "reasons": {}
+      },
+      "200_0.0_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00032801920037992736,
+        "reasons": {}
+      },
+      "200_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.04999999999999982,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0003280192264214696,
+        "reasons": {}
+      },
+      "200_0.02_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0003639079797440926,
+        "reasons": {}
+      },
+      "200_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.20566666666666653,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0003639080181102538,
+        "reasons": {}
+      },
+      "200_0.04_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.000479914943300891,
+        "reasons": {}
+      },
+      "200_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.4449999999999997,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0004799150114161808,
+        "reasons": {}
+      },
+      "200_0.08_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      },
+      "200_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0005100964607074205,
+        "reasons": {}
+      },
+      "200_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.6753333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.0005100965166914832,
+        "reasons": {}
+      },
+      "200_0.12_12.0": {
+        "n": 3,
+        "successes": 0,
+        "rate": 0.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": null,
+        "reasons": {
+          "support_reach_exceeded": 3
+        }
+      }
+    },
+    "capture_predict": {
+      "50_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.007532379201794487,
+        "reasons": {}
+      },
+      "50_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.033666666666666366,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.008001033623044334,
+        "reasons": {}
+      },
+      "50_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.35633333333333317,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10119973942114158,
+        "reasons": {}
+      },
+      "50_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.004197632888564648,
+        "reasons": {}
+      },
+      "50_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.05633333333333305,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.004804381219977875,
+        "reasons": {}
+      },
+      "50_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.30299999999999977,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09659113182110857,
+        "reasons": {}
+      },
+      "50_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.009481756932735926,
+        "reasons": {}
+      },
+      "50_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.015002477829574062,
+        "reasons": {}
+      },
+      "50_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3339999999999998,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09914161640397401,
+        "reasons": {}
+      },
+      "50_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.011243671043687455,
+        "reasons": {}
+      },
+      "50_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.03855512837912911,
+        "reasons": {}
+      },
+      "50_0.08_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.7883333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10208656062078014,
+        "reasons": {}
+      },
+      "50_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.01966313760055266,
+        "reasons": {}
+      },
+      "50_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.2599999999999998,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.05407790837960665,
+        "reasons": {}
+      },
+      "50_0.12_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 1.1833333333333333,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.1904591240504361,
+        "reasons": {}
+      },
+      "100_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.00694237565590217,
+        "reasons": {}
+      },
+      "100_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02799999999999958,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.007436196904432888,
+        "reasons": {}
+      },
+      "100_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.38999999999999985,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09982943974782522,
+        "reasons": {}
+      },
+      "100_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.007311144897634143,
+        "reasons": {}
+      },
+      "100_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.05199999999999975,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.007784092579067719,
+        "reasons": {}
+      },
+      "100_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3006666666666664,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10030381874126232,
+        "reasons": {}
+      },
+      "100_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.005820491313320561,
+        "reasons": {}
+      },
+      "100_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19933333333333314,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.013062676028286861,
+        "reasons": {}
+      },
+      "100_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3189999999999998,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09688325971770632,
+        "reasons": {}
+      },
+      "100_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.01078051383766776,
+        "reasons": {}
+      },
+      "100_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.03826537247704034,
+        "reasons": {}
+      },
+      "100_0.08_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.6839999999999997,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09932147997049223,
+        "reasons": {}
+      },
+      "100_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.018790423644713224,
+        "reasons": {}
+      },
+      "100_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.24066666666666636,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.05319646257139432,
+        "reasons": {}
+      },
+      "100_0.12_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.8043333333333331,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.19128285077864926,
+        "reasons": {}
+      },
+      "200_0.0_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.009870213776893256,
+        "reasons": {}
+      },
+      "200_0.0_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.02699999999999969,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.006671800533633248,
+        "reasons": {}
+      },
+      "200_0.0_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.39866666666666656,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.09416870548131485,
+        "reasons": {}
+      },
+      "200_0.02_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.008004811887343343,
+        "reasons": {}
+      },
+      "200_0.02_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.048999999999999634,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.012785479746211373,
+        "reasons": {}
+      },
+      "200_0.02_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3013333333333332,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10427024564495473,
+        "reasons": {}
+      },
+      "200_0.04_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0094718144298609,
+        "reasons": {}
+      },
+      "200_0.04_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19099999999999984,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.015527252880191819,
+        "reasons": {}
+      },
+      "200_0.04_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.3156666666666664,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10132314874510862,
+        "reasons": {}
+      },
+      "200_0.08_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.0030775212130897817,
+        "reasons": {}
+      },
+      "200_0.08_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.19999999999999973,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.03771319149498262,
+        "reasons": {}
+      },
+      "200_0.08_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.6499999999999999,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.10180021808190805,
+        "reasons": {}
+      },
+      "200_0.12_0.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": null,
+        "recovery_n": 0,
+        "successful_route_error_mean_m": 0.012445329641238179,
+        "reasons": {}
+      },
+      "200_0.12_6.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.26233333333333314,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.06333614981352338,
+        "reasons": {}
+      },
+      "200_0.12_12.0": {
+        "n": 3,
+        "successes": 3,
+        "rate": 1.0,
+        "recovery_mean_s": 0.8019999999999997,
+        "recovery_n": 3,
+        "successful_route_error_mean_m": 0.19600199114925,
+        "reasons": {}
+      }
+    }
+  },
+  "boundary": {
+    "pd": {
+      "0.0": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.0008823715738735699,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008823717497098972,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.5916666666666665,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008823719255473325,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.9296666666666664,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008823723073366706,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 9.0
+      },
+      "0.04": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.0008342787707908209,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 4.2476666666666665,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008342786972594761,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 4.2476666666666665,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008342783951106248,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 6.0
+      },
+      "0.08": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      },
+      "0.12": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      }
+    },
+    "lqr": {
+      "0.0": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.000780737121524969,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371206062828,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.028333333333333172,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371189841716,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.4789999999999998,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371089591082,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 9.0
+      },
+      "0.04": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.0010256445763985262,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 3.7296666666666667,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0010256445741307944,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 3.7296666666666667,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0010256445657676548,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 6.0
+      },
+      "0.08": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      },
+      "0.12": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      }
+    },
+    "capture": {
+      "0.0": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.010450221326725252,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.010434042808370228,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.027666666666666433,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.01152888891362359,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.19999999999999973,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.038414088873809836,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.39866666666666645,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.09556589804737194,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.7879999999999997,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.09889318928268771,
+            "reasons": {}
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 15.0
+      },
+      "0.04": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.015426108197727039,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 1.0303333333333333,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.013527126523623914,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.23933333333333304,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.03316859142887205,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.2683333333333331,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.08918441631642228,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 2.301,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.10611989376047222,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 12.0
+      },
+      "0.08": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      },
+      "0.12": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": null
+      }
+    },
+    "lqr_predict": {
+      "0.0": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.000780737121524969,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371206062828,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.028333333333333172,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371189841716,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.4789999999999998,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0007807371089591082,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 9.0
+      },
+      "0.04": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.000900547214176616,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.000900547212491675,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.1613333333333332,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0009005472100713841,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.8463333333333333,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0009005471918859931,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 9.0
+      },
+      "0.08": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.0008799430173419539,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.030999999999999694,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008799430183429703,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.43666666666666654,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008799430235346351,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 6.0
+      },
+      "0.12": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.0008442363669835896,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.07366666666666655,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.000844236379865747,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.6769999999999997,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.0008442364415520337,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 6.0
+      }
+    },
+    "capture_predict": {
+      "0.0": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.010450221326725252,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.010434042808370228,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.027666666666666433,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.01152888891362359,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.19999999999999973,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.038414088873809836,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.39866666666666645,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.09556589804737194,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.7879999999999997,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.09889318928268771,
+            "reasons": {}
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 15.0
+      },
+      "0.04": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.01404521856904988,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.0,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.014137472788743092,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.15566666666666654,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.019883338623114814,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.3106666666666665,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.07785248903281795,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.31599999999999967,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.10268914473838942,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 12.0
+      },
+      "0.08": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.009208062082012266,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.026666666666666394,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.008381881047263295,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.19999999999999973,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.03621645144687596,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.40366666666666645,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.09997665499456887,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.669333333333333,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.10421447414401064,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 12.0
+      },
+      "0.12": {
+        "cells": {
+          "0.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": 0.015545751883365573,
+            "reasons": {}
+          },
+          "3.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.07199999999999977,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.012103656175927383,
+            "reasons": {}
+          },
+          "6.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.22533333333333308,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.04884685800648283,
+            "reasons": {}
+          },
+          "9.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.30366666666666636,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.08758438465403336,
+            "reasons": {}
+          },
+          "12.0": {
+            "n": 3,
+            "successes": 3,
+            "rate": 1.0,
+            "recovery_mean_s": 0.8016666666666664,
+            "recovery_n": 3,
+            "successful_route_error_mean_m": 0.18818815763546,
+            "reasons": {}
+          },
+          "15.0": {
+            "n": 3,
+            "successes": 0,
+            "rate": 0.0,
+            "recovery_mean_s": null,
+            "recovery_n": 0,
+            "successful_route_error_mean_m": null,
+            "reasons": {
+              "support_reach_exceeded": 3
+            }
+          }
+        },
+        "contiguous_all_seed_impulse_Ns": 12.0
+      }
+    }
+  },
+  "domain": {
+    "pd": {
+      "n": 32,
+      "successes": 24,
+      "rate": 0.75,
+      "recovery_mean_s": 1.4672916666666664,
+      "recovery_n": 24,
+      "successful_route_error_mean_m": 0.0019779300553737227,
+      "reasons": {
+        "friction_infeasible": 3,
+        "support_reach_exceeded": 3,
+        "terminal_balance_not_recovered": 2
+      }
+    },
+    "lqr": {
+      "n": 32,
+      "successes": 26,
+      "rate": 0.8125,
+      "recovery_mean_s": 0.6515769230769227,
+      "recovery_n": 26,
+      "successful_route_error_mean_m": 0.003215497538617563,
+      "reasons": {
+        "friction_infeasible": 3,
+        "support_reach_exceeded": 3
+      }
+    },
+    "capture": {
+      "n": 32,
+      "successes": 29,
+      "rate": 0.90625,
+      "recovery_mean_s": 0.12168965517241359,
+      "recovery_n": 29,
+      "successful_route_error_mean_m": 0.030607226972707974,
+      "reasons": {
+        "friction_infeasible": 3
+      }
+    },
+    "lqr_predict": {
+      "n": 32,
+      "successes": 26,
+      "rate": 0.8125,
+      "recovery_mean_s": 0.14973076923076903,
+      "recovery_n": 26,
+      "successful_route_error_mean_m": 0.0030659521265597417,
+      "reasons": {
+        "friction_infeasible": 3,
+        "support_reach_exceeded": 3
+      }
+    },
+    "capture_predict": {
+      "n": 32,
+      "successes": 29,
+      "rate": 0.90625,
+      "recovery_mean_s": 0.09913793103448255,
+      "recovery_n": 29,
+      "successful_route_error_mean_m": 0.02864542042827954,
+      "reasons": {
+        "friction_infeasible": 3
+      }
+    }
+  },
+  "phase": {
+    "pd": {
+      "n": 36,
+      "successes": 9,
+      "rate": 0.25,
+      "recovery_mean_s": 0.5927777777777775,
+      "recovery_n": 9,
+      "successful_route_error_mean_m": 0.0010509948759532615,
+      "reasons": {
+        "support_reach_exceeded": 27
+      }
+    },
+    "lqr": {
+      "n": 36,
+      "successes": 9,
+      "rate": 0.25,
+      "recovery_mean_s": 0.030111111111111002,
+      "recovery_n": 9,
+      "successful_route_error_mean_m": 0.0007219533936851024,
+      "reasons": {
+        "support_reach_exceeded": 27
+      }
+    },
+    "capture": {
+      "n": 36,
+      "successes": 20,
+      "rate": 0.5555555555555556,
+      "recovery_mean_s": 0.7475999999999998,
+      "recovery_n": 20,
+      "successful_route_error_mean_m": 0.07254124252495167,
+      "reasons": {
+        "support_reach_exceeded": 15,
+        "route_shift_exceeded": 1
+      }
+    },
+    "lqr_predict": {
+      "n": 36,
+      "successes": 18,
+      "rate": 0.5,
+      "recovery_mean_s": 0.24555555555555544,
+      "recovery_n": 18,
+      "successful_route_error_mean_m": 0.0008643623977493304,
+      "reasons": {
+        "support_reach_exceeded": 18
+      }
+    },
+    "capture_predict": {
+      "n": 36,
+      "successes": 30,
+      "rate": 0.8333333333333334,
+      "recovery_mean_s": 0.28319999999999984,
+      "recovery_n": 30,
+      "successful_route_error_mean_m": 0.050577690863123824,
+      "reasons": {
+        "support_reach_exceeded": 6
+      }
+    }
+  },
+  "gait": {
+    "pd": {
+      "n": 12,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    "lqr": {
+      "n": 12,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    "capture": {
+      "n": 12,
+      "successes": 6,
+      "rate": 0.5,
+      "recovery_mean_s": 0.27799999999999975,
+      "recovery_n": 6,
+      "successful_route_error_mean_m": 0.07538368119499685,
+      "reasons": {
+        "support_reach_exceeded": 6
+      }
+    },
+    "lqr_predict": {
+      "n": 12,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 12
+      }
+    },
+    "capture_predict": {
+      "n": 12,
+      "successes": 9,
+      "rate": 0.75,
+      "recovery_mean_s": 0.42122222222222194,
+      "recovery_n": 9,
+      "successful_route_error_mean_m": 0.08194429557939845,
+      "reasons": {
+        "support_reach_exceeded": 3
+      }
+    }
+  },
+  "nominal": {
+    "pd_0.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": 0.0008028683084616743,
+      "reasons": {}
+    },
+    "pd_6.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.5716666666666663,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.0008028686352893667,
+      "reasons": {}
+    },
+    "pd_12.0": {
+      "n": 3,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 3
+      }
+    },
+    "lqr_0.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": 0.00046157713372539975,
+      "reasons": {}
+    },
+    "lqr_6.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.02799999999999958,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.00046157713087311493,
+      "reasons": {}
+    },
+    "lqr_12.0": {
+      "n": 3,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 3
+      }
+    },
+    "capture_0.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": 0.00694237565590217,
+      "reasons": {}
+    },
+    "capture_6.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.02799999999999958,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.007436196904432888,
+      "reasons": {}
+    },
+    "capture_12.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.38999999999999985,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.09982943974782522,
+      "reasons": {}
+    },
+    "lqr_predict_0.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": 0.00046157713372539975,
+      "reasons": {}
+    },
+    "lqr_predict_6.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.02799999999999958,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.00046157713087311493,
+      "reasons": {}
+    },
+    "lqr_predict_12.0": {
+      "n": 3,
+      "successes": 0,
+      "rate": 0.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": null,
+      "reasons": {
+        "support_reach_exceeded": 3
+      }
+    },
+    "capture_predict_0.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": null,
+      "recovery_n": 0,
+      "successful_route_error_mean_m": 0.00694237565590217,
+      "reasons": {}
+    },
+    "capture_predict_6.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.02799999999999958,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.007436196904432888,
+      "reasons": {}
+    },
+    "capture_predict_12.0": {
+      "n": 3,
+      "successes": 3,
+      "rate": 1.0,
+      "recovery_mean_s": 0.38999999999999985,
+      "recovery_n": 3,
+      "successful_route_error_mean_m": 0.09982943974782522,
+      "reasons": {}
+    }
+  },
+  "spectral": {
+    "pd": {
+      "50": {
+        "0.0": 0.9466604073467663,
+        "0.02": 0.9448084988841502,
+        "0.04": 0.9424570723027623,
+        "0.08": 0.9361612187486643,
+        "0.12": 0.957844426019805
+      },
+      "100": {
+        "0.0": 0.9731660684157903,
+        "0.02": 0.9722641984600642,
+        "0.04": 0.9711251963444932,
+        "0.08": 0.9679083726981852,
+        "0.12": 0.9763008597541611
+      },
+      "200": {
+        "0.0": 0.9865416405238828,
+        "0.02": 0.9860965830303818,
+        "0.04": 0.985536091234327,
+        "0.08": 0.98392902809915,
+        "0.12": 0.9874657421011167
+      }
+    },
+    "lqr": {
+      "50": {
+        "0.0": 0.9385799837607616,
+        "0.02": 0.9384157367379469,
+        "0.04": 0.9382681503573744,
+        "0.08": 1.0488137309753225,
+        "0.12": 1.0820335622042334
+      },
+      "100": {
+        "0.0": 0.9688237928965155,
+        "0.02": 0.9687367797307973,
+        "0.04": 0.9686586373344723,
+        "0.08": 1.0198287240161619,
+        "0.12": 1.0389974889188869
+      },
+      "200": {
+        "0.0": 0.9842940549702397,
+        "0.02": 0.9842492582820805,
+        "0.04": 0.9842090399618253,
+        "0.08": 1.0086925234198063,
+        "0.12": 1.0189954606042857
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "moving_average": {
+    "constant_preserved": true,
+    "no_pre_response": true,
+    "step_half_response_ms": 80
+  },
+  "ema": {
+    "constant_preserved": true,
+    "no_pre_response": true,
+    "step_half_response_ms": 0
+  },
+  "butterworth": {
+    "constant_preserved": true,
+    "no_pre_response": true,
+    "step_half_response_ms": 80
+  }
+}

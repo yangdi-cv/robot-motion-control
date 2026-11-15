@@ -1,0 +1,13 @@
+{
+  "python": "3.10.18 | packaged by conda-forge | (main, Jun  4 2025, 14:45:41) [GCC 13.3.0]",
+  "packages": {
+    "numpy": "1.26.4",
+    "scipy": "1.15.3",
+    "mujoco": "2.3.7",
+    "osqp": "1.0.4",
+    "matplotlib": "3.10.7",
+    "Pillow": "12.3.0",
+    "imageio-ffmpeg": "0.8.1"
+  },
+  "scope": "Isolated lipm-balance environment; OSQP added; no system Python or ROS changes."
+}

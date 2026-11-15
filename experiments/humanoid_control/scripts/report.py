@@ -1,0 +1,452 @@
+"""Build a Chinese stage report and standalone source/model archive."""
+
+import hashlib
+import importlib.metadata
+import json
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import zipfile
+from markdown_it import MarkdownIt
+from model import R
+
+
+def main():
+    m = json.loads((R / "manifest.json").read_text())
+    s = json.loads((R / "summary.json").read_text())
+    v = json.loads((R / "verification.json").read_text())
+    sv = json.loads((R / "stress_verification.json").read_text())
+    video = json.loads((R / "video_metadata.json").read_text())
+    stress = json.loads((R / "stress_results.json").read_text())
+    cases = s["cases"]
+    group_names = {
+        "standing": "站立",
+        "transfer": "重心转移",
+        "single_support": "单脚支撑",
+        "one_step": "单步前移",
+        "walking": "交替步行",
+        "friction": "低摩擦",
+        "heading": "初始朝向",
+        "backend": "求解器对照",
+    }
+
+    def table(head, rows):
+        return "\n".join(
+            [
+                "| " + " | ".join(head) + " |",
+                "|" + "|".join(["---"] * len(head)) + "|",
+                *["| " + " | ".join(map(str, row)) + " |" for row in rows],
+            ]
+        )
+
+    def find(**values):
+        return next(
+            r
+            for r in cases.values()
+            if all(r["config"].get(name) == value for name, value in values.items())
+        )
+
+    base = find(
+        scenario="walk",
+        backend="clarabel",
+        walk_steps=4,
+        step_distance=0.06,
+        hz=100,
+        push_x=0.0,
+        push_y=0.0,
+    )
+    single = {
+        backend: find(
+            scenario="single", backend=backend, support_side=0, hz=100, push_y=0.0
+        )
+        for backend in ["clarabel", "osqp"]
+    }
+    walking = []
+    for key in m["groups"]["walking"]:
+        r = cases[key]
+        c = r["config"]
+        walking.append(
+            [
+                c["hz"],
+                c["walk_steps"],
+                c["step_distance"],
+                c["push_y"],
+                f"{sum(r['landings'])}/{len(r['landings'])}",
+                f"{r['forward_progress']:.4f}",
+                f"{r['duration']:.0f}",
+            ]
+        )
+    stressrows = []
+    names = {"stand": "站立", "single": "单脚支撑", "walk": "四步行走"}
+    failures = {"conflicting_joint_or_torque_bounds": "关节预测或力矩上下界冲突"}
+    for r in sorted(
+        stress.values(), key=lambda x: (x["config"]["scenario"], x["config"]["push_y"])
+    ):
+        c = r["config"]
+        reason = "完成" if r["success"] else failures.get(r["failure"], "QP判为不可行")
+        stressrows.append(
+            [
+                names[c["scenario"]],
+                c["push_y"],
+                "通过" if r["success"] else "终止",
+                f"{r['duration']:.2f}",
+                reason,
+            ]
+        )
+    timings = []
+    for backend in ["osqp", "clarabel"]:
+        r = single[backend]
+        timings.append(
+            [
+                backend,
+                f"{r['whole_body_p50_ms']:.2f}",
+                f"{r['qp_p95_ms']:.2f}",
+                f"{r['whole_body_p99_ms']:.2f}",
+                f"{r['whole_body_max_ms']:.2f}",
+                f"{r['deadline_misses']}/{r['updates']}",
+            ]
+        )
+    text = f"""# G1三维站立、单脚支撑与准静态步行
+
+2026年11月13日 · 机器人控制算法阶段进展
+
+## 摘要
+
+本轮将平面控制扩展到完整六自由度浮动基座的Unitree G1模型。采用固定版本MuJoCo Menagerie描述，保留质量、惯量、关节限位与碰撞，将原位置伺服改为29个受限力矩电机。基座没有执行器，没有用固定侧向自由度、mocap或外部支撑力维持平衡。
+
+完成三维站立、左右重心转移、双侧单脚支撑、单步前移和慢速交替步行。去重后的正式批次52个条件通过51个：Clarabel后端50/50，OSQP对照1/2。四步参考条件在29s内完成4次实测承重确认、前进约{base["forward_progress"]:.3f}m；六步延长条件在43s内前进约0.330m。步态周期约7s，属于准静态验证，不是动态高速行走。
+
+为保留失效边界，冻结控制器后另加8个强扰动条件，仅2个通过。250N侧向站立推扰、单脚较大推扰及行走中±40N侧向推扰会触发约束冲突或不可行。强扰动抽样还发现手腕—髋、肩部—躯干自接触，当前QP没有对此建模。
+
+![图1 四步真实动力学运行的双相机画面，右侧正面可见横向重心转移。](figures/camera_180.png)
+
+## 目录
+
+1. 从平面到三维：模型与控制接口
+2. 站立、重心转移与单脚支撑
+3. 三维慢速交替行走
+4. QP后端对照与运行时间
+5. 冻结条件下的结果与失效边界
+6. 独立核验与保存机制
+7. 当前范围与后续工作
+8. 代码目录、复现与参考
+
+## 1. 从平面到三维：模型与控制接口
+
+### 1.1 模型选择和保留内容
+
+先比较现有平面双足、H1和G1描述，选择腿部具备髋三轴、膝、踝俯仰/滚转的G1，便于直接验证横向平衡。模型来自MuJoCo Menagerie固定提交，G1目录采用BSD-3-Clause。源文件、网格、许可证与SHA256均保存，不依赖临时下载链接。
+
+| 项目 | 本轮设置 |
+|---|---|
+| 模型质量 | 33.341142kg，来自模型，不是实测硬件质量 |
+| 广义位置/速度维度 | nq=36，nv=35，含基座四元数 |
+| 电机 | 29个关节motor，gear=1；前6个基座自由度无电机 |
+| 基座 | 自由平移、滚转、俯仰和偏航，无焊接或平面约束 |
+| 腿部力矩界 | 每侧髋88/139/88、膝139、踝50/50N·m，取自原描述 |
+| 物理积分 | 1ms，implicitfast；椭圆摩擦锥 |
+| 控制更新 | 50、100、200Hz，状态直接取模拟器 |
+| 初态 | 原站姿基础上屈膝，初始定位只在仿真开始前进行 |
+
+原模型的位置执行器不能直接接收力矩。本轮显式替换为motor，保留原forcerange作为控制与实际作用力上限；通过检查确认执行器偏置为0、ctrl等于关节作用力矩、基座广义驱动力为0。增加足底site，仅用于计算参考点和接触扳手。
+
+模型机械参数与原描述逐项对照，包括质量、惯量、连杆、关节范围和碰撞几何。派生模型另外固定接触锥、积分及求解设置；实验中的摩擦系数显式设置，避免脚部优先级覆盖地面配置。原始上游文件没有修改。
+
+### 1.2 三维全身逆动力学
+
+继续沿用CoM、躯干、摆脚与姿态任务分层，扩展为空间雅可比、SO(3)姿态误差和每只支撑脚6维扳手。QP变量包括35维广义加速度、29维电机力矩及接触扳手。质量矩阵、偏置、被动力和运动学由MuJoCo计算，不自行重写刚体动力学。
+
+```text
+M(q) qdd + bias = Sᵀ τ + Σ J_iᵀ λ_i + passive
+λ_i = [Fx, Fy, Fz, Mx, My, Mz]，以足底site为参考，世界坐标表示
+约束：非负法向力、摩擦锥近似、足底力矩范围、关节位置/速度与电机力矩界
+目标：CoM、躯干/骨盆姿态、摆脚、关节姿态、负载分配和地面CoP
+```
+
+CoM外环沿用 `a_cmd=a_ff+80(c_ref-c)+18(v_ref-v)`。横向与前向同时参与，接触锥在当前足坐标中约束；不存在把左右运动直接固定为0的平面假设。基座姿态通过关节力矩稳定，是控制目标，不是机械锁定。
+
+QP只输出电机力矩到data.ctrl。预测接触扳手用于求解和记录，不直接施加到模拟器。外力数组仅用于明确的推扰协议；地面反力由MuJoCo独立求解。实际地面CoP从接触力与力矩重算，与QP预测分开。
+
+相关代码在 `scripts/model.py`、`scripts/controller.py`、`scripts/qp.py`。
+
+## 2. 站立、重心转移与单脚支撑
+
+### 2.1 站立与横向转移
+
+站立覆盖50/100/200Hz，以及无扰动、前后±40N、左右±40N和单向60N侧向推扰，共18个条件，均完成。推扰持续0.1s。左右重心转移以五次平滑参考移动约6cm再返回，另加0/±20N侧向推扰，6个条件均完成。
+
+另外两组初始偏航±0.3rad的站立测试通过，用于检查世界/足坐标变换；没有锁偏航自由度。这里验证的是不同朝向下站立，不是转弯行走。
+
+### 2.2 两侧都做实际单脚承重
+
+先把CoM移向支撑脚，再卸载、抬起另一脚，保持后落回地面，最后回到双脚承重。支持左脚和右脚两种模式，100/200Hz以及0/±10N侧向推扰，共12个条件均通过。
+
+无推扰的左右模式，摆脚实际最大高度约4.23cm，目标高度5cm。验收区间要求：摆脚高于3cm、其实际法向力低于5N、支撑脚承担超过模型重量80%，连续至少0.5s。参考条件在所选保持窗口内连续满足约1.4s，随后实际落脚并重新双脚承重。不能只依据脚的画面位置判断单脚支撑。
+
+![图2 双侧单脚支撑：实际离地高度与真实法向力。](figures/single_support.png)
+
+开发中发现把双支撑维持到重心完全移过去，会导致卸载脚、关节范围与刚性接触要求相互冲突。本轮把卸载与抬脚时序协调，并允许空中脚有小幅滚转；关节范围、真实接触和电机力矩上限未关闭。
+
+相关代码在 `scripts/run.py` 的Reference、simulate，以及 `scripts/metrics.py`。
+
+## 3. 三维慢速交替行走
+
+### 3.1 从单步到连续交替
+
+单步前移同时覆盖左右摆脚、6cm和10cm目标，共4个条件完成。连续步行按左右交替安排横向重心转移、卸载、摆脚、落地承重和回中。每个周期约7s，摆脚时间较长，目的是先验证可执行性而非追求速度。
+
+{table(["控制率（Hz）", "步数", "目标步长（m）", "侧向推力（N）", "实测承重确认", "CoM前进量（m）", "时长（s）"], walking)}
+
+前进量取实际CoM变化。四步6cm条件约0.210m，六步约0.330m；不能直接把脚的目标步长总和当成身体前进量。受扰四步条件的推力发生在第二次单脚支撑附近，强度10N、持续0.1s。
+
+![图3 实际足底前移、离地和左右承重转换。](figures/walking_contacts.png)
+
+![图4 俯视的实际CoM轨迹及足底位置，可见横向转移。](figures/com_top.png)
+
+### 3.2 承重确认与完成判据
+
+每步须有实际摆脚离地且单脚承担主要重量的时段；落脚后、下一次抬脚前，要求正确脚在目标位置1.5cm范围内、足底高度绝对值小于8mm，并有超过10N法向力持续至少50ms。末态还要恢复双脚承重，限制CoM跟踪、终端误差及机体倾角。单纯运行到结束或没有倒下，都不足以计为完成。
+
+目前支撑集合仍按名义时间表切换，实际载荷用于验收和诊断，没有实现触地触发的在线步时重排。测得的承重确认也不是“首次触地时间”，两者不混用。
+
+相关代码在 `scripts/run.py` 的Reference和 `scripts/metrics.py` 的evaluate。
+
+## 4. QP后端对照与运行时间
+
+### 4.1 同一问题，不更换模型或控制目标
+
+先导中OSQP在部分动作可以完成，但在连续步行中出现迭代上限及数值敏感性。查阅维护与许可证后，引入Apache-2.0的Clarabel 0.11.1。两个后端接收同一H、g、A、l、u：OSQP使用双边约束，Clarabel转换为等式零锥和不等式非负锥，不另换一套控制器。
+
+残差按物理量校验，区分N、N·m、m/s²及rad/s²；电机上限另外逐项核对。正式参数冻结后不再因为单个失败改容差。
+
+| 正式后端对照 | 单脚支撑 | 四步行走 |
+|---|---|---|
+| Clarabel | 完成 | 完成 |
+| OSQP | 完成 | 残差超限终止 |
+
+OSQP四步对照触发的是某足底力矩不等式数值残差约0.05026N·m，略高于预设0.05N·m允许值，并非观察到机器人倒地。不能据此断言OSQP在物理稳定性上一定较差，也不能把临界的数值门槛当成算法能力的显著差距。
+
+从同一成功轨迹取7个状态，构造完全相同的QP分别重解，两后端全部返回求解成功，Clarabel约束残差更小；这些离散点不包含另一条轨迹的所有问题，不能替代整回合测试。原始矩阵对照结果在backend_probe.json。
+
+### 4.2 记录完整调用时间，而非只取平均
+
+以下为同一8s、100Hz单脚支撑条件的全身控制调用，包含目标/约束构建和QP，不含通信或完整物理循环：
+
+{table(["后端", "P50（ms）", "P95（ms）", "P99（ms）", "最大（ms）", "超过10ms参考预算"], timings)}
+
+![图5 单脚支撑条件的调用耗时累计分布。](figures/backend_timing.png)
+
+在本次50个Clarabel条件的61,000次更新中，没有记录到WBC函数超过各自控制周期预算。四步参考条件P95约{base["qp_p95_ms"]:.2f}ms。OSQP中位数更短，但本条件的耗时尾部更长。该结果来自本机离线、三进程条件批次，不包含传感、通信和调度的端到端时延，也不是硬实时保证。
+
+相关代码在 `scripts/qp.py`、`scripts/backend_probe.py`、`scripts/analyze.py`。
+
+## 5. 冻结条件下的结果与失效边界
+
+### 5.1 正式条件
+
+{table(["组别", "通过/组内条件"], [[group_names[name], f"{row['passed']}/{row['n']}"] for name, row in s["groups"].items()])}
+
+各组共享部分相同配置，去重后为52个，而不是把表格相加。去重同时处理整数/浮点同值，并忽略无推力时没有物理意义的推扰时间。Clarabel条件为50/50，OSQP为1/2；测试是预设条件网格，不是实际部署成功概率。
+
+### 5.2 控制器冻结后的强扰动
+
+在原控制器、求解精度和判据不变的情况下，额外增加8个强扰动，结果如下。站立推扰在2.7s，单脚在3.0s，行走在10.0s施加，均持续0.1s。
+
+{table(["场景", "侧向力（N）", "结果", "运行时长（s）", "原因"], stressrows)}
+
+![图6 40/150/250N侧向站立推扰；终止轨迹只画到真实停止时刻。](figures/push_boundary.png)
+
+150N站立条件完成，250N终止；这两个点不能确定精确的抗扰阈值。单脚和行走的抗扰范围明显小于双支撑，正负方向也不完全对称。固定步时、有限支撑范围和关节界会限制恢复，不能把站立通过的推力直接迁移为行走抗扰能力。
+
+独立重建接触时，在两个失败附近分别观察到右髋—右腕约7.8N、躯干—左肩约92.3N的自接触。模拟器保留了这些真实碰撞，但当前QP只建模足地接触；它们是后续应处理的模型差异，尚不能只凭这些抽样认定为唯一失败原因。
+
+强扰动2/8与正式51/52分开报告，不合成一个容易误解的成功率。没有通过后续调参把这批失败从结果里移除。
+
+## 6. 独立核验与保存机制
+
+重新读取保存状态，而不只采信运行器的success。检查四元数与关节积分、足底/CoM正运动学、真实接触扳手、空间雅可比虚功、电机力矩通道、全部物理验收判据及源码/资源哈希。
+
+{table(["核验项", "结果"], [["正式记录 / 强扰动记录", f"{v['cases_verified']} / {sv['cases_verified']}"], ["正式记录中承重确认", v["verified_load_confirmations"]], ["四元数与关节积分最大残差", f"{v['max_errors']['integration']:.2e}"], ["足位 / CoM重算残差（m）", f"{v['max_errors']['feet']:.2e} / {v['max_errors']['com']:.2e}"], ["足地接触虚功残差", f"{v['max_errors']['virtual_work']:.2e}"], ["独立接触重建最大差值", f"{v['max_errors']['contact_rebuild']:.2e}"], ["接口/物理量单元检查", "9项通过"], ["视频完整解码", f"{video['decoded_frames']}/{video['frames']}帧"]])}
+
+积分、执行器界、分块一致性和任务判据覆盖完整保存轨迹；接触与运动学独立重建在每条运行均匀抽取12个时刻。强扰动接触核验只比较相同的足地接触，额外自接触另外记录，避免把不同接触集合的广义力相减后误判为程序错误。
+
+每秒保存一块完整轨迹，并原子更新运行状态；中途退出可保留最后完整块，但不支持直接恢复模拟器继续运行。所有分块与最终完整数组逐项一致。
+
+双相机视频是同配置实际物理重跑，不是用参考轨迹强制驱动模型。录制的qpos、qvel、ctrl、CoM、足位及实际接触力与正式回合逐元素相同，最大差值为0。视频为{video["frames"]}帧、{video["duration"]:.0f}s，不增加独立实验数量。
+
+相关代码在 `scripts/tests.py`、`scripts/verify.py`、`scripts/storage.py` 和 `scripts/record.py`。
+
+## 7. 当前范围与后续工作
+
+本轮已从受限平面模型推进到真实三维浮动基座、29个受限电机、实际单脚承重和交替步行，并找到了强扰动下的约束与自接触边界。还不能称为企业可部署的人形控制器：
+
+- 状态直接取自模拟器，尚未使用IMU/编码器构建有误差的状态估计。
+- 步态为慢速准静态，约7s一步，未完成动态步行或在线落脚位置/时刻优化。
+- 接触切换按名义时序，未处理提前/延迟触地及地形变化。
+- 只建模足地接触，未加入自碰撞规避与额外接触约束。
+- 使用有限力矩的理想电机，没有真实电流环、驱动带宽和通信链路。
+- 未做实体机器人、软硬件在环或硬实时验证。
+
+后续优先把触地事件、状态估计与自碰撞约束接入同一闭环，再讨论提高行走速度。继续扩大相同理想场景的条件数，不如先补这些接口。
+
+## 8. 代码目录、复现与参考
+
+```text
+humanoid_control/
+  scripts/
+    model.py / controller.py / qp.py
+    run.py / metrics.py / storage.py
+    suite.py / stress.py / analyze.py
+    tests.py / verify.py / backend_probe.py
+    figures.py / record.py / report.py
+  models/g1_torque.xml / scene.xml
+  third_party/menagerie/unitree_g1/   原模型、网格、BSD-3-Clause许可
+  research/                         上游版本、资源哈希与参考
+  manifest.json / stress_manifest.json
+  results.json / stress_results.json / summary.json / metrics.csv
+  verification.json / stress_verification.json / backend_probe.json
+  requirements.txt / requirements-visual.txt / README.md
+```
+
+独立环境为.venvs/humanoid-control，MuJoCo3.2.3、NumPy1.26.4、SciPy1.15.3、OSQP1.0.4、Clarabel0.11.1。原lipm、ROS和模型训练环境没有改动。核心测试和物理仿真使用CPU，不需要GPU权重、摄像头或机器人；录屏另需OpenGL/EGL和中文字体。
+
+```bash
+cd humanoid_control
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python scripts/tests.py
+.venv/bin/python scripts/suite.py
+.venv/bin/python scripts/analyze.py
+.venv/bin/python scripts/verify.py
+.venv/bin/python scripts/stress.py
+```
+
+源码ZIP包含完整模型资源、代码、配置、结果汇总、关键图和报告源文，不含虚拟环境和大规模原始数组。重新运行suite.py/stress.py会生成原始轨迹，随后才能执行相应verify；不能用只包含汇总的源码包直接核验尚未生成的全量数组。9项单元检查自包含，不依赖这些数组。
+
+参考模型与设计均在实现前核对许可和维护状态；没有下载现成策略来替代本轮控制器：
+
+- MuJoCo Menagerie G1：BSD-3-Clause，固定模型提交见research/model_source.json。
+- TSID：BSD-2-Clause；PlaCo：MIT，参考浮动基座任务与接触分层，不整体引入其依赖。
+- Clarabel：Apache-2.0，采用官方QP接口，不自行实现数值求解器。
+- 原始模型和求解器引用： https://github.com/google-deepmind/mujoco_menagerie/tree/main/unitree_g1 、 https://github.com/stack-of-tasks/tsid 、 https://github.com/Rhoban/placo 、 https://clarabel.org/stable/examples/py/example_qp/ 。
+
+具体修改、约定与取舍见RESEARCH.md。交付直接附PDF和MP4，不依赖视频链接。
+"""
+    (R / "REPORT.md").write_text(text)
+    css = """@page{size:A4;margin:17mm 16mm 18mm}body{font:10pt/1.7 "Noto Sans CJK SC","Noto Sans CJK JP",sans-serif;color:#23374a}h1{font-size:24pt;color:#153b58}h2{font-size:16pt;color:#153b58;border-bottom:1px solid #c9d8e4;padding-top:12px;break-after:avoid}h3{font-size:12pt;break-after:avoid}.toc-title{break-before:page}.toc-title+ol{break-inside:avoid}table{border-collapse:collapse;width:100%;font-size:8.5pt;margin:12px 0;break-inside:avoid}td,th{border:1px solid #c9d8e4;padding:5px;text-align:left}th{background:#edf3f8}img{width:100%;height:auto}p:has(img){break-inside:avoid}pre{font:8pt/1.6 "DejaVu Sans Mono","Noto Sans CJK SC",monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;background:#f1f5f8;break-inside:avoid}code,a{overflow-wrap:anywhere}a{color:#24577a}"""
+    (R / "REPORT.html").write_text(
+        '<!doctype html><meta charset="utf-8"><title>G1三维站立、单脚支撑与准静态步行</title><style>'
+        + css
+        + "</style>"
+        + MarkdownIt()
+        .enable("table")
+        .render(text)
+        .replace("<h2>目录</h2>", '<h2 class="toc-title">目录</h2>')
+    )
+    subprocess.run(
+        [
+            "google-chrome",
+            "--headless",
+            "--no-sandbox",
+            "--disable-gpu",
+            "--no-pdf-header-footer",
+            f"--print-to-pdf={R / 'REPORT.pdf'}",
+            (R / "REPORT.html").as_uri(),
+        ],
+        check=True,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    packages = {
+        name: importlib.metadata.version(name)
+        for name in [
+            "numpy",
+            "scipy",
+            "mujoco",
+            "osqp",
+            "clarabel",
+            "Pillow",
+            "matplotlib",
+            "imageio-ffmpeg",
+        ]
+    }
+    (R / "environment.json").write_text(
+        json.dumps(
+            dict(
+                python=sys.version,
+                packages=packages,
+                scope="New isolated humanoid-control; existing environments unchanged",
+            ),
+            indent=2,
+        )
+    )
+    destination = R.parents[1] / "deliverables/20261113_字节_G1三维控制"
+    destination.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(R / "REPORT.pdf", destination / "G1三维控制阶段报告.pdf")
+    shutil.copyfile(
+        R / "G1_三维四步准静态行走.mp4", destination / "G1_三维四步准静态行走.mp4"
+    )
+    files = (
+        list((R / "scripts").glob("*.py"))
+        + [R / "scripts/python"]
+        + list((R / "models").glob("*.xml"))
+        + list((R / "research").glob("*.json"))
+        + list((R / "figures").glob("*.png"))
+    )
+    files += [
+        p for p in (R / "third_party/menagerie/unitree_g1").rglob("*") if p.is_file()
+    ]
+    files += [
+        R / name
+        for name in [
+            "README.md",
+            "pyproject.toml",
+            "RESEARCH.md",
+            "REPORT.md",
+            "requirements.txt",
+            "requirements-visual.txt",
+            "environment.json",
+            "manifest.json",
+            "stress_manifest.json",
+            "results.json",
+            "stress_results.json",
+            "summary.json",
+            "metrics.csv",
+            "verification.json",
+            "stress_verification.json",
+            "backend_probe.json",
+            "video_metadata.json",
+        ]
+    ]
+    if (R / "clean_acceptance.json").exists():
+        files.append(R / "clean_acceptance.json")
+    contents = {
+        str(Path("humanoid_control") / p.relative_to(R)): p.read_bytes()
+        for p in sorted(set(files))
+    }
+    contents["PACKAGE_SHA256.json"] = json.dumps(
+        {name: hashlib.sha256(data).hexdigest() for name, data in contents.items()},
+        indent=2,
+    ).encode()
+    with zipfile.ZipFile(
+        destination / "G1三维控制_源码与模型.zip", "w", zipfile.ZIP_DEFLATED
+    ) as z:
+        for name, data in contents.items():
+            z.writestr(name, data)
+    (destination / "文件清单.json").write_text(
+        json.dumps(
+            {
+                p.name: hashlib.sha256(p.read_bytes()).hexdigest()
+                for p in destination.iterdir()
+                if p.is_file() and p.name != "文件清单.json"
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
+    print(destination)
+
+
+if __name__ == "__main__":
+    main()

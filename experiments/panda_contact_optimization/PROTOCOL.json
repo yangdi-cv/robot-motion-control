@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-12",
+  "scope": "Fixed-base Panda, real PhysX simulation only; no physical robot",
+  "primary_control_dt_s": 0.01,
+  "physics_dt_s": 0.001,
+  "target_force_N": 5,
+  "admittance_mass_kg": 1,
+  "admittance_damping_Ns_m": 40,
+  "evaluation_bin_s": 0.01,
+  "force_band_N": [4.5, 5.5],
+  "legacy_window_s": 0.5,
+  "tail_evaluation_s": 2,
+  "engineering_targets_not_guarantees": {
+    "raw_peak_N_max": 15,
+    "last2_in_band_pct_min": 99,
+    "last2_rmse_N_max": 0.25,
+    "first5_joint_rmse_deg_each_max": 0.1
+  },
+  "comparison_rules": [
+    "Only compare algorithm improvement within equal geometry, gravity, material and solver settings",
+    "Soft material is an environment condition, not a controller improvement",
+    "EMA is used for feedback only, never as evaluation signal",
+    "Identical deterministic repeats do not establish statistical significance",
+    "Known surface height for braking is simulated prior knowledge, not visual inference",
+    "No claim of industrial robustness or full-duration constant force from a 0.5s window"
+  ]
+}

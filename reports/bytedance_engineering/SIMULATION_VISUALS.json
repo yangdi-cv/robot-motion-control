@@ -1,0 +1,767 @@
+[
+  {
+    "kind": "figure",
+    "stage": "s03",
+    "source": "reports/bytedance_engineering/videos/ch02/panda_joint_trajectory.mp4",
+    "local": "figures/ch02/panda_trajectory_viewport_sequence.png",
+    "sha256": "4e8bdc043e0a75699b3b0913f6daa62fa79c77fe740c42c598ee571f93cd089a",
+    "caption": "Isaac Panda实际轨迹录屏的四个时刻；裁剪仅去除界面侧栏，时间为视频播放时刻。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.01,
+      "frames": [
+        {
+          "frame": 10,
+          "video_time_s": 0.4997501249375312,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 50,
+          "video_time_s": 2.498750624687656,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 100,
+          "video_time_s": 4.997501249375312,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 160,
+          "video_time_s": 7.996001999000499,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/keyframes.png",
+    "local": "figures/ch04/panda_contact_compensated_keyframes.png",
+    "sha256": "c46a07c42e5fdca8576be0d6648cad41018f8dc2cf6ce9b6740a78a3b4afae71",
+    "caption": "Isaac球形探针接触的保存关键帧；这是补偿内环示例，不替代普通PID主实验的条件标记。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/figures/comparison_keyframe.png",
+    "local": "figures/ch05/panda_gravity_comparison_full_frame.png",
+    "sha256": "45e64a9aedbbf5fe523645ca70920091ea6024ae6a0bf1d29e93f787d29fcfe7",
+    "caption": "相同重力、几何与内环下的位置控制和优化导纳：实际画面与同步均力曲线。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00000.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame000.png",
+    "sha256": "157815fdc3638c2629829dfe80822a362660752f4d67b06eef5588c3407939b6",
+    "caption": "两种控制条件的纯相机画面，保存帧序号0（约0.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00000.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00000.png"
+      ],
+      "source_sha256": [
+        "4a52525086171f9be8b7ad4d602d7ee90af4262f2d614ece24c43b73f0363523",
+        "f326e8207ba28ec04a0ee8a7ad1378171aeb11e8471c4fe99893e674ce652e67"
+      ],
+      "frame_index": 0
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00140.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame140.png",
+    "sha256": "6b3f70e6ef0a905fe6c5837db449a476c7cedb7f557d165e59f21171079bbbf0",
+    "caption": "两种控制条件的纯相机画面，保存帧序号140（约14.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00140.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00140.png"
+      ],
+      "source_sha256": [
+        "e953a8ea515486f343b12f75c023e27f6700f251e8fbbc1fbc906276be9e8e14",
+        "e1961cb41dbd944cc025b5689e3b516f699ed104fdfd210d7451a40cd54f97f3"
+      ],
+      "frame_index": 140
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00300.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame300.png",
+    "sha256": "d22b8edcd22a86755a48a0c71a38dc6952872395bb2758b1618c8a76f54df262",
+    "caption": "两种控制条件的纯相机画面，保存帧序号300（约30.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00300.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00300.png"
+      ],
+      "source_sha256": [
+        "9261b2c422a56957040927fff23106417edb946fe734d90167c19af31efe9b4c",
+        "2995476213768bf60fb6f9c477b7388bffe84a796bb7061ef3443e01ef1c033a"
+      ],
+      "frame_index": 300
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/lipm_keyframe.png",
+    "local": "figures/ch06/lipm_reference_support_visualization.png",
+    "sha256": "cb8321a01a2674f30fa3bd68c3eddcec847b0f72a298d901b6004ce9feea8bca",
+    "caption": "线性倒立摆的状态与支撑示意，不属于多关节物理相机画面。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/figures/physical_keyframe.png",
+    "local": "figures/ch06/finite_foot_standing_comparison.png",
+    "sha256": "199dcecfb64e6cb7746c1984a9bffb3a080620f086f214e40dc814a2a42e0fba",
+    "caption": "有限脚掌非线性站立模型的实际物理画面与对应姿态记录；左PD、右LQR。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/physical_comparison.mp4",
+    "local": "figures/ch06/finite_foot_push_camera_sequence.png",
+    "sha256": "97b3bf43ea1c569c5d1c7e0974d82a6427d6327c301c3b2767252255537e64b5",
+    "caption": "有限脚掌站立推扰前、推扰后及后续恢复画面；每行左PD、右LQR，时间为视频时刻。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 53,
+          "video_time_s": 2.65,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        },
+        {
+          "frame": 57,
+          "video_time_s": 2.85,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        },
+        {
+          "frame": 90,
+          "video_time_s": 4.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_torque_comparison.mp4",
+    "local": "figures/ch07/planar_biped_failure_camera_sequence.png",
+    "sha256": "46cf019d3a34cdba2e2ab499d6db41f9246e256c7834e100aa7e7682bd7a113e",
+    "caption": "完整力矩与半力矩的实际相机画面对照；后者终止后冻结末帧，不能将其显示时长当成有效运行时长。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 50,
+          "video_time_s": 2.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        },
+        {
+          "frame": 70,
+          "video_time_s": 3.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        },
+        {
+          "frame": 90,
+          "video_time_s": 4.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/figures/frame_142.png",
+    "local": "figures/ch07/planar_twenty_steps_full_frame.png",
+    "sha256": "af159478f8dec46adf13bc63590a1819f0f143640d69caf00a8665e98ad8bd3f",
+    "caption": "二十步行走实际相机帧与同期质心、接触记录；画面显示的名义经过时段不代替实测落脚判据。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_twenty_steps.mp4",
+    "local": "figures/ch07/planar_twenty_steps_camera_sequence_1.png",
+    "sha256": "77bb653bdbe1e9248e470ab5c4dd0d6e160954fcd968e66a870ac444e391b0ba",
+    "caption": "二十步实际动力学录屏的前段相机画面；为保留机器人和脚掌而裁去文字栏。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 10,
+          "video_time_s": 0.5,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 24,
+          "video_time_s": 1.2,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 54,
+          "video_time_s": 2.7,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 65,
+          "video_time_s": 3.25,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_twenty_steps.mp4",
+    "local": "figures/ch07/planar_twenty_steps_camera_sequence_2.png",
+    "sha256": "0530a02d13db4eeb10312d3d3b36ff2f7f7be4f60ef7becdbd9a46a408c5fe86",
+    "caption": "二十步实际动力学录屏的后段相机画面；为保留机器人和脚掌而裁去文字栏。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 142,
+          "video_time_s": 7.1,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 180,
+          "video_time_s": 9.0,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 220,
+          "video_time_s": 11.0,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 270,
+          "video_time_s": 13.5,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view0.png",
+    "sha256": "d1e7a628810bddbfba90a7f975446a51e8a591349a70fe0f126e45632a461266",
+    "caption": "G1左脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view1.png",
+    "sha256": "cb41dee39cf8d33c8ff173e1909761b9f3970bd5fa4e28b7749b533e22113a34",
+    "caption": "G1左脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          -0.0008912663433247592,
+          0.040960581292349696
+        ],
+        "saved_fz_N": [
+          327.081435892106,
+          0.0
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view2.png",
+    "sha256": "9218718d17144fc6309d19cdf9de1897afa3ecf89fd0a2afce3ed0e0fba0e045",
+    "caption": "G1左脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005898171377761788,
+          -0.0005873190534253711
+        ],
+        "saved_fz_N": [
+          164.3882098243327,
+          162.6859142234944
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view0.png",
+    "sha256": "a72e42af063cb9e60b00643367aa55fe91f9bd0255270c300664690c1eb96efc",
+    "caption": "G1右脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view1.png",
+    "sha256": "b917045e1a4c04e2e3221bd47742a86954ea4340a996ee72ab36e372dad5c682",
+    "caption": "G1右脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          0.04096353259174824,
+          -0.0008911816181591536
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.08147521813225
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view2.png",
+    "sha256": "6ae967dbfccde7c4622c6873e64b8ecdc4694c307fdab7a93f758f5af80b7f83",
+    "caption": "G1右脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005878221887264459,
+          -0.0005893067015102227
+        ],
+        "saved_fz_N": [
+          162.9098141680907,
+          164.16430742932292
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/94ecb4bd4e443011/trace.npz",
+    "local": "figures/ch08/g1_stress_150n_saved_view2.png",
+    "sha256": "7906e59f92e93582d5b20825de38be761b4d9b3dd7a5f4394f5b633bcd7ca42a",
+    "caption": "G1150牛站立扰动：最后保存状态，5.999秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 5999,
+        "time": 5.9990000000000006,
+        "feet_z_m": [
+          -0.0005902942367887951,
+          -0.0005844831497069033
+        ],
+        "saved_fz_N": [
+          165.1079448610687,
+          161.96872395985753
+        ]
+      },
+      "trace_sha256": "fd97ee618025d778699f852e36cae8b60bc5279ca0e5d40e0aab1363afdc87fd"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/e82d93dd13ca691c/trace.npz",
+    "local": "figures/ch08/g1_stress_250n_saved_view2.png",
+    "sha256": "392780956259b0f0d46d7c0818452228a2c55d1795636c2b3112c382d5b8703c",
+    "caption": "G1250牛站立扰动：最后保存状态，3.049秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 3049,
+        "time": 3.049,
+        "feet_z_m": [
+          -0.0007482226150840252,
+          0.0054704815480268315
+        ],
+        "saved_fz_N": [
+          288.1158550491143,
+          4.969104267151805
+        ]
+      },
+      "trace_sha256": "38813c5a7e4d3c93ed6421b2fa8a1c03cc8fc09e2389f343a33b23422f7f52c8"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view0.png",
+    "sha256": "b6fb5eb833919c94c0fe4bf40b4a598fb9c9a298112463e0a07b902ad1c97a25",
+    "caption": "G140牛侧向行走扰动：推扰前，9.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 9800,
+        "time": 9.8,
+        "feet_z_m": [
+          0.04153263654737775,
+          -0.0008951911979837093
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.09638765668103
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view1.png",
+    "sha256": "931a24e66c20f6a93ca17e11ad13e17b5a6a857b4f7681e33582c2e61ac1eeee",
+    "caption": "G140牛侧向行走扰动：推扰后，10.200秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 10200,
+        "time": 10.200000000000001,
+        "feet_z_m": [
+          0.042532625293079274,
+          -0.0009401123047341406
+        ],
+        "saved_fz_N": [
+          0.0,
+          324.8421293950495
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view2.png",
+    "sha256": "bf633b529f5365f79324f49d8a70c7aa71d9bd2fe82808f0fe18c05b6c7e85ef",
+    "caption": "G140牛侧向行走扰动：最后保存状态，11.389秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 11389,
+        "time": 11.389000000000001,
+        "feet_z_m": [
+          0.016238102020201636,
+          -0.00038270438367209864
+        ],
+        "saved_fz_N": [
+          0.0,
+          256.2654256429897
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_018.png",
+    "local": "figures/ch08/g1_walk_dual_camera_018.png",
+    "sha256": "031d3e65d29e89cf5204bae640a1c47469ebaef269a4cca744defc7749e1a872",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间0.90秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_060.png",
+    "local": "figures/ch08/g1_walk_dual_camera_060.png",
+    "sha256": "34bfef37633d7aa57e1a76b4bc909a416585130be273b3c329bc3348dffb428b",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间3.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_180.png",
+    "local": "figures/ch08/g1_walk_dual_camera_180.png",
+    "sha256": "25f96f435d6342d1287570352f384f8268b1795711881f16154dc5b5d328d879",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间9.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_340.png",
+    "local": "figures/ch08/g1_walk_dual_camera_340.png",
+    "sha256": "4dbdf8e9c37af7898bea5e8aa6e102cbb3aea0c1eda65afee05f15c274cbcefb",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间17.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_560.png",
+    "local": "figures/ch08/g1_walk_dual_camera_560.png",
+    "sha256": "d9e90fe6976a0d1ce5c7f136ccd0eea8e2287eeead60e90d894ae539c328443e",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间28.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "video",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/lipm_comparison.mp4",
+    "local": "videos/ch06/lipm_model_comparison.mp4",
+    "sha256": "10c78fab50b72c0c5ec92f317ea5d7f3ffab93cabafa087bb30598c0096baaef",
+    "caption": "倒立摆模型示意",
+    "derivation": "copied existing video"
+  },
+  {
+    "kind": "video",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/physical_comparison.mp4",
+    "local": "videos/ch06/finite_foot_standing_comparison.mp4",
+    "sha256": "07064e66541b7075a3f2520eac6f6fb2b8b8d051e88e62ab36e810bb2769ab35",
+    "caption": "有限脚掌物理站立",
+    "derivation": "copied existing video"
+  }
+]

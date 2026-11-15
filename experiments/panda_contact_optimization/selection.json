@@ -1,0 +1,30 @@
+{
+  "selected": "final_selected",
+  "scope": "Rigid normal contact on fixed plane, fixed-base Panda; simulation only",
+  "controller": "ordinary PID + gravity compensation + gated admittance + differential IK",
+  "parameters": {
+    "gravity": true,
+    "gravity_compensation": true,
+    "geometry": "gripper",
+    "mass": 1,
+    "damping": 40,
+    "physics_dt": 0.001,
+    "control_dt": 0.01,
+    "force_ramp": 1,
+    "approach_profile": "brake",
+    "brake_distance": 0.015,
+    "minimum_approach_speed": 0.001,
+    "force_velocity_limit": 0.003,
+    "solver_iterations": 4,
+    "normal_damping": 0,
+    "duration": 32,
+    "friction": 0.5,
+    "stiffness": 0
+  },
+  "limitations": [
+    "Braking uses nominal plane height, not camera or distance sensing",
+    "Rigid force peaks remain sensitive to geometry and solver",
+    "A 100Hz mean-force band does not guarantee an instantaneous 1kHz band",
+    "Height/friction validation is finite and does not establish industrial robustness"
+  ]
+}

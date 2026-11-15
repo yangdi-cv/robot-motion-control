@@ -1,0 +1,406 @@
+{
+  "experiments/imu_week2/REPORT.md": {
+    "bytes": 10713,
+    "sha256": "788442b760d94a3a3403a4e5063e9386c75cc0e67068e692e73e369b0f7d0b0f"
+  },
+  "experiments/imu_week2/README.md": {
+    "bytes": 3557,
+    "sha256": "ea3ba87f8f8e36225620bd8dd0976c8db07e3dad18ae7f67e005ceb7b77e4d89"
+  },
+  "experiments/imu_week2/VERIFICATION.json": {
+    "bytes": 232,
+    "sha256": "616fbea2491d0ac770d887ab6a4aee10a92afa2d40947de2ac6f671b8df0b596"
+  },
+  "experiments/imu_week2/FILTER_VERIFICATION.json": {
+    "bytes": 347,
+    "sha256": "70f4126fcdd31bd85f92c4a5d8c2dc086d96c055d24665bd3235aa8f34aa38a3"
+  },
+  "experiments/imu_week2/scripts/verify_imu_ros.py": {
+    "bytes": 1468,
+    "sha256": "f1326e3573f6d64dbfcbb4f4597fb7a136c1c814c5e32dd1df1b557b7aee2785"
+  },
+  "experiments/imu_week2/scripts/trajectory.py": {
+    "bytes": 438,
+    "sha256": "8458858ab5e167f9f2a14880cc282b6224cadd890a5cc0457cc108eeafa32a90"
+  },
+  "experiments/imu_week2/scripts/isaac-python": {
+    "bytes": 555,
+    "sha256": "41594ff62d87b82b5d6f9f1da0afc5154ff4350c678159e21e4faef0ba406a24"
+  },
+  "experiments/imu_week2/scripts/run_sim.py": {
+    "bytes": 2008,
+    "sha256": "a289165d87974ce91c4fcdc11d5595871925e9bd593771e1b76f5045a63a4592"
+  },
+  "experiments/imu_week2/scripts/write_report.py": {
+    "bytes": 11803,
+    "sha256": "a6c575e89591720461a634fb740f40ead865c19dad9d1a7c2528d0387cb8b17c"
+  },
+  "experiments/imu_week2/scripts/ros-python": {
+    "bytes": 293,
+    "sha256": "c16c9ff9a5eab1006868a760fdac2849aac4d5f24f98eb991366e74d2681e389"
+  },
+  "experiments/imu_week2/scripts/controller.py": {
+    "bytes": 2629,
+    "sha256": "75472a296ddde7e9467d9b18e7bac8f90caa94c37717886aecbd0b9810d47a85"
+  },
+  "experiments/imu_week2/scripts/relay.py": {
+    "bytes": 1889,
+    "sha256": "3c3356d101ddf1d18e40b60ff42ba42bcac291d696063dc85eb8f3d963d741d9"
+  },
+  "experiments/imu_week2/scripts/filters.py": {
+    "bytes": 1032,
+    "sha256": "2d3b496eb7442f5ee5e7a66101567aea947cc00e815291272a3d513048799f70"
+  },
+  "experiments/imu_week2/scripts/imu-python": {
+    "bytes": 380,
+    "sha256": "a279087a4d9721444acad147c9124da9f24f10d29919b88285eea741fa4c8d47"
+  },
+  "experiments/imu_week2/scripts/imu_node.py": {
+    "bytes": 4251,
+    "sha256": "1fc7f5e177507b1309f8750112fe53ca9b1ca46c2368b4a0d3c2882171fa80e3"
+  },
+  "experiments/imu_week2/scripts/verify.py": {
+    "bytes": 1455,
+    "sha256": "f82f6395642821b59e946ca514f59208630deaa51be3899d20e1907bbf0f5e89"
+  },
+  "experiments/imu_week2/scripts/analyze.py": {
+    "bytes": 6779,
+    "sha256": "c137289c8fb2c511b2eda5dc24573be691aca359af5c35b28c2af2ac269cd421"
+  },
+  "experiments/imu_week2/scripts/isaac_scene.py": {
+    "bytes": 6124,
+    "sha256": "8c55af1317b6db113de397067f8728d5346a97e243fb0fc64cfdedc6e35b6743"
+  },
+  "experiments/imu_week2/scripts/imu_sink.py": {
+    "bytes": 1333,
+    "sha256": "438a63f814d7a2c5724a433ef38c05720af450aa3be32fa14141208a026dd92d"
+  },
+  "experiments/imu_week2/vendor/YbImuSerialLib.py": {
+    "bytes": 17622,
+    "sha256": "6c9c3208c8280900abd657889c3050d986dd1789c0cd543ebb402225a3f8dd96"
+  },
+  "experiments/imu_week2/runs/run002_balanced/filter_metrics.csv": {
+    "bytes": 713,
+    "sha256": "9ec88038b8f6cd6203561b40b038035118d3b3b42618a120c9f680c440551231"
+  },
+  "experiments/imu_week2/runs/run002_balanced/sim_imu.csv": {
+    "bytes": 1877349,
+    "sha256": "1fde01b5f3d435874c9c2d9b5d05ad83a17231264c7c61a6301ea3201fba8ebd"
+  },
+  "experiments/imu_week2/runs/run002_balanced/controller.log": {
+    "bytes": 198,
+    "sha256": "542fc84bf9740909e01191aba9262e04507b8580941f07f2822064986e5f6a23"
+  },
+  "experiments/imu_week2/runs/run002_balanced/commands.json": {
+    "bytes": 990,
+    "sha256": "85710a38dc561c4c9964e21829e0c1844f10148296c3c2d2272b9163dc64a28b"
+  },
+  "experiments/imu_week2/runs/run002_balanced/RUN_COMPLETE": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run002_balanced/controller_done.json": {
+    "bytes": 51,
+    "sha256": "c5cba77b0c7eda6614d89938789db85423ffc709f779e40c85938aec5711febd"
+  },
+  "experiments/imu_week2/runs/run002_balanced/ros_graph.txt": {
+    "bytes": 2083,
+    "sha256": "62e4011fe2c3e5559d66a010ebfeb46f4dbbb02e229ec8ae0e9e6709cdf86444"
+  },
+  "experiments/imu_week2/runs/run002_balanced/scene_metadata.json": {
+    "bytes": 1914,
+    "sha256": "6360477040e597e2e12fe5cbe2d75f0034e8b2413fd05f4cc624a30ad2e52f3d"
+  },
+  "experiments/imu_week2/runs/run002_balanced/imu_filter_data.csv": {
+    "bytes": 1603684,
+    "sha256": "17f123050823deec076f8f3f2950d53ccf98262b174ac8c5c7aeea638ee172ad"
+  },
+  "experiments/imu_week2/runs/run002_balanced/metrics.json": {
+    "bytes": 10086,
+    "sha256": "f48a5a98a744dce70c5dd579a2fb346fdfcb01cd765321469a5a1828b16f7ad1"
+  },
+  "experiments/imu_week2/runs/run002_balanced/panda_scene.usda": {
+    "bytes": 16469,
+    "sha256": "7e6e50bbb439f41f178ffbbe929d51e5c9b00f9aff73f26cbd40af5093c4e461"
+  },
+  "experiments/imu_week2/runs/run002_balanced/sim_ready": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run002_balanced/tracking.csv": {
+    "bytes": 1369860,
+    "sha256": "a1726985d7194b3c1bb9584c46dcec0f93e048a9fea4747150f89657ac51581d"
+  },
+  "experiments/imu_week2/runs/run002_balanced/relay.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run002_balanced/relay.csv": {
+    "bytes": 330227,
+    "sha256": "6fe4096dccda54731afa0fe9379c5f7e385965c6c5f7a955ea1d9d5a28328b47"
+  },
+  "experiments/imu_week2/runs/run002_balanced/raw_feedback.csv": {
+    "bytes": 301970,
+    "sha256": "875874f6286c14aafb994bed09223a1472c0e0145c0a2e09ebf38d14cff8efe2"
+  },
+  "experiments/imu_week2/runs/run002_balanced/isaac.log": {
+    "bytes": 40909,
+    "sha256": "07ff245b2ab0da60434b180743c0b03889c067be928c44faf026f90d10956472"
+  },
+  "experiments/imu_week2/runs/run002_balanced/simulation_timing.csv": {
+    "bytes": 648617,
+    "sha256": "ac275a2aaba37cdd51f5586f7fb5748c965d0da55e9e0a36bf6d5e3adc64e800"
+  },
+  "experiments/imu_week2/runs/run002_balanced/frequency_metrics.csv": {
+    "bytes": 2757,
+    "sha256": "6007a0b5dc54295549378eed0c65e20392312005a0677c10b1f51be7d4d7a367"
+  },
+  "experiments/imu_week2/runs/run002_balanced/config.json": {
+    "bytes": 1241,
+    "sha256": "21831e4401a2d4ec936a8f24a39bc8ac28a0ab2f79e9d86bdc8b51ca34c5b503"
+  },
+  "experiments/imu_week2/runs/run002_balanced/exit_codes.json": {
+    "bytes": 9,
+    "sha256": "ef07a1fd1a788f2e516b8b90e6ce1b52186dc315adee7321b5cc79e6c0c2805f"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/trajectory.py": {
+    "bytes": 438,
+    "sha256": "8458858ab5e167f9f2a14880cc282b6224cadd890a5cc0457cc108eeafa32a90"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/isaac-python": {
+    "bytes": 555,
+    "sha256": "41594ff62d87b82b5d6f9f1da0afc5154ff4350c678159e21e4faef0ba406a24"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/run_sim.py": {
+    "bytes": 2008,
+    "sha256": "a289165d87974ce91c4fcdc11d5595871925e9bd593771e1b76f5045a63a4592"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/ros-python": {
+    "bytes": 293,
+    "sha256": "c16c9ff9a5eab1006868a760fdac2849aac4d5f24f98eb991366e74d2681e389"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/controller.py": {
+    "bytes": 2634,
+    "sha256": "1b426168e5fd6a2300fdcf443d533ae5a495d03e0af53fd840a84e2ee399b761"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/relay.py": {
+    "bytes": 1889,
+    "sha256": "3c3356d101ddf1d18e40b60ff42ba42bcac291d696063dc85eb8f3d963d741d9"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/filters.py": {
+    "bytes": 1032,
+    "sha256": "2d3b496eb7442f5ee5e7a66101567aea947cc00e815291272a3d513048799f70"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/imu-python": {
+    "bytes": 380,
+    "sha256": "a279087a4d9721444acad147c9124da9f24f10d29919b88285eea741fa4c8d47"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/imu_node.py": {
+    "bytes": 4192,
+    "sha256": "9e5914018434aee2ba73a99040296a94fa54457a2a6f5cfb20f885c555a9fcac"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/analyze.py": {
+    "bytes": 6177,
+    "sha256": "505e644e60d8f866d12573a694a4a7d283468079856e86c731c8759725766deb"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/isaac_scene.py": {
+    "bytes": 6124,
+    "sha256": "8c55af1317b6db113de397067f8728d5346a97e243fb0fc64cfdedc6e35b6743"
+  },
+  "experiments/imu_week2/runs/run002_balanced/source_snapshot/imu_sink.py": {
+    "bytes": 1297,
+    "sha256": "b8b64dda5fa460a9256183bd786dc4ac1fbae207ff87ce5e4ca17d41bc500bd8"
+  },
+  "experiments/imu_week2/runs/run002_balanced/figures/frequency_comparison.png": {
+    "bytes": 71768,
+    "sha256": "d1863982224701e6d3f75c2eeda4f8d963bef14975fbe721a61e72d50240bb4d"
+  },
+  "experiments/imu_week2/runs/run002_balanced/figures/imu_filter_comparison.png": {
+    "bytes": 377487,
+    "sha256": "e8e8c507d31f4fe3b53f243dda1ea3554805cd9c82532445afd8c5f586b12f2a"
+  },
+  "experiments/imu_week2/runs/run001/filter_metrics.csv": {
+    "bytes": 708,
+    "sha256": "8ea46cb13bc39a87bc3c13d342919863f4e28ac16309e543dff1ec5c82575fa7"
+  },
+  "experiments/imu_week2/runs/run001/imu_ros_stable_frame.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/sim_imu.csv": {
+    "bytes": 1426628,
+    "sha256": "8fda8cc623188932567c3a6ea36a17a1db7f34bd77e187d2895b659ceefc1281"
+  },
+  "experiments/imu_week2/runs/run001/controller.log": {
+    "bytes": 147,
+    "sha256": "6eb920710d3ebe3f75bb0df6ec247596f285a43991af8a5df783e7c7234213b6"
+  },
+  "experiments/imu_week2/runs/run001/imu_ros_verification.json": {
+    "bytes": 497,
+    "sha256": "740ab1598030cd1dcabcd7a7416c44c8f91630d015207a79b1d55401987a38f6"
+  },
+  "experiments/imu_week2/runs/run001/commands.json": {
+    "bytes": 963,
+    "sha256": "d74f2ff1de0c4c03cbc16ec22bffb08c5ab35cc368a878173ec10706e6544a39"
+  },
+  "experiments/imu_week2/runs/run001/RUN_COMPLETE": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/controller_done.json": {
+    "bytes": 49,
+    "sha256": "a0663d3aa40e6e60efb93eecce7a9b15bb0690fbec5142e9a2cc57f646dfe1e7"
+  },
+  "experiments/imu_week2/runs/run001/scene_metadata.json": {
+    "bytes": 1914,
+    "sha256": "6360477040e597e2e12fe5cbe2d75f0034e8b2413fd05f4cc624a30ad2e52f3d"
+  },
+  "experiments/imu_week2/runs/run001/imu_filter_data.csv": {
+    "bytes": 1219920,
+    "sha256": "5f86a4e6a1edff0f17794c7b42558a1f7084e368e9fa7c927b65087f6195c27c"
+  },
+  "experiments/imu_week2/runs/run001/metrics.json": {
+    "bytes": 7468,
+    "sha256": "9397caa9b0da3d9e64929d5355edcd5d8b04a14342c8277e728a5740e8ed6c62"
+  },
+  "experiments/imu_week2/runs/run001/imu_ros_replay_fixed.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/panda_scene.usda": {
+    "bytes": 16469,
+    "sha256": "7e6e50bbb439f41f178ffbbe929d51e5c9b00f9aff73f26cbd40af5093c4e461"
+  },
+  "experiments/imu_week2/runs/run001/sim_ready": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/tracking.csv": {
+    "bytes": 1028258,
+    "sha256": "29b424985d1fb0f2f8b204ab2a9d159944bf25226dd51569cf71e905d3e70d26"
+  },
+  "experiments/imu_week2/runs/run001/relay.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/relay.csv": {
+    "bytes": 246859,
+    "sha256": "22fdc6d6db00eb7ac1a99cb4292840ffe54a24dc07fa4603ab4011f4f155d3ce"
+  },
+  "experiments/imu_week2/runs/run001/raw_feedback.csv": {
+    "bytes": 225690,
+    "sha256": "abfb07a287aaf1613586673c4f19f2f3f9bd365cad98a5d34d1c0400c40f0440"
+  },
+  "experiments/imu_week2/runs/run001/isaac.log": {
+    "bytes": 40901,
+    "sha256": "3586d83d58eee164265ad233dc9aa9e2d66ec0d3a4ff0a340f72ccb3334e297e"
+  },
+  "experiments/imu_week2/runs/run001/imu_ros_replay.log": {
+    "bytes": 810,
+    "sha256": "b27de3f8d96f1a7074aa3529bf01adaca6559923ca49f3762e9467e96e1e23ef"
+  },
+  "experiments/imu_week2/runs/run001/simulation_timing.csv": {
+    "bytes": 492195,
+    "sha256": "07a6b07bb019a5198371adc46b85f361143bf12555d61baa098f2fbc5a2c882b"
+  },
+  "experiments/imu_week2/runs/run001/frequency_metrics.csv": {
+    "bytes": 1946,
+    "sha256": "c9f882300b6c26fda8d9710d2441959b6cab6f98323f9686d9f8a8ac3a132b04"
+  },
+  "experiments/imu_week2/runs/run001/config.json": {
+    "bytes": 1216,
+    "sha256": "61b3088314a5dd80a41d0aec20ef4766e73ae524402a4780b4d9fe6b161fe65b"
+  },
+  "experiments/imu_week2/runs/run001/exit_codes.json": {
+    "bytes": 9,
+    "sha256": "ef07a1fd1a788f2e516b8b90e6ce1b52186dc315adee7321b5cc79e6c0c2805f"
+  },
+  "experiments/imu_week2/runs/run001/imu_sink_fixed/ready": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/imu_sink_fixed/received.csv": {
+    "bytes": 83578,
+    "sha256": "56568a4f515f71864f1101790baa710d0d99c8aff2a655de4b45322073adc38d"
+  },
+  "experiments/imu_week2/runs/run001/imu_publisher_v2/summary.json": {
+    "bytes": 228,
+    "sha256": "4942dd4a4f98d18d19a92f7325875b852b8fe1aa8f3f5bc50296baa4779cc7b8"
+  },
+  "experiments/imu_week2/runs/run001/imu_publisher_v2/published.csv": {
+    "bytes": 75413,
+    "sha256": "8795a6a79b985c1ed0af9724412719300ef37a1e68243eaf07f88c7af6ed321f"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/trajectory.py": {
+    "bytes": 438,
+    "sha256": "8458858ab5e167f9f2a14880cc282b6224cadd890a5cc0457cc108eeafa32a90"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/isaac-python": {
+    "bytes": 555,
+    "sha256": "41594ff62d87b82b5d6f9f1da0afc5154ff4350c678159e21e4faef0ba406a24"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/run_sim.py": {
+    "bytes": 2008,
+    "sha256": "a289165d87974ce91c4fcdc11d5595871925e9bd593771e1b76f5045a63a4592"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/ros-python": {
+    "bytes": 293,
+    "sha256": "c16c9ff9a5eab1006868a760fdac2849aac4d5f24f98eb991366e74d2681e389"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/controller.py": {
+    "bytes": 2634,
+    "sha256": "1b426168e5fd6a2300fdcf443d533ae5a495d03e0af53fd840a84e2ee399b761"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/relay.py": {
+    "bytes": 1889,
+    "sha256": "3c3356d101ddf1d18e40b60ff42ba42bcac291d696063dc85eb8f3d963d741d9"
+  },
+  "experiments/imu_week2/runs/run001/source_snapshot/isaac_scene.py": {
+    "bytes": 6124,
+    "sha256": "8c55af1317b6db113de397067f8728d5346a97e243fb0fc64cfdedc6e35b6743"
+  },
+  "experiments/imu_week2/runs/run001/imu_publisher/summary.json": {
+    "bytes": 228,
+    "sha256": "07bc27be3210977d7f5e683ce000f7ca0809078d6a0d517c84199bdbf8fdade9"
+  },
+  "experiments/imu_week2/runs/run001/imu_publisher/published.csv": {
+    "bytes": 70416,
+    "sha256": "ad114a8655c3bf55bce3fba498ac7493884360efa5f671e6e7a72923c6382c06"
+  },
+  "experiments/imu_week2/runs/run001/figures/frequency_comparison.png": {
+    "bytes": 69870,
+    "sha256": "6ea47d727c42a4fbdf89b0c6b44ca7acb230c04a7bf01dd8b8eff5e6de145999"
+  },
+  "experiments/imu_week2/runs/run001/figures/imu_filter_comparison.png": {
+    "bytes": 369981,
+    "sha256": "27f192d11f8678874f77cd286adbd88db183fa2e130ed3539bf1baf2faf8457d"
+  },
+  "experiments/imu_week2/runs/run001/imu_sink_v2/ready": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "experiments/imu_week2/runs/run001/imu_sink_v2/received.csv": {
+    "bytes": 83578,
+    "sha256": "ba7d4ef1e666e0f10aee6be2be707c35ca27b9f4fa70268aacf588bbf81660fe"
+  },
+  "experiments/imu_week2/setup_logs/requirements.lock.txt": {
+    "bytes": 6732,
+    "sha256": "9b8495a9ee611a95bcfe2a8936af1826f49259635b507039ff3bb5d1b6768e76"
+  },
+  "experiments/imu_week2/setup_logs/hardware_availability.json": {
+    "bytes": 290,
+    "sha256": "a0e67964975b92b0683ece9417d5c7263dbd47a6ea92a3f8d41c82392a6dda9c"
+  },
+  "experiments/imu_week2/setup_logs/pyserial-install.log": {
+    "bytes": 317,
+    "sha256": "009e980f7396a49d4e88e9b150c5fab547cc1304e1927496c09930f10d1a8854"
+  },
+  "experiments/imu_week2/config/experiment.json": {
+    "bytes": 1241,
+    "sha256": "21831e4401a2d4ec936a8f24a39bc8ac28a0ab2f79e9d86bdc8b51ca34c5b503"
+  },
+  "PTA/字节/Week2_自主补充索引_2026-10-13.md": {
+    "bytes": 669,
+    "sha256": "7ea01eb355bf77e887175763e8d4cc6a4aa0272d563b07f0d8e96d79bd7138a4"
+  }
+}

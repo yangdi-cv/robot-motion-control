@@ -1,0 +1,37 @@
+{
+  "config": {
+    "scenario": "single",
+    "duration": 8,
+    "hz": 100,
+    "dt": 0.001,
+    "push_x": 0.0,
+    "push_y": 0.0,
+    "push_time": 2.7,
+    "push_duration": 0.1,
+    "friction": 0.6,
+    "shift": 0.06,
+    "lift": 0.05
+  },
+  "success": true,
+  "failure": null,
+  "duration": 8.000000000001005,
+  "mass": 33.341142000000005,
+  "nq": 36,
+  "nv": 35,
+  "nu": 29,
+  "steps": 8000,
+  "updates": 800,
+  "qp_p95_ms": 9.574146749037027,
+  "max_qp_residual": 0.0006805073487266,
+  "com_rmse": [
+    0.0002127847227319952,
+    0.0012307050728429159,
+    0.0046803128586601
+  ],
+  "max_foot_height": [
+    -0.00010000000000000286,
+    0.04228877068511395
+  ],
+  "min_com_height": 0.6735578967942643,
+  "max_joint_speed": 2.709579071660813
+}

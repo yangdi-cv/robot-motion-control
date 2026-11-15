@@ -1,0 +1,1390 @@
+[
+  {
+    "kind": "video",
+    "stage": "s03",
+    "source": "experiments/panda_task1/runs/run_20261013_003/simulation_recording.mp4",
+    "local": "videos/ch02/panda_joint_trajectory.mp4",
+    "sha256": "156b03114ad53c8462729cc30f927a6e4afaba9f0db32a456d2dd015729680b4",
+    "caption": "panda_joint_trajectory"
+  },
+  {
+    "kind": "video",
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/runs/contact_suite_v3/position.mp4",
+    "local": "videos/ch04/panda_position_contact.mp4",
+    "sha256": "ed275a5dff94db5f36639a6c5a86e335df3309a4e60ce9ceab6730ac14e5a928",
+    "caption": "panda_position_contact"
+  },
+  {
+    "kind": "video",
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/runs/contact_suite_v3/admittance.mp4",
+    "local": "videos/ch04/panda_admittance_contact.mp4",
+    "sha256": "fc557c315d1f0fd47d17a2e9f9dcfdd8b3ca9956680d509afd022fb079ef11b9",
+    "caption": "panda_admittance_contact"
+  },
+  {
+    "kind": "video",
+    "stage": "s21",
+    "source": "experiments/lipm_extension/biped_comparison.mp4",
+    "local": "videos/ch07/planar_biped_torque_comparison.mp4",
+    "sha256": "14a171371e10b89bf2d09d1e182211c7646d1a34229ee261b06cccd99c6150a9",
+    "caption": "planar_biped_torque_comparison"
+  },
+  {
+    "kind": "video",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/连续二十步_实际动力学.mp4",
+    "local": "videos/ch07/planar_biped_twenty_steps.mp4",
+    "sha256": "82fe372249e73b154a10f5fbb7c0800a1cbf54178ab78e855344eabb24b6a4fb",
+    "caption": "planar_biped_twenty_steps"
+  },
+  {
+    "kind": "video",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/G1_三维四步准静态行走.mp4",
+    "local": "videos/ch08/g1_quasistatic_four_steps.mp4",
+    "sha256": "86218f4ab4f286de266fa07be8a7107d257f4bb9957e00b8f832e3b31f73cb4a",
+    "caption": "g1_quasistatic_four_steps"
+  },
+  {
+    "kind": "figure",
+    "stage": "s01",
+    "source": "experiments/panda_task1/setup_logs/ubuntu_environment.png",
+    "local": "figures/ch02/s01_ubuntu_environment_48389fb1.png",
+    "sha256": "48389fb10ac64f8d6bace9ba796cf8eb1a9252c9be5b069f1c4aa892023af300",
+    "caption": "环境配置截图",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s01",
+    "source": "experiments/panda_task1/runs/run_20261013_003/isaac_environment.png",
+    "local": "figures/ch02/s01_isaac_environment_85d70296.png",
+    "sha256": "85d70296fe65a993cffcffb9eef89a595a6015f189e555b84e96cf5229058db3",
+    "caption": "Panda仿真场景",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s03",
+    "source": "experiments/panda_task1/runs/run_20261013_003/trajectory_tracking.png",
+    "local": "figures/ch02/s03_trajectory_tracking_f6e7c8ea.png",
+    "sha256": "f6e7c8ea0c11b550d4ce3dc5316eba7b8851a6b6a96b620c14435f887477fba8",
+    "caption": "目标与实际轨迹",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s03",
+    "source": "experiments/panda_task1/runs/run_20261013_003/tracking_error.png",
+    "local": "figures/ch02/s03_tracking_error_9c4ff88b.png",
+    "sha256": "9c4ff88bc468c9a59f1a681b30b1e09b6e36921c00a8bc80da5da9f49ff50ac8",
+    "caption": "跟踪误差",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/figures/tracking_error.png",
+    "local": "figures/ch02/s04_tracking_error_34a7c300.png",
+    "sha256": "34a7c3007138986b44444b2463ef39f1027a3402fa85905e0af8a122811febec",
+    "caption": "前三关节实际误差",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/figures/panda_frequency_norender.png",
+    "local": "figures/ch02/s04_panda_frequency_norender_b1d39b52.png",
+    "sha256": "b1d39b52f382607e30487d1b63a881489224390ea97f75de7c2299777f31aff1",
+    "caption": "无逐帧渲染的关节外环对照",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s04",
+    "source": "experiments/control_feedback_task2/figures/panda_frequency.png",
+    "local": "figures/ch02/s04_panda_frequency_f2e821dd.png",
+    "sha256": "f2e821ddbbd3615c47406c0b294db8eb5e6a744b90b7976228450492bf130b4e",
+    "caption": "关节外环频率对照",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s05",
+    "source": "experiments/imu_week2/runs/run002_balanced/figures/frequency_comparison.png",
+    "local": "figures/ch03/s05_frequency_comparison_d1863982.png",
+    "sha256": "d1863982224701e6d3f75c2eeda4f8d963bef14975fbe721a61e72d50240bb4d",
+    "caption": "反馈频率对照",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s06",
+    "source": "experiments/imu_week2/runs/run002_balanced/figures/imu_filter_comparison.png",
+    "local": "figures/ch03/s06_imu_filter_comparison_e8e8c507.png",
+    "sha256": "e8e8c507d31f4fe3b53f243dda1ea3554805cd9c82532445afd8c5f586b12f2a",
+    "caption": "静止与运动滤波对照",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/figures/static_six_axes.png",
+    "local": "figures/ch03/s07_static_six_axes_126abe0a.png",
+    "sha256": "126abe0ac66a05a98ce61bed160a976ed7ff6a4a9cd2a7df6d71da7309c47fec",
+    "caption": "静止六轴滤波",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/figures/motion_six_axes.png",
+    "local": "figures/ch03/s07_motion_six_axes_642cb4e5.png",
+    "sha256": "642cb4e574c1da7e6857b7973471fcaef6ff87d4e3cd2317f42b6924c9765b19",
+    "caption": "运动六轴滤波",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/figures/static_psd.png",
+    "local": "figures/ch03/s07_static_psd_21a3cffd.png",
+    "sha256": "21a3cffd69e4483dd90a3fe60887c5a7f4419dc81d719c977035038ca665b421",
+    "caption": "静止数据频谱",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s07",
+    "source": "experiments/control_feedback_task2/figures/static_allan.png",
+    "local": "figures/ch03/s07_static_allan_e2029130.png",
+    "sha256": "e2029130fffc6c7265a2fe4df8ff98c3b9cb983d384936fd98e0d87f3ef28502",
+    "caption": "静止数据Allan曲线",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s08",
+    "source": "experiments/control_feedback_task2/figures/feedback_rates.png",
+    "local": "figures/ch03/s08_feedback_rates_856eba1b.png",
+    "sha256": "856eba1bfe09dc63423618369221a7390838b558b333608d980e0713dc3e22a4",
+    "caption": "反馈频率与数据新鲜度",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s08",
+    "source": "experiments/control_feedback_task2/runs/jetson_20261020/static_analysis_01/six_axes.png",
+    "local": "figures/ch03/s08_six_axes_39c424bd.png",
+    "sha256": "39c424bd23b4a100a1f5359a1f7e8c4b64a5e094736d441c4fed41437ec1a25b",
+    "caption": "静止六轴",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s08",
+    "source": "experiments/control_feedback_task2/runs/jetson_20261020/motion_analysis_02/six_axes.png",
+    "local": "figures/ch03/s08_six_axes_b188f7b9.png",
+    "sha256": "b188f7b9f7d5c77157e36241f1f75076b1b96ec006f7817a84a542855de00037",
+    "caption": "运动六轴",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s09",
+    "source": "experiments/bytedance_week3/figures/contact_force.png",
+    "local": "figures/ch04/s09_contact_force_20f4706d.png",
+    "sha256": "20f4706d6942af81c2cfc5c5a7116622dcc44c090b842d197f7df6785b699d53",
+    "caption": "接触力和位置修正",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/figures/joint_tracking.png",
+    "local": "figures/ch04/s10_joint_tracking_de8648da.png",
+    "sha256": "de8648da80167138295a00bb7b3bdb50563b65b92b8e1c217f68c74243500d19",
+    "caption": "七关节参考跟踪",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/figures/admittance_contact.png",
+    "local": "figures/ch04/s10_admittance_contact_dcf28dbc.png",
+    "sha256": "dcf28dbc0c240aa1f7816a730c86a7c429c3dcaf3cdb14f02e27b74d083ed4cb",
+    "caption": "Panda末端接触画面",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s10",
+    "source": "experiments/bytedance_week3/figures/delay_approach.png",
+    "local": "figures/ch04/s10_delay_approach_fcdb3c40.png",
+    "sha256": "fcdb3c404b757c2582895b9352af7f2ed7ab82faabe5e879785da01c7f03ae15",
+    "caption": "反馈延迟与接近时间",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/scene.png",
+    "local": "figures/ch04/s11_scene_16a22a9e.png",
+    "sha256": "16a22a9ec660ac3388c3a82fced88fe224b9223b8131613eca15245ffb5bcf4e",
+    "caption": "Panda球形探针与固定水平接触面；原夹爪几何不参与该阶段实验。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/joints.png",
+    "local": "figures/ch04/s11_joints_229fc7a9.png",
+    "sha256": "229fc7a95ed39e0445f2caf15ccc42213f438b0f817d38494eaaca3cb662d320",
+    "caption": "前三关节5秒轨迹跟踪，角度单位为度。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/fz.png",
+    "local": "figures/ch04/s11_fz_6719572d.png",
+    "sha256": "6719572dfaac15b81e4acaed855b1964b017d2461b9223877f9d346ddfc0194f",
+    "caption": "周期平均接触力；原始1ms峰值另列于结果表。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/z.png",
+    "local": "figures/ch04/s11_z_372cc86f.png",
+    "sha256": "372cc86fb3a8566749d44869ef2c84984d7159261ed89990426748e7aebec91a",
+    "caption": "末端高度变化；刚性平面限制实际高度继续下降。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/transition.png",
+    "local": "figures/ch04/s11_transition_0627ccb8.png",
+    "sha256": "0627ccb8a61b92b86c60eea44ce718fe100bb66a1a5afc1f28d18e7272443c28",
+    "caption": "直接导纳与接触后切换的对照：上图周期平均力，下图1ms原始力。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s12",
+    "source": "experiments/panda_contact_isaac/figures/stability_factors.png",
+    "local": "figures/ch04/s12_stability_factors_7cdb51ba.png",
+    "sha256": "7cdb51baea88465cbc5f3640e8bbc59263e9a91f3bc86a0290953cfe1316a5b5",
+    "caption": "冻结、滤波与控制周期对照；全部从1ms原始力计算相同10ms均值，不使用控制器指数滤波结果。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s12",
+    "source": "experiments/panda_contact_isaac/figures/stability_ik.png",
+    "local": "figures/ch04/s12_stability_ik_40164769.png",
+    "sha256": "401647693b4ed25e44d4f72045982e5a87798058d37c2006b9689e9a1efedd9f",
+    "caption": "原逆解、上次命令初值和连续微分逆解对照。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s12",
+    "source": "experiments/panda_contact_isaac/figures/stability_validation.png",
+    "local": "figures/ch04/s12_stability_validation_e8cd6d7d.png",
+    "sha256": "e8cd6d7d29195832010a37eec931fe75856087dc9df4a2a89f124b0b7145c4db",
+    "caption": "所选组合、同条件重复和平面高度±1mm；绿色为4.5—5.5N。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s13",
+    "source": "experiments/panda_contact_optimization/figures/gravity.png",
+    "local": "figures/ch05/s13_gravity_f06ae4bc.png",
+    "sha256": "f06ae4bcaf104313bb725d155a08ff1e56799a1b23f9426232ed6a6dd1f31b3a",
+    "caption": "相同探针条件下，关闭重力与开启重力并补偿的对照。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/figures/approach.png",
+    "local": "figures/ch05/s14_approach_cb3b566a.png",
+    "sha256": "cb3b566ac3fd924ae01d76a4fc5477a0b021df424c3b3b6e233ebcf4a3406af2",
+    "caption": "相同刚性夹爪场景下的接近与目标力切换对照。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/figures/refinement.png",
+    "local": "figures/ch05/s14_refinement_0c4260a8.png",
+    "sha256": "0c4260a8dc8e8541b90bcd8abf508b6d0d8e1924cc7d4ee2384c74222f7d28b9",
+    "caption": "修正速度与提前减速范围的后续对照。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/figures/material.png",
+    "local": "figures/ch05/s15_material_4e8027ac.png",
+    "sha256": "4e8027acfcbb1b32047e8d564c4999570ab0cd5495f307f7149511dd2fc04ca8",
+    "caption": "刚性与柔顺材质对照；此处改变环境，不计算跨材质算法改善比例。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/figures/validation.png",
+    "local": "figures/ch05/s15_validation_7338073d.png",
+    "sha256": "7338073d3b5be2fc832118ff9e1f6f12655a3489abb011657958fd16853fa077",
+    "caption": "默认减速方案的高度与摩擦扰动。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/figures/timestep.png",
+    "local": "figures/ch05/s15_timestep_92c24626.png",
+    "sha256": "92c24626b4797480883fcff4ec1dce7627b449614e8a3a3a267193acdf48ff59",
+    "caption": "物理步长减半的数值检查；原始峰值与周期均力分别解释。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s15",
+    "source": "experiments/panda_contact_optimization/figures/final_validation.png",
+    "local": "figures/ch05/s15_final_validation_ebdf4225.png",
+    "sha256": "ebdf4225b979db9d5e126564bc1beda050e16b1fbd29bba0992dab512631a074",
+    "caption": "统一修正方案的独立条件验证。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s16",
+    "source": "experiments/panda_contact_isaac/figures/execution_delay.png",
+    "local": "figures/ch05/s16_execution_delay_fa537d74.png",
+    "sha256": "fa537d740ccb64a4956f9338320c0f982aecb1aab654138f98901631394e6a35",
+    "caption": "固定120ms延迟下，忽略时标与按时标选取动作的比较。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s16",
+    "source": "experiments/panda_contact_isaac/figures/execution_jitter.png",
+    "local": "figures/ch05/s16_execution_jitter_307c270b.png",
+    "sha256": "307c270bde7c18ea3c403bc8decb81ac912c56fd907ed597f525aa72f7dcd2a0",
+    "caption": "同样的动作块偏差下，直接执行与命令限速限加速度。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s16",
+    "source": "experiments/panda_contact_isaac/figures/execution_outage.png",
+    "local": "figures/ch05/s16_execution_outage_aac306ae.png",
+    "sha256": "aac306aef41b50ca14c52f4d5b185e2c014632e85f0b508e30518a1d0212957a",
+    "caption": "橙色区间为停止产生动作块的2—3秒；包含送达延迟与超时等待。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s16",
+    "source": "experiments/panda_contact_isaac/figures/stream_coverage.png",
+    "local": "figures/ch05/s16_stream_coverage_1c419e63.png",
+    "sha256": "1c419e63dc7f057d9edb681fbf1ca0d949d0aa4abe4e1f584531e4e52bdaf4a6",
+    "caption": "动作窗口不足时，即使按时标消费也会用完可执行动作。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/stepping.png",
+    "local": "figures/ch06/s18_stepping_455e1724.png",
+    "sha256": "455e172455b7e2cbf6b07eaf3eec8302656c0fbb342e3a8f0f70a5b6ed8b7a55",
+    "caption": "相同12N·s推扰的对照。失败轨迹在真实终止时停止；路线平移另画出，不能与原路线误差混用。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/disturbance_boundary.png",
+    "local": "figures/ch06/s18_disturbance_boundary_6e46f392.png",
+    "sha256": "6e46f3929dd727a5cda5af41a7d26f53403aede182edae2c316609c061ff8f12",
+    "caption": "独立噪声种子的推扰边界。方法的优势依赖反馈延迟和控制可行域，边界不是普适常数。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/frequency_delay.png",
+    "local": "figures/ch06/s18_frequency_delay_642b1eb8.png",
+    "sha256": "642b1eb8c6851d720c21e74b704a308a3f336719b9a9b2e570d4cce11013beeb",
+    "caption": "12N·s主网格：每格三个种子，颜色表示通过比例；频率和延迟都按仿真时间设置。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/delay_analysis.png",
+    "local": "figures/ch06/s18_delay_analysis_39b0c131.png",
+    "sha256": "39b0c13141178b294fd7339c94bcf3a820674075f2a58d2e01ccbae4db92a174",
+    "caption": "左：固定支撑线性系统的离散谱半径；右：80ms延迟下的消融轨迹。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/heldout.png",
+    "local": "figures/ch06/s18_heldout_641ae1f8.png",
+    "sha256": "641ae1f88079ec79cbad866b6178e77acfdbdc234122b0204d24846cd0518e3c",
+    "caption": "独立验证组的固定组合汇总；比例只描述这些测试条件，不能解释为现实任务分布下的成功率。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/figures/physical_balance.png",
+    "local": "figures/ch06/s19_physical_balance_94cd3215.png",
+    "sha256": "94cd3215194691b714dbc7727183d9fe8c30ee664c38c3897c21355f2fdd8e60",
+    "caption": "80N接触边界试验：世界姿态恢复不代表脚掌没有移动或翻转，需同时检查支撑状态。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s20",
+    "source": "experiments/lipm_extension/figures/sensor_rates.png",
+    "local": "figures/ch06/s20_sensor_rates_a4364da8.png",
+    "sha256": "a4364da87af5395194ee469151fc3d44b55bbcaa5e6846940500b8913f4f0c14",
+    "caption": "传感器帧复用与数据年龄；数据年龄在实际控制读取时刻统计。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s20",
+    "source": "experiments/lipm_extension/figures/noise_traffic.png",
+    "local": "figures/ch06/s20_noise_traffic_f1bbbf23.png",
+    "sha256": "f1bbbf23045c108c24a5ea7ca3c36b62bbd73b5cf8ead68969d030243fa97c55",
+    "caption": "同一组预设条件下的通过比例；各柱表示测试网格，不表示概率估计。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s20",
+    "source": "experiments/lipm_extension/figures/support_timing.png",
+    "local": "figures/ch06/s20_support_timing_1d78e427.png",
+    "sha256": "1d78e42794c4e6023e5522fab55409b854f75812927449c0b4d22a9333e8b3d9",
+    "caption": "双支撑对照及摆脚速度限制下的可行性。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "experiments/lipm_extension/figures/step_sequence.png",
+    "local": "figures/ch07/s21_step_sequence_6db95e66.png",
+    "sha256": "6db95e668a589343235ff22e13dc5639451505fc334c310eebe69f9ed6b896b4",
+    "caption": "同一动力学运行在0.5、2.7、5.4s的真实相机帧。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "experiments/lipm_extension/figures/measured_steps.png",
+    "local": "figures/ch07/s21_measured_steps_d93b29e0.png",
+    "sha256": "d93b29e00482991c74bc009f72e4d9f3db22a919f8b49d320ae1802d6811741e",
+    "caption": "实际足端轨迹与地面接触，用于核对摆脚和八次落脚。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "experiments/lipm_extension/figures/biped_constraints.png",
+    "local": "figures/ch07/s21_biped_constraints_edf641d4.png",
+    "sha256": "edf641d4b8e7b2be893397e43f8d813a6282b5fbd2d217f935d19fb06b1d90b4",
+    "caption": "动力学条件对照；全部条件和结果保存在 biped_results.json。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "experiments/lipm_extension/figures/biped_keyframe.png",
+    "local": "figures/ch07/s21_biped_keyframe_1ca131fc.png",
+    "sha256": "1ca131fc48df580219b1f8f1842fcb3425dcf224ca62fbc2b77825be57e25757",
+    "caption": "完整力矩与半力矩对照。右侧在终止后保留真实末帧，未继续模拟。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s22",
+    "source": "experiments/biped_feedback/figures/mapping.png",
+    "local": "figures/ch07/s22_mapping_f57b4e97.png",
+    "sha256": "f57b4e97c55326daf4832476c37d61a2eda7e14224565a61cc1ea363da7d40c6",
+    "caption": "相同无扰动条件下的压力中心与质心误差。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/figures/twenty_steps.png",
+    "local": "figures/ch07/s23_twenty_steps_11830081.png",
+    "sha256": "11830081a26015f7f47c8480163bcd24ad8adf627771fa0b9ca8d4a3e0fd8f4e",
+    "caption": "连续20步的实际足位、离地高度和地面法向力。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/figures/double_support.png",
+    "local": "figures/ch07/s23_double_support_7b86abbd.png",
+    "sha256": "7b86abbd2256b54154be8d0e2829b001d85ad84048a4b73582394a9699619577",
+    "caption": "相同支撑转换附近的计划与实际左足负载比例。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/figures/slew.png",
+    "local": "figures/ch07/s23_slew_16fc2548.png",
+    "sha256": "16fc2548afb685321c8e95362e2c500869653745465b494ae3acfb9bb84325c8",
+    "caption": "不同控制频率下的实际指令变化率。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s24",
+    "source": "experiments/biped_feedback/figures/cop_com.png",
+    "local": "figures/ch07/s24_cop_com_c33be67c.png",
+    "sha256": "c33be67c7802536dc9f5d4f1c024a420e151cd07d25e82f47763e81dc2d023c4",
+    "caption": "40N前向推扰下的实际CoP与CoM误差，橙色为施力区间。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s24",
+    "source": "experiments/biped_feedback/figures/delay.png",
+    "local": "figures/ch07/s24_delay_3b2aa9af.png",
+    "sha256": "3b2aa9af396d9f32150887d964ddef3cf56d2d78f96fef1bba10ff56e9f6c878",
+    "caption": "延迟条件下的完成数，每格3个噪声种子。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/figures/single_support.png",
+    "local": "figures/ch08/s25_single_support_448676c3.png",
+    "sha256": "448676c3842728485159b452ff33f59ac7928f374d4f80fe251fa1a22ea10471",
+    "caption": "双侧单脚支撑：实际离地高度与真实法向力。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/walking_contacts.png",
+    "local": "figures/ch08/s26_walking_contacts_4e4971b9.png",
+    "sha256": "4e4971b94874347f007d1d30987d43d7d3b445805d36bb1df7218537f2997ea5",
+    "caption": "实际足底前移、离地和左右承重转换。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/com_top.png",
+    "local": "figures/ch08/s26_com_top_c8a80097.png",
+    "sha256": "c8a800979b9232fce91a07d3c0e76c6c37a9883f88b825f83e079359880b46e8",
+    "caption": "俯视的实际CoM轨迹及足底位置，可见横向转移。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s27",
+    "source": "experiments/humanoid_control/figures/backend_timing.png",
+    "local": "figures/ch08/s27_backend_timing_315955bc.png",
+    "sha256": "315955bce51052cf1d3f5f2d0413d54330b7ad0fda97dd6d466594fc61e01009",
+    "caption": "单脚支撑条件的调用耗时累计分布。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/figures/push_boundary.png",
+    "local": "figures/ch08/s28_push_boundary_c69c7887.png",
+    "sha256": "c69c7887b4e2363e4469c419ec76bcdac8eaaf50a771480a4576f3dadb0b31cf",
+    "caption": "40/150/250N侧向站立推扰；终止轨迹只画到真实停止时刻。",
+    "note": "从已有运行材料迁入，未重新运行模型。"
+  },
+  {
+    "kind": "video",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/comparison.mp4",
+    "local": "videos/ch05/panda_gravity_contact_comparison.mp4",
+    "sha256": "33f7689ead265352774c09b85ae12425c0f432d6fae8fe5b7e9aff8d8934858f",
+    "caption": "带重力接触控制与同步曲线"
+  },
+  {
+    "kind": "figure",
+    "stage": "s03",
+    "source": "reports/bytedance_engineering/videos/ch02/panda_joint_trajectory.mp4",
+    "local": "figures/ch02/panda_trajectory_viewport_sequence.png",
+    "sha256": "4e8bdc043e0a75699b3b0913f6daa62fa79c77fe740c42c598ee571f93cd089a",
+    "caption": "Isaac Panda实际轨迹录屏的四个时刻；裁剪仅去除界面侧栏，时间为视频播放时刻。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.01,
+      "frames": [
+        {
+          "frame": 10,
+          "video_time_s": 0.4997501249375312,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 50,
+          "video_time_s": 2.498750624687656,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 100,
+          "video_time_s": 4.997501249375312,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        },
+        {
+          "frame": 160,
+          "video_time_s": 7.996001999000499,
+          "crop": [
+            50,
+            30,
+            1000,
+            605
+          ],
+          "original_size": [
+            1440,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s11",
+    "source": "experiments/panda_contact_isaac/figures/keyframes.png",
+    "local": "figures/ch04/panda_contact_compensated_keyframes.png",
+    "sha256": "c46a07c42e5fdca8576be0d6648cad41018f8dc2cf6ce9b6740a78a3b4afae71",
+    "caption": "Isaac球形探针接触的保存关键帧；这是补偿内环示例，不替代普通PID主实验的条件标记。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/figures/comparison_keyframe.png",
+    "local": "figures/ch05/panda_gravity_comparison_full_frame.png",
+    "sha256": "45e64a9aedbbf5fe523645ca70920091ea6024ae6a0bf1d29e93f787d29fcfe7",
+    "caption": "相同重力、几何与内环下的位置控制和优化导纳：实际画面与同步均力曲线。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00000.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame000.png",
+    "sha256": "157815fdc3638c2629829dfe80822a362660752f4d67b06eef5588c3407939b6",
+    "caption": "两种控制条件的纯相机画面，保存帧序号0（约0.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00000.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00000.png"
+      ],
+      "source_sha256": [
+        "4a52525086171f9be8b7ad4d602d7ee90af4262f2d614ece24c43b73f0363523",
+        "f326e8207ba28ec04a0ee8a7ad1378171aeb11e8471c4fe99893e674ce652e67"
+      ],
+      "frame_index": 0
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00140.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame140.png",
+    "sha256": "6b3f70e6ef0a905fe6c5837db449a476c7cedb7f557d165e59f21171079bbbf0",
+    "caption": "两种控制条件的纯相机画面，保存帧序号140（约14.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00140.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00140.png"
+      ],
+      "source_sha256": [
+        "e953a8ea515486f343b12f75c023e27f6700f251e8fbbc1fbc906276be9e8e14",
+        "e1961cb41dbd944cc025b5689e3b516f699ed104fdfd210d7451a40cd54f97f3"
+      ],
+      "frame_index": 140
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s14",
+    "source": "experiments/panda_contact_optimization/runs/video_position/frames/00300.png",
+    "local": "figures/ch05/panda_contact_camera_pair_frame300.png",
+    "sha256": "d22b8edcd22a86755a48a0c71a38dc6952872395bb2758b1618c8a76f54df262",
+    "caption": "两种控制条件的纯相机画面，保存帧序号300（约30.001秒仿真时间）。",
+    "derivation": "pair of saved camera images; resize only",
+    "detail": {
+      "sources": [
+        "experiments/panda_contact_optimization/runs/video_position/frames/00300.png",
+        "experiments/panda_contact_optimization/runs/video_admittance/frames/00300.png"
+      ],
+      "source_sha256": [
+        "9261b2c422a56957040927fff23106417edb946fe734d90167c19af31efe9b4c",
+        "2995476213768bf60fb6f9c477b7388bffe84a796bb7061ef3443e01ef1c033a"
+      ],
+      "frame_index": 300
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/figures/lipm_keyframe.png",
+    "local": "figures/ch06/lipm_reference_support_visualization.png",
+    "sha256": "cb8321a01a2674f30fa3bd68c3eddcec847b0f72a298d901b6004ce9feea8bca",
+    "caption": "线性倒立摆的状态与支撑示意，不属于多关节物理相机画面。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/figures/physical_keyframe.png",
+    "local": "figures/ch06/finite_foot_standing_comparison.png",
+    "sha256": "199dcecfb64e6cb7746c1984a9bffb3a080620f086f214e40dc814a2a42e0fba",
+    "caption": "有限脚掌非线性站立模型的实际物理画面与对应姿态记录；左PD、右LQR。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/physical_comparison.mp4",
+    "local": "figures/ch06/finite_foot_push_camera_sequence.png",
+    "sha256": "97b3bf43ea1c569c5d1c7e0974d82a6427d6327c301c3b2767252255537e64b5",
+    "caption": "有限脚掌站立推扰前、推扰后及后续恢复画面；每行左PD、右LQR，时间为视频时刻。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 53,
+          "video_time_s": 2.65,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        },
+        {
+          "frame": 57,
+          "video_time_s": 2.85,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        },
+        {
+          "frame": 90,
+          "video_time_s": 4.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            1080
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s21",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_torque_comparison.mp4",
+    "local": "figures/ch07/planar_biped_failure_camera_sequence.png",
+    "sha256": "46cf019d3a34cdba2e2ab499d6db41f9246e256c7834e100aa7e7682bd7a113e",
+    "caption": "完整力矩与半力矩的实际相机画面对照；后者终止后冻结末帧，不能将其显示时长当成有效运行时长。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 50,
+          "video_time_s": 2.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        },
+        {
+          "frame": 70,
+          "video_time_s": 3.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        },
+        {
+          "frame": 90,
+          "video_time_s": 4.5,
+          "crop": [
+            20,
+            98,
+            1390,
+            603
+          ],
+          "original_size": [
+            1400,
+            840
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "experiments/biped_feedback/figures/frame_142.png",
+    "local": "figures/ch07/planar_twenty_steps_full_frame.png",
+    "sha256": "af159478f8dec46adf13bc63590a1819f0f143640d69caf00a8665e98ad8bd3f",
+    "caption": "二十步行走实际相机帧与同期质心、接触记录；画面显示的名义经过时段不代替实测落脚判据。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_twenty_steps.mp4",
+    "local": "figures/ch07/planar_twenty_steps_camera_sequence_1.png",
+    "sha256": "77bb653bdbe1e9248e470ab5c4dd0d6e160954fcd968e66a870ac444e391b0ba",
+    "caption": "二十步实际动力学录屏的前段相机画面；为保留机器人和脚掌而裁去文字栏。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 10,
+          "video_time_s": 0.5,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 24,
+          "video_time_s": 1.2,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 54,
+          "video_time_s": 2.7,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 65,
+          "video_time_s": 3.25,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s23",
+    "source": "reports/bytedance_engineering/videos/ch07/planar_biped_twenty_steps.mp4",
+    "local": "figures/ch07/planar_twenty_steps_camera_sequence_2.png",
+    "sha256": "0530a02d13db4eeb10312d3d3b36ff2f7f7be4f60ef7becdbd9a46a408c5fe86",
+    "caption": "二十步实际动力学录屏的后段相机画面；为保留机器人和脚掌而裁去文字栏。",
+    "derivation": "video frame extraction; fixed crop and resize; no pose synthesis",
+    "detail": {
+      "fps": 20.0,
+      "frames": [
+        {
+          "frame": 142,
+          "video_time_s": 7.1,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 180,
+          "video_time_s": 9.0,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 220,
+          "video_time_s": 11.0,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        },
+        {
+          "frame": 270,
+          "video_time_s": 13.5,
+          "crop": [
+            40,
+            66,
+            1080,
+            704
+          ],
+          "original_size": [
+            1120,
+            900
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view0.png",
+    "sha256": "d1e7a628810bddbfba90a7f975446a51e8a591349a70fe0f126e45632a461266",
+    "caption": "G1左脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view1.png",
+    "sha256": "cb41dee39cf8d33c8ff173e1909761b9f3970bd5fa4e28b7749b533e22113a34",
+    "caption": "G1左脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          -0.0008912663433247592,
+          0.040960581292349696
+        ],
+        "saved_fz_N": [
+          327.081435892106,
+          0.0
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "local": "figures/ch08/g1_single_support_side0_saved_view2.png",
+    "sha256": "9218718d17144fc6309d19cdf9de1897afa3ecf89fd0a2afce3ed0e0fba0e045",
+    "caption": "G1左脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005898171377761788,
+          -0.0005873190534253711
+        ],
+        "saved_fz_N": [
+          164.3882098243327,
+          162.6859142234944
+        ]
+      },
+      "trace_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view0.png",
+    "sha256": "a72e42af063cb9e60b00643367aa55fe91f9bd0255270c300664690c1eb96efc",
+    "caption": "G1右脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view1.png",
+    "sha256": "b917045e1a4c04e2e3221bd47742a86954ea4340a996ee72ab36e372dad5c682",
+    "caption": "G1右脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          0.04096353259174824,
+          -0.0008911816181591536
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.08147521813225
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s25",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "local": "figures/ch08/g1_single_support_side1_saved_view2.png",
+    "sha256": "6ae967dbfccde7c4622c6873e64b8ecdc4694c307fdab7a93f758f5af80b7f83",
+    "caption": "G1右脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005878221887264459,
+          -0.0005893067015102227
+        ],
+        "saved_fz_N": [
+          162.9098141680907,
+          164.16430742932292
+        ]
+      },
+      "trace_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/94ecb4bd4e443011/trace.npz",
+    "local": "figures/ch08/g1_stress_150n_saved_view2.png",
+    "sha256": "7906e59f92e93582d5b20825de38be761b4d9b3dd7a5f4394f5b633bcd7ca42a",
+    "caption": "G1150牛站立扰动：最后保存状态，5.999秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 5999,
+        "time": 5.9990000000000006,
+        "feet_z_m": [
+          -0.0005902942367887951,
+          -0.0005844831497069033
+        ],
+        "saved_fz_N": [
+          165.1079448610687,
+          161.96872395985753
+        ]
+      },
+      "trace_sha256": "fd97ee618025d778699f852e36cae8b60bc5279ca0e5d40e0aab1363afdc87fd"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/e82d93dd13ca691c/trace.npz",
+    "local": "figures/ch08/g1_stress_250n_saved_view2.png",
+    "sha256": "392780956259b0f0d46d7c0818452228a2c55d1795636c2b3112c382d5b8703c",
+    "caption": "G1250牛站立扰动：最后保存状态，3.049秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 3049,
+        "time": 3.049,
+        "feet_z_m": [
+          -0.0007482226150840252,
+          0.0054704815480268315
+        ],
+        "saved_fz_N": [
+          288.1158550491143,
+          4.969104267151805
+        ]
+      },
+      "trace_sha256": "38813c5a7e4d3c93ed6421b2fa8a1c03cc8fc09e2389f343a33b23422f7f52c8"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view0.png",
+    "sha256": "b6fb5eb833919c94c0fe4bf40b4a598fb9c9a298112463e0a07b902ad1c97a25",
+    "caption": "G140牛侧向行走扰动：推扰前，9.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 9800,
+        "time": 9.8,
+        "feet_z_m": [
+          0.04153263654737775,
+          -0.0008951911979837093
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.09638765668103
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view1.png",
+    "sha256": "931a24e66c20f6a93ca17e11ad13e17b5a6a857b4f7681e33582c2e61ac1eeee",
+    "caption": "G140牛侧向行走扰动：推扰后，10.200秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 10200,
+        "time": 10.200000000000001,
+        "feet_z_m": [
+          0.042532625293079274,
+          -0.0009401123047341406
+        ],
+        "saved_fz_N": [
+          0.0,
+          324.8421293950495
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s28",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "local": "figures/ch08/g1_walk_stress_40n_saved_view2.png",
+    "sha256": "bf633b529f5365f79324f49d8a70c7aa71d9bd2fe82808f0fe18c05b6c7e85ef",
+    "caption": "G140牛侧向行走扰动：最后保存状态，11.389秒。依据保存状态重建，图下的足高与法向力取自历史日志。",
+    "derivation": "saved-state render; no physics stepping",
+    "detail": {
+      "state_render_manifest": "STATE_RENDER_MANIFEST.json",
+      "frame": {
+        "index": 11389,
+        "time": 11.389000000000001,
+        "feet_z_m": [
+          0.016238102020201636,
+          -0.00038270438367209864
+        ],
+        "saved_fz_N": [
+          0.0,
+          256.2654256429897
+        ]
+      },
+      "trace_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3"
+    }
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_018.png",
+    "local": "figures/ch08/g1_walk_dual_camera_018.png",
+    "sha256": "031d3e65d29e89cf5204bae640a1c47469ebaef269a4cca744defc7749e1a872",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间0.90秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_060.png",
+    "local": "figures/ch08/g1_walk_dual_camera_060.png",
+    "sha256": "34bfef37633d7aa57e1a76b4bc909a416585130be273b3c329bc3348dffb428b",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间3.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_180.png",
+    "local": "figures/ch08/g1_walk_dual_camera_180.png",
+    "sha256": "25f96f435d6342d1287570352f384f8268b1795711881f16154dc5b5d328d879",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间9.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_340.png",
+    "local": "figures/ch08/g1_walk_dual_camera_340.png",
+    "sha256": "4dbdf8e9c37af7898bea5e8aa6e102cbb3aea0c1eda65afee05f15c274cbcefb",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间17.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "figure",
+    "stage": "s26",
+    "source": "experiments/humanoid_control/figures/camera_560.png",
+    "local": "figures/ch08/g1_walk_dual_camera_560.png",
+    "sha256": "d9e90fe6976a0d1ce5c7f136ccd0eea8e2287eeead60e90d894ae539c328443e",
+    "caption": "G1四步准静态行走的原始双视角画面，仿真时间28.00秒；保留原始状态说明。",
+    "derivation": "copied original screenshot"
+  },
+  {
+    "kind": "video",
+    "stage": "s18",
+    "source": "experiments/lipm_balance/lipm_comparison.mp4",
+    "local": "videos/ch06/lipm_model_comparison.mp4",
+    "sha256": "10c78fab50b72c0c5ec92f317ea5d7f3ffab93cabafa087bb30598c0096baaef",
+    "caption": "倒立摆模型示意",
+    "derivation": "copied existing video"
+  },
+  {
+    "kind": "video",
+    "stage": "s19",
+    "source": "experiments/lipm_balance/physical_comparison.mp4",
+    "local": "videos/ch06/finite_foot_standing_comparison.mp4",
+    "sha256": "07064e66541b7075a3f2520eac6f6fb2b8b8d051e88e62ab36e810bb2769ab35",
+    "caption": "有限脚掌物理站立",
+    "derivation": "copied existing video"
+  }
+]

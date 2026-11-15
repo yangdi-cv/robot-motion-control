@@ -1,0 +1,34 @@
+{
+  "config": {
+    "controller": "lqr",
+    "hz": 100,
+    "delay": 0.0,
+    "force": 40.0,
+    "friction": 0.8,
+    "seed": 0,
+    "noise": 0.002,
+    "initial_angle": 0.02,
+    "dt": 0.001,
+    "duration": 6.0,
+    "record": true
+  },
+  "completed": true,
+  "success": true,
+  "reason": null,
+  "duration_s": 6.000000000000338,
+  "max_angle_deg": 1.1483671082162301,
+  "tail_angle_rmse_deg": 0.07392504098076094,
+  "max_foot_translation_m": 0.0001950372931404334,
+  "max_foot_pitch_deg": 0.5342351410949152,
+  "peak_torque_Nm": 25.0,
+  "recovery_s": 0.08099999999999996,
+  "peak_contact_force_N": 493.494328820918,
+  "last_normal_force_N": 220.72498672173685,
+  "gain": [
+    557.1550164832315,
+    133.5559535266955
+  ],
+  "pinned_ankle_inertia_kgm2": 13.016000000000004,
+  "gravity_moment_per_rad_Nm": 158.922,
+  "source": "MuJoCo nonlinear finite-foot standing; not walking"
+}

@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-20 Australia/Sydney",
+  "simulation": "Isaac5.1.0 / ROS2 Humble / NVIDIA Franka Panda, domain71",
+  "dataset": {
+    "name": "TUM VI Benchmark",
+    "authors": "Schubert, Demmel, von Stumberg, Usenko, Cremers (2018)",
+    "page": "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset",
+    "license": "CC BY 4.0",
+    "static_url": "https://cdn3.vision.in.tum.de/tumvi/imu_static/dataset-calib-imu-static2.npy",
+    "motion_url": "https://cdn3.vision.in.tum.de/tumvi/exported/euroc/512_16/dataset-room1_512_16.tar",
+    "static": "first120001 float64 rows; NPY container recreated, original values retained",
+    "motion": "original imu0/data.csv bytes, full member extracted by checked HTTP ranges",
+    "full_remote_file_md5_verified": false,
+    "local_hashes": {
+      "ATTRIBUTION.md": "48f83bbed32edfea29250261a770def0695bb6ed947e7fa7a0c736a77febcec6",
+      "motion_30s.csv": "8ff4452ab42cec38e80b063720ede133248316499f9afbe656076c4ba4c2212d",
+      "static_600s.npy": "8a883a6c2c1e43229e05ad2ce312447ce8aefb692aab05beab36ef514b27afff",
+      "motion_download_ranges.json": "24d547d800ee40a845487751b054869fa8a66f61685f532319e935a69d2b8a62",
+      "static_30s.csv": "bd81eec407efa9896290a139e02b08c11a484256ea987bb2e5b6494251a4115d",
+      "download.json": "95179e8ce58a160b472dbdf471e53a4081db8eababba93cbbb22b2e576de10f7",
+      "room1_imu.csv": "8cd471ca2c1425260534228fbe0f3e27bd6711199dfce7c971447cdf184569e2"
+    }
+  },
+  "hardware_results": {
+    "jetson": true,
+    "own_board_capture": true,
+    "physical_motion_commands": false,
+    "timestamp": "same-host parse/receipt; not device sampling time",
+    "conda_an_project_modified": false
+  },
+  "source_sha256": {
+    "after_control.py": "65abe64df0223f77c54a590d24f6b9c7846a49bdb57e41c80e14cfe78cf6476e",
+    "after_feedback.py": "6ca976f11bdb02543ca592730cf5c3e8d41e5b686ae9d31849db85196b82e827",
+    "run_control.py": "704f46c0aa4463ac958781186221d7a09beb5ff26124493db9e647bda113b656",
+    "run_feedback.py": "ae2cf5c9df53fb44c19613e8efb601525b74f05e68937eb6ec73460eea3fe080",
+    "analyze_imu.py": "c7cec2067b1c150b97ea22092790fb980c1003c3876f960ef85979a52c0adabe",
+    "trajectory.py": "28634ed22f0567ff865a7b6074d14f78309de5b5ea12a8de893f2affa6e88ec2",
+    "write_report.py": "9301a26d4672a217f6d07847296e4e45cdb6c39f003d6c800cff86f1d24d5769",
+    "finalize_norender.py": "de9fc46bbdfba27c8c3c46e1893fcda847a2012c4b00754de82762ced52104b4",
+    "download_public_imu.py": "2ee82485e7998a00a087d03f323f1f62e85c1030d0c3ff6879a465ea7caf5284",
+    "analyze_control_frequency.py": "94ce45a12ff4cb406dd39b26ff6c4e6979a12d325db3730eef0adada3db9951d",
+    "analyze_feedback.py": "2c3bd4f8c4b735caff6621f170aef6ae1d943ddd45ed48617f9b3acbc5c46fb1",
+    "log_progress.py": "db8a24c1927bb9f7c4a93e1e8c17e36cb078804372c4a8241358f1a77197aaa5",
+    "controller.py": "90f8fa73e80da9f65e732e793d8e79c7330c10c1be4b31c625229827b3a9a686",
+    "check_software.py": "c2c5dea88d28f11d5c493a6adff6ade76636273064f7ac609dc1021c3fc7d673",
+    "imu_serial_node.py": "1c2e991d6484eb4ef4ef1d00a78b6e2ab143b8bf198ec5c9c515440f7dd79358",
+    "build_delivery.py": "fca412d6a2775411673e916d200afcc8350fadb5235738570ed7b43371001b76",
+    "filter_csv.py": "4874234efef323b487d9c9431bf88b8330998962b85c3bf05bf11981d405c126",
+    "finalize.py": "75ff035a438ac57b47d999ab933e4621998082da7026b66105e282917d70e643",
+    "verify.py": "2de2141bfeaa78442637f557638b69b2044a0392f7a4dd0673c7a7361448d813",
+    "download_motion.py": "da0d6b39f65171560fc2a2ae8825114f34511d1703dee8c7020a684145f900cd",
+    "analyze_control.py": "a7f71a5bd8f825ff695413f3cd840db83db5849a8821735720602b79e15af350",
+    "build_jetson_delivery.py": "d4d7d14f8326d77e49ff54dfe76ac698c5f8e0b56b5e3774f6d6e44006f6620c",
+    "isaac_scene.py": "787962a8ab4f7af08a255c7611c09d69e7c855bae617784a85d9b052b08f8111",
+    "feedback_node.py": "1481e48968e0db15682b240ee060cff7429c916d813ad79b519aa250f492e254"
+  },
+  "new_scripts_postrun_changes": "Formatting, CLI output-path options, and clean signal handling; numerical analysis and experimental configurations preserved."
+}

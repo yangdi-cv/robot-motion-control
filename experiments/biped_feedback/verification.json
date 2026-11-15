@@ -1,0 +1,14 @@
+{
+  "cases_verified": 94,
+  "verified_landings_total": 690,
+  "max_errors": {
+    "integration": 2.2195270185025422e-16,
+    "kinematics": 0.0,
+    "virtual_work": 1.7053025658242404e-13,
+    "contact_reconstruction": 8.384404281969182e-12,
+    "cop_reconstruction": 4.1772141301521515e-15,
+    "mapping": 0.0
+  },
+  "source_unchanged": true,
+  "scope": "planar model; no physical hardware; horizontal CoM delay only"
+}

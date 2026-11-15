@@ -1,0 +1,643 @@
+\chapter{末端接触与导纳控制}
+模型与物理接口分别参考MuJoCo Menagerie\cite{menagerie}、MuJoCo API\cite{mujoco}和Isaac接触接口\cite{contact}。
+
+
+自由空间跟踪精度不决定接触表现。本章先用MuJoCo研究法向柔顺，再在Isaac中核对普通关节内环、原始冲击与有限窗口稳定。
+
+\section{MuJoCo法向接触模型与导纳设计}
+
+\label{stage:s09}
+
+\subsection{模型、接触与执行接口}\label{s09-detail-1}
+
+Panda来自Google DeepMind的MuJoCo Menagerie，版本固定为 \texttt{62ab00f2bc44}，保留原模型惯量及关节结构，仅省去装饰网格。为了单独研究末端接触，在手部加入半径15mm球形探头与水平平面。其余机器人几何不参与碰撞，因此当前不研究自碰撞或机械臂其他部位撞桌。
+
+采用独立MuJoCo2.3.7／NumPy1.26.4环境，未修改原ACT环境。物理步长1ms。末端位置与固定姿态通过阻尼雅可比逆解转换为七个关节参考，内环采用带重力/偏置补偿的关节PD力矩，前四关节限87Nm，后三关节限12Nm。除场景重置与逆解用的独立状态外，不直接改写动态机器人的关节位置，没有mocap焊接或把末端瞬移到目标。
+
+接触力来自mj\_contactForce的法向分量。这里只有水平平面的单一法向接触，不把它称为真实六维力传感器。接触求解器刚度参数设2000/8000/20000，不能直接当成已标定材料的N/m刚度。
+
+相关代码在 \path|scripts/contact_task.py|，模型来源与许可在 \path|assets/panda/SOURCE.json| 和 \path|assets/panda/LICENSE|。
+
+\subsection{位置控制与导纳控制}\label{s09-detail-2}
+
+先保持0.5秒，再用五次曲线下探；位置控制继续保持固定参考。导纳控制在检测到接触后，以测量力与目标力之差调整法向位置，目标力在0.5秒内升至10N。
+
+法向偏移 $x$ 满足：
+\begin{equation}
+M\ddot{x}+B\dot{x}+Kx=F_{\mathrm{meas}}-F_{\mathrm{ref}}.
+\end{equation}
+其中质量参数 $M=2\,\mathrm{kg}$，阻尼参数 $B=100\,\mathrm{N\,s/m}$。正方向按该阶段的法向坐标约定，后文Isaac的向下压入坐标另行说明。主方案K=0，为质量阻尼型力跟随；另用K=200N/m对照虚拟弹簧带来的影响。偏移限−25至50mm、偏移速度限40mm/s，限制条件均保留在配置中。
+
+接触力及状态按1kHz记录，峰值从完整采样中统计，避免较低频率日志漏掉瞬时冲击。稳定段统一为第5至8秒。所有对照使用相同模型、接近参考和力矩限制。
+
+\stagefigure{figures/ch04/s09_contact_force_20f4706d.png}{接触力和位置修正}{fig:s09-detail-1}
+
+相关代码在 \path|scripts/contact_task.py|、\path|scripts/run_suite.py|，参数在 \path|config/suite.json|。
+
+
+\paragraph{阶段结论}采用真实动力学和有限关节力矩，但仅单法向探头接触；接触参数档不是已标定材料刚度。
+
+\stagecode{s09}
+
+\FloatBarrier
+
+\section{力跟随、噪声与首次碰撞}
+
+\label{stage:s10}
+
+\subsection{稳定接触和关节跟踪结果}\label{s10-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{稳定接触和关节跟踪结果：设置与结果}\label{tab:s10-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+接触参数档
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+控制
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+峰值力 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定平均力 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力RMSE / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力标准差 / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+接触参数档
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+控制
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+峰值力 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定平均力 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力RMSE / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力标准差 / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2000 & 位置 & 34.27 & 26.458 & 16.469 & 0.605 \\
+2000 & 导纳K0 & 25.05 & 9.987 & 0.014 & 0.004 \\
+2000 & 导纳K200 & 25.05 & 11.713 & 1.714 & 0.026 \\
+8000 & 位置 & 50.62 & 28.851 & 18.868 & 0.793 \\
+8000 & 导纳K0 & 50.62 & 9.987 & 0.013 & 0.003 \\
+8000 & 导纳K200 & 50.62 & 11.815 & 1.815 & 0.028 \\
+20000 & 位置 & 82.01 & 30.576 & 20.589 & 0.735 \\
+20000 & 导纳K0 & 82.01 & 9.989 & 0.012 & 0.003 \\
+20000 & 导纳K200 & 82.01 & 11.875 & 1.875 & 0.024 \\
+\end{longtable}\endgroup
+
+K=0时可将稳定接触力保持在10N附近；加入虚拟弹簧后，保持偏移需要额外力，留下约1.7--1.9N的稳定段误差。这是当前控制形式的取舍，不把弹簧参数越大视为越好。
+
+额外六次运行保存七关节参考及实际位置。下图为中间接触参数档的全程跟踪误差，包含外力作用，不能直接与之前无接触Isaac实验的误差比较。
+
+\stagefigure{figures/ch04/s10_joint_tracking_de8648da.png}{七关节参考跟踪}{fig:s10-detail-1}
+
+关闭接触求解的对照得到零接触力；启用接触时机器人产生动态偏移，说明力并非由预设曲线或目标位置人工生成。
+
+\stagefigure{figures/ch04/s10_admittance_contact_dcf28dbc.png}{Panda末端接触画面}{fig:s10-detail-2}
+
+相关代码在 \path|scripts/joint_check.py|；参考与实际关节记录在 \path|runs/joint_check_v3/|。演示视频为 \path|videos/ch04/panda_position_contact.mp4| 和 \texttt{admittance.mp4}。
+
+\subsection{噪声、频率与延迟}\label{s10-detail-2}
+
+对位置与导纳分别组合三档接触参数、50/100/200Hz外环、额外0/20/60ms反馈延迟。导纳测量叠加每次更新标准差0.5N的高斯噪声，三个随机种子，共162组。它是人为设定的扰动，不是自有传感器噪声。
+
+下表为导纳在三档接触参数和三个种子上的平均稳定段力RMSE：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2506}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}@{}}
+\caption{噪声、频率与延迟：设置与结果}\label{tab:s10-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+附加延迟0ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+20ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+60ms / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+附加延迟0ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+20ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+60ms / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 0.294 & 0.342 & 0.959 \\
+100 & 0.183 & 0.233 & 0.781 \\
+200 & 0.117 & 0.147 & 0.415 \\
+\end{longtable}\endgroup
+
+附加延迟增大后误差增加，当前设置下更高更新率通常改善稳定段力跟随，但不保证首次碰撞峰值更低。各档每次更新注入相同标准差，连续时间噪声带宽并不严格相同，因此不能把所有差异只归因于频率。
+
+177次运行共享一个姿态及平面接触任务，其中一些位置控制对照对随机种子不敏感；这些不是177个独立场景，也不代表覆盖全部稳定性边界。
+
+\subsection{接近速度与首次冲击}\label{s10-detail-3}
+
+将下探时间设为1、2、4秒，保持最终位置和控制参数不变：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{接近速度与首次冲击：设置与结果}\label{tab:s10-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+接近时间 / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+控制
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+接触峰值 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力RMSE / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+接近时间 / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+控制
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+接触峰值 / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+稳定力RMSE / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1.0 & 位置 & 93.10 & 18.608 \\
+1.0 & 导纳 & 93.10 & 0.012 \\
+2.0 & 位置 & 50.62 & 18.868 \\
+2.0 & 导纳 & 50.62 & 0.013 \\
+4.0 & 位置 & 33.39 & 20.079 \\
+4.0 & 导纳 & 24.72 & 0.016 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch04/s10_delay_approach_fcdb3c40.png}{反馈延迟与接近时间}{fig:s10-detail-3}
+
+导纳要在检测到力之后作出反应，不能撤销已经发生的首次碰撞。当前结果支持将接近速度、接触检测和接触后的柔顺调节一起设计，不能只给原位置控制外面加一层导纳就认为安全问题已经解决。
+
+
+\paragraph{阶段结论}稳定力误差可大幅下降，首次冲击仍需接近速度和阶段切换共同处理。
+
+\stagecode{s10}
+
+\stagevideo{videos/ch04/panda_admittance_contact.mp4}
+
+\stagevideo{videos/ch04/panda_position_contact.mp4}
+
+\FloatBarrier
+
+\section{Isaac普通PID与接触对照}
+
+\label{stage:s11}
+
+\subsection{场景和参数}\label{s11-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3095}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6905}}@{}}
+\caption{场景和参数：设置与结果}\label{tab:s11-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+软件 & Isaac Sim 5.1.0；独立Python 3.11环境 \\
+物理与控制周期 & 物理1ms；控制10ms，仿真时间基准 \\
+关节初态/rad & {[}0, -0.785398, 0, -2.356194, 0, 1.570796, 0.785398{]} \\
+五次轨迹 & 前三关节增量{[}0.06, 0.04, -0.04{]}rad；持续5s \\
+探针与平面 & 手部原点半径25mm球；固定平面220\(\times\)220mm，厚20mm \\
+接近轨迹 & 5s后沿世界-Z方向以5mm/s接近，名义最大位移55mm \\
+力目标与主导纳参数 & 5N；M=1kg，B=40N·s/m，无弹簧项 \\
+导纳限幅 & 位移±80mm，速度±30mm/s；另测位移±30mm \\
+普通PID参数 & 七轴Kp={[}200,200,150,150,10,8,1{]}；Kd={[}10,10,8,8,0.3,0.2,0.02{]}；Ki={[}5,5,5,5,0.2,0.2,0.05{]}；积分±0.2rad·s \\
+力矩限制 & 前四轴87Nm，后三轴12Nm；夹爪5N \\
+测力 & PhysX手部---平面接触矩阵；传入dt=0.001换算N \\
+力信号 & 保存1kHz原始值；100Hz控制使用前一周期10样本平均 \\
+\end{longtable}\endgroup
+
+0---5秒完成关节轨迹，之后固定末端姿态，由Lula逆运动学求沿平面法向运动的关节目标。两个主条件的初态、名义接近轨迹、碰撞几何、内环和力矩限幅相同，仅导纳条件叠加力反馈位移。控制周期指仿真中的10ms，不代表主机实时计算保证。
+
+\stagefigure{figures/ch04/s11_scene_16a22a9e.png}{Panda球形探针与固定水平接触面；原夹爪几何不参与该阶段实验。}{fig:s11-detail-1}
+
+\subsection{控制方法与代码}\label{s11-detail-2}
+
+五次插值s(u)=10u³−15u⁴+6u⁵，u=t/5。普通PID输出直接作为关节力矩，D项使用实测角速度，避免目标跳变引起微分冲击。七轴增益按惯量差异配置，两种主条件完全相同。重力统一关闭，以隔离该阶段轨迹与接触行为。增益单位为Kp：Nm/rad、Kd：Nm·s/rad、Ki：Nm/(rad·s)。
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+error = q_reference - q
+integral = clip(integral + error * 0.01, -0.2, 0.2)
+torque = kp * error - kd * dq + ki * integral
+torque = clip(torque, -torque_limit, torque_limit)
+\end{Verbatim}
+
+导纳坐标的正方向取向下压入平面，PhysX向上的反力取正。用目标力减实测力驱动向下的附加位移；力偏大时附加位移减小。因此在世界Z坐标中需要减去导纳位移，不能直接照搬正负号。
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+acc = (5.0 - measured_force - B * velocity) / M
+velocity = clip(velocity + acc * 0.01, -0.03, 0.03)
+offset = clip(offset + velocity * 0.01, -limit, limit)
+z_reference = z_nominal - offset
+\end{Verbatim}
+
+相关代码在 \path|scripts/run.py|。分析与图表在 scripts/analyze.py，运行条件在各 runs//metadata.json。
+
+\subsection{主要对比结果}\label{s11-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4058}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2971}}@{}}
+\caption{主要对比结果：设置与结果}\label{tab:s11-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+指标
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+位置PID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+导纳 M1/B40
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+指标
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+位置PID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+导纳 M1/B40
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+前三轴5s RMSE/度 & 0.0394/0.0265/0.0276 & 0.0394/0.0265/0.0276 \\
+1ms原始力峰值/N & 47.387 & 95.324 \\
+10ms平均力峰值/N & 21.032 & 14.754 \\
+末2s平均力/N & 19.745 & 5.007 \\
+末2s目标力RMSE/N & 14.751 & 0.522 \\
+法向位置跟踪RMSE/mm & 24.834 & 9.123 \\
+三维位置跟踪RMSE/mm & 24.878 & 9.129 \\
+严格稳定接触时间/s & 未达到 & 未达到 \\
+\end{longtable}\endgroup
+
+严格稳定接触时间定义为：从首次周期平均力超过0.5N起，到连续0.5秒内每个100Hz力样本均落在5±0.5N的时间。未达到表示该阶段运行内未满足此条件，不填写0，也不以平均力接近5N代替。法向位置误差相对于各自实际发送的末端位置目标计算，导纳目标会随力反馈改变，因此不能把该误差单独作为优劣判据。
+
+\stagefigure{figures/ch04/s11_joints_229fc7a9.png}{前三关节5秒轨迹跟踪，角度单位为度。}{fig:s11-detail-2}
+
+\stagefigure{figures/ch04/s11_fz_6719572d.png}{周期平均接触力；原始1ms峰值另列于结果表。}{fig:s11-detail-3}
+
+\stagefigure{figures/ch04/s11_z_372cc86f.png}{末端高度变化；刚性平面限制实际高度继续下降。}{fig:s11-detail-4}
+
+主条件的平均力虽接近5N，原始冲击峰值却高于位置控制。首次周期平均力超过0.5N之前约20ms，根据高度差分估算的下降速度约为位置控制2.9mm/s、直接导纳34.8mm/s。原因是空中实测力为0，恒力导纳也在不断增加向下位移，叠加到名义接近速度上。
+
+\subsection{参数对照与问题分析}\label{s11-detail-4}
+
+先在普通PID内环下比较接触切换和接近速度，保持M=1/B=40。三维位置误差由真实末端XYZ与发送的XYZ目标计算；不同控制条件的目标会变化，位置误差与接触力需一起看。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2846}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}@{}}
+\caption{参数对照与问题分析：设置与结果}\label{tab:s11-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+普通PID条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s均力/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+力RMSE/N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+普通PID条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s均力/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+力RMSE/N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+位置控制 & 47.387 & 19.745 & 14.751 \\
+直接导纳 & 95.324 & 5.007 & 0.522 \\
+接触后启用 & 47.362 & 5.010 & 0.437 \\
+接触后启用、2.5mm/s & 36.829 & 5.001 & 0.424 \\
+\end{longtable}\endgroup
+
+接触检测发生在首次碰撞之后，因此门控本身不能预先消除初次冲击。降低接近速度与接触后退让是两件事，需要分别验证。下面保留补偿PID的九组结果，内环为质量矩阵乘以PID加速度，再补偿科氏/离心项；加速度形式Kp=100/s²、Kd=20/s、Ki=5/s³。两组增益参数化不同，不能单独据此归因补偿算法的优劣；与普通PID结果分组展示，不跨组混算改善比例。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}@{}}
+\caption{参数对照与问题分析：设置与结果}\label{tab:s11-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s平均/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+严格稳定时间/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s平均/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+严格稳定时间/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+阻尼B20 & 158.002 & 4.998 & 0.477 & 未达到 \\
+阻尼B80 & 158.002 & 5.004 & 0.479 & 未达到 \\
+接触后启用导纳 & 27.242 & 5.013 & 0.427 & 未达到 \\
+补偿PID M1/B40 & 158.002 & 5.006 & 0.507 & 未达到 \\
+接触后0.5s力渐增 & 26.705 & 5.013 & 0.470 & 未达到 \\
+位移限幅±30mm & 158.002 & 5.702 & 0.851 & 未达到 \\
+补偿PID重复运行 & 158.002 & 5.006 & 0.507 & 未达到 \\
+接近速度2.5mm/s & 102.957 & 5.000 & 0.453 & 未达到 \\
+补偿PID位置控制 & 43.211 & 19.233 & 14.238 & 未达到 \\
+\end{longtable}\endgroup
+
+慢速条件保持相同55mm最大名义接近位移，运行32秒，其余20秒。阻尼对照只改B，基准条件保持B=40；该表各项均使用补偿PID内环。位移限幅对照检验控制器是否因无法继续退让而产生稳态力偏差。重复运行用于检查本机确定性，不是不同初态的独立泛化样本。
+
+B=20、40、80的首次峰值相同，因为接触前都已触及30mm/s导纳速度限幅；减慢名义接近速度虽降低冲击，仍未消除额外下压。接触后启用导纳直接处理了这个阶段切换问题。0.5秒目标力渐增只带来小幅进一步改善，不能据此声称优于其他方法或具有统计显著性。主条件重复运行的力序列一致，两个主条件前5秒的七轴实测轨迹也完全一致。
+
+\stagefigure{figures/ch04/s11_transition_0627ccb8.png}{直接导纳与接触后切换的对照：上图周期平均力，下图1ms原始力。}{fig:s11-detail-5}
+
+该阶段触及的主要问题包括碰撞体遍历、时间步进和力信号采样。调试中发现带渲染的step与无渲染step会推进不同数量的物理步，已将旧运行移出正式统计；现改为每次只推进1ms物理步，再单独渲染，并逐步校验引擎时钟。20秒运行累计时钟差约1微秒，来自浮点步长表示。第一，USD实例化碰撞体需要先展开再检查，否则普通遍历会漏掉原夹爪碰撞，得到与设计不符的接触。第二，100Hz单点抽取会漏掉1kHz尖峰，所以同时保留原始峰值和周期平均力。第三，导纳输出存在速度、位移限幅，平均力接近目标并不能说明刚性接触完全稳定。
+
+导纳主动让出位置精度来控制接触力。位置控制坚持向平面内部走，会持续增加反力；导纳会退让，但离散更新、刚性接触、逆解变化及关节内环共同影响波动。该阶段尚未逐项分离这些因素，不能把所有波动归因于单一参数。
+
+
+\paragraph{阶段结论}原始1毫秒峰值与10毫秒均力必须分开；关闭重力和简化碰撞的结果不能直接迁移到完整物理场景。
+
+
+
+% BEGIN SIM_VISUALS s11
+\subsection{接触几何与姿态变化}
+补充原报告保存的实际仿真关键帧。图中为补偿内环示例，用于辨认球形探针、平面与接触位置；普通PID主结果仍采用本节对应曲线和记录，不把不同内环的画面混作同条件对照。
+
+\motionfigure{figures/ch04/panda_contact_compensated_keyframes.png}{Isaac球形探针接触的保存关键帧；这是补偿内环示例，不替代普通PID主实验的条件标记。}{fig:motion-panda_contact_compensated_keyframes}
+% END SIM_VISUALS s11
+\stagecode{s11}
+
+\FloatBarrier
+
+\section{恒力稳定性诊断与连续逆解}
+
+\label{stage:s12}
+
+\subsection{恒力稳定性排查与改进}\label{s12-detail-1}
+
+本章保留原有标准：未经指数滤波的接触力，按10ms时间箱取均值，连续0.5秒内每个样本均在5±0.5N内。控制周期改为5ms或20ms时，评价仍使用相同的10ms箱。指数滤波仅进入控制反馈，不用于生成评价曲线。
+
+\subsubsection{参考实现与适配范围}\label{s12-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2441}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2921}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4638}}@{}}
+\caption{参考实现与适配范围：设置与结果}\label{tab:s12-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+参考项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+许可证与最近推送
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+借鉴和限制
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+参考项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+许可证与最近推送
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+借鉴和限制
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+libfranka & Apache-2.0；2026-09-07 & 力控示例假设起始已接触，采用平滑目标；依赖真实Franka FCI，不直接替换本仿真接口 \\
+ros2\_controllers & Apache-2.0；2026-10-19 & 测力、运动学、位置内环分层，支持力滤波；当前Rolling接口不直接安装到已有Humble环境 \\
+FZI cartesian\_controllers & BSD-3-Clause；2024-10-30 & 运动/力/柔顺组合与前向动力学设计；更新较早，仅作设计对照 \\
+\end{longtable}\endgroup
+
+\href{https://frankarobotics.github.io/libfranka/0.16.1/force_control_8cpp-example.html}{libfranka力控示例与接触初态约束}
+
+\href{https://control.ros.org/rolling/doc/ros2_controllers/admittance_controller/doc/userdoc.html}{ROS2导纳控制器：运动学与滤波接口}
+
+\href{https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers}{FZI笛卡尔控制器}
+
+核对了许可证、仓库提交号和相关issue。ros2\_controllers \#2670涉及非激活状态参考被带入激活阶段，libfranka \#241涉及真实网络切换超时；它们提醒切换初始化与硬件依赖需独立检查，不能拿来解释本地PhysX的波动。该阶段只借鉴设计，通过现有Isaac SDK实现，不引入新的ROS2或硬件库。完整比较在\path|OPEN_SOURCE_REVIEW.md|，提交号及issue状态在open\_source\_review.json。
+
+\subsubsection{单因素排查}\label{s12-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3246}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}@{}}
+\caption{单因素排查：设置与结果}\label{tab:s12-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最长带内跨度/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+达到0.5s标准
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最长带内跨度/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+达到0.5s标准
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+接触门控基线 & 0.437 & 0.140 & 否 \\
+冻结名义下压 & 0.529 & 0.370 & 否 \\
+冻结+指数滤波 & 0.528 & 0.310 & 否 \\
+冻结+末次力采样 & 0.891 & 0.100 & 否 \\
+冻结+5ms控制 & 0.443 & 0.210 & 否 \\
+冻结+20ms控制 & 0.588 & 0.140 & 否 \\
+冻结+上次命令作逆解初值 & 0.411 & 0.190 & 否 \\
+上次初值+1\(\mu\)m容差（失稳） & 7.063 & 0.000 & 否 \\
+微分逆解、继续名义下压 & 0.254 & 0.700 & 是 \\
+微分逆解、冻结名义下压 & 0.296 & 0.730 & 是 \\
+微分逆解+冻结+指数滤波 & 0.244 & 0.980 & 是 \\
+微分逆解+冻结+5ms控制 & 0.242 & 0.970 & 是 \\
+\end{longtable}\endgroup
+
+冻结名义下压本身没有消除波动；仅加滤波或缩短周期也未使原逆解链路通过标准。默认Lula逆解位置容差为1mm，实测关节状态不断变化会影响每轮求解结果。改用上次命令作初值也不是充分条件，直接收紧容差还可能切换到远处的另一组关节解。
+
+1\(\mu\)m容差的保护前测试出现最大约223.9°的关节参考跳变，原始峰值力约460.8N。该条件属于失败对照，不作为可用方案。当前代码增加有限值检查和每轮0.05rad参考跳变保护。
+
+回归测试在5.01秒拦截了约66.4°的拟议跳变，未继续执行；该测试没有正常完成标记。它与此前无保护的失败记录分开保存。
+
+\stagefigure{figures/ch04/s12_stability_factors_7cdb51ba.png}{冻结、滤波与控制周期对照；全部从1ms原始力计算相同10ms均值，不使用控制器指数滤波结果。}{fig:s12-detail-1}
+
+\subsubsection{连续微分逆运动学}\label{s12-detail-4}
+
+使用Isaac关节雅可比和Lula正运动学，按相邻目标的位姿误差做阻尼最小二乘增量更新，避免每轮重新选择一整组逆解。正则系数0.01，每轴每轮增量不超过0.003rad，并按模型关节限位裁剪。导纳保持M=1/B=40，关节内环仍是普通PID。
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+pose_error = concatenate([target_position - FK_position(q_reference), rotation_error])
+dq = J.T @ solve(J @ J.T + 0.01**2 * I, pose_error)
+q_reference = clip(q_reference + clip(dq, -0.003, 0.003), lower, upper)
+\end{Verbatim}
+
+该雅可比来自当前实测姿态，正运动学在上次参考处计算，是局部近似；不保证大范围路径或奇异位形下仍适用。它沿用成熟控制链的连续增量设计，通过当前SDK公开接口实现，没有复制外部项目源码。
+
+\stagefigure{figures/ch04/s12_stability_ik_40164769.png}{原逆解、上次命令初值和连续微分逆解对照。}{fig:s12-detail-2}
+
+选择10ms控制、接触后冻结名义位置、连续微分逆解和α=0.2指数反馈这一组合。末2秒均力5.011N，力RMSE为0.244N，最长连续带内跨度0.98秒，达到原0.5秒标准。默认几何下末2秒94.0\%样本在带内，仍存在越界。
+
+\subsubsection{重复运行与高度扰动}\label{s12-detail-5}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2125}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}@{}}
+\caption{重复运行与高度扰动：设置与结果}\label{tab:s12-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+带内占比
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最长带内/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原始峰值/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+末2s力RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+带内占比
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最长带内/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+所选组合 & 21.751 & 0.244 & 94.0\% & 0.980 \\
+相同条件重复 & 21.751 & 0.244 & 94.0\% & 0.980 \\
+平面升高1mm & 25.682 & 0.302 & 89.0\% & 1.170 \\
+平面降低1mm & 49.652 & 0.355 & 82.0\% & 1.060 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch04/s12_stability_validation_e8cd6d7d.png}{所选组合、同条件重复和平面高度±1mm；绿色为4.5—5.5N。}{fig:s12-detail-3}
+
+这四组都出现了连续0.5秒的合格区间。同条件重复用于检查确定性，不算独立随机样本。平面降低1mm时，末2秒仍有约18\%的周期均力越界，首次冲击也增大。因此当前结论是通过既定有限窗口标准，尚未实现整个接触阶段持续无越界，更不能称为工业现场恒力性能。
+
+相关代码在 \path|scripts/analyze_stability.py|、\path|scripts/stability_*suite.sh| 和 \path|scripts/run.py|。刚度、摩擦、重力、完整夹爪碰撞及真实力传感器噪声尚未系统测试。现阶段最重要的改进是参考连续性与输入链路联合验证，而不是仅凭一次参数调整宣称解决了所有波动。
+
+
+\paragraph{阶段结论}组合方案通过连续0.5秒有限窗口标准，但末段仍有部分周期均力越界；这不是全程恒力。
+
+\stagecode{s12}
+
+\FloatBarrier

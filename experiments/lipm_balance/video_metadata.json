@@ -1,0 +1,14 @@
+{
+  "lipm": {
+    "file": "lipm_comparison.mp4",
+    "frames": 185,
+    "fps": 20,
+    "model_duration_s": 9.2
+  },
+  "physical": {
+    "file": "physical_comparison.mp4",
+    "frames": 120,
+    "fps": 20,
+    "model_duration_s": 6
+  }
+}

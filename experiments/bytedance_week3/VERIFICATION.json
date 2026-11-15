@@ -1,0 +1,15 @@
+{
+  "main_trials": 177,
+  "samples_per_trial": 8000,
+  "joint_tracking_trials": 6,
+  "video_frames": {
+    "position": 200,
+    "admittance": 200
+  },
+  "no_mocap": true,
+  "torque_actuators": 7,
+  "contact_disabled_force_zero": true,
+  "metric_recalculation": true,
+  "hardware_used": false,
+  "passed": true
+}

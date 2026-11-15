@@ -1,0 +1,279 @@
+{
+  "admittance_B20": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 158.00169372558594,
+    "control_mean_force_peak_N": 16.13981885910034,
+    "last2s_mean_N": 4.997792215043213,
+    "last2s_force_rmse_N": 0.4774019770918381,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.302906850091272,
+    "first_contact_time_s": 5.680000269785523,
+    "pre_contact_downward_speed_mm_s": 35.098498332907816
+  },
+  "admittance_B80": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 158.00169372558594,
+    "control_mean_force_peak_N": 16.13981885910034,
+    "last2s_mean_N": 5.003564418800175,
+    "last2s_force_rmse_N": 0.47949512135328753,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.680420766870608,
+    "first_contact_time_s": 5.680000269785523,
+    "pre_contact_downward_speed_mm_s": 35.098498332907816
+  },
+  "admittance_contact_gate": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 27.24167251586914,
+    "control_mean_force_peak_N": 6.715718781948089,
+    "last2s_mean_N": 5.01295264457188,
+    "last2s_force_rmse_N": 0.4268815658144419,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 7.820126961811263,
+    "first_contact_time_s": 8.660000411327928,
+    "pre_contact_downward_speed_mm_s": 4.843499769947439
+  },
+  "admittance_final": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 158.00169372558594,
+    "control_mean_force_peak_N": 16.13981885910034,
+    "last2s_mean_N": 5.006391725735739,
+    "last2s_force_rmse_N": 0.5072533609893445,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.426785788926347,
+    "first_contact_time_s": 5.680000269785523,
+    "pre_contact_downward_speed_mm_s": 35.098498332907816
+  },
+  "admittance_force_ramp": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 26.70489501953125,
+    "control_mean_force_peak_N": 6.515988409519196,
+    "last2s_mean_N": 5.012506350457653,
+    "last2s_force_rmse_N": 0.4704254049340558,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 7.76549818023999,
+    "first_contact_time_s": 8.660000411327928,
+    "pre_contact_downward_speed_mm_s": 4.843499769947439
+  },
+  "admittance_limited": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 158.00169372558594,
+    "control_mean_force_peak_N": 16.13981885910034,
+    "last2s_mean_N": 5.70152589390485,
+    "last2s_force_rmse_N": 0.8512448068127211,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.76145216422663,
+    "first_contact_time_s": 5.680000269785523,
+    "pre_contact_downward_speed_mm_s": 35.098498332907816
+  },
+  "admittance_repeat": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 158.00169372558594,
+    "control_mean_force_peak_N": 16.13981885910034,
+    "last2s_mean_N": 5.006391725735739,
+    "last2s_force_rmse_N": 0.5072533609893445,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.426785788926347,
+    "first_contact_time_s": 5.680000269785523,
+    "pre_contact_downward_speed_mm_s": 35.098498332907816
+  },
+  "admittance_slow": {
+    "duration_s": 32.000001519443465,
+    "control_samples": 3200,
+    "physics_samples": 32000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 102.95716857910156,
+    "control_mean_force_peak_N": 14.393085479736328,
+    "last2s_mean_N": 4.999657344044768,
+    "last2s_force_rmse_N": 0.4531799854170208,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 7.450919654595438,
+    "first_contact_time_s": 5.7200002716854215,
+    "pre_contact_downward_speed_mm_s": 32.54499845419601
+  },
+  "pid_admittance": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.03943015513986994,
+      0.026528086826422433,
+      0.02759623983179539
+    ],
+    "raw_force_peak_N": 95.32372283935547,
+    "control_mean_force_peak_N": 14.753598672151565,
+    "last2s_mean_N": 5.006888911676594,
+    "last2s_force_rmse_N": 0.5219111857452037,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 9.123072644766841,
+    "position_3d_rmse_mm": 9.128949163161401,
+    "first_contact_time_s": 5.530000262660906,
+    "pre_contact_downward_speed_mm_s": 34.77349834834902
+  },
+  "pid_contact_gate": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.03943015513986994,
+      0.026528086826422433,
+      0.02759623983179539
+    ],
+    "raw_force_peak_N": 47.361759185791016,
+    "control_mean_force_peak_N": 6.90618537068367,
+    "last2s_mean_N": 5.009751361276489,
+    "last2s_force_rmse_N": 0.4373411948654232,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 8.414313812356621,
+    "position_3d_rmse_mm": 8.419336896669906,
+    "first_contact_time_s": 8.570000407053158,
+    "pre_contact_downward_speed_mm_s": 2.9414998602895146
+  },
+  "pid_gate_slow": {
+    "duration_s": 32.000001519443465,
+    "control_samples": 3200,
+    "physics_samples": 32000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.03943015513986994,
+      0.026528086826422433,
+      0.02759623983179539
+    ],
+    "raw_force_peak_N": 36.82877731323242,
+    "control_mean_force_peak_N": 6.673219990730286,
+    "last2s_mean_N": 5.000615367869846,
+    "last2s_force_rmse_N": 0.4243729843649353,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 7.462220167567361,
+    "position_3d_rmse_mm": 7.466632754417165,
+    "first_contact_time_s": 12.310000584693626,
+    "pre_contact_downward_speed_mm_s": 5.954499717175858
+  },
+  "pid_position": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.03943015513986994,
+      0.026528086826422433,
+      0.02759623983179539
+    ],
+    "raw_force_peak_N": 47.38661193847656,
+    "control_mean_force_peak_N": 21.031640815734864,
+    "last2s_mean_N": 19.74470011528209,
+    "last2s_force_rmse_N": 14.751014608482548,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 24.834303029621424,
+    "position_3d_rmse_mm": 24.87780394388297,
+    "first_contact_time_s": 8.570000407053158,
+    "pre_contact_downward_speed_mm_s": 2.9414998602895146
+  },
+  "position_final": {
+    "duration_s": 20.000000949474053,
+    "control_samples": 2000,
+    "physics_samples": 20000,
+    "pre_contact_force_peak_N": 0.0,
+    "control_dt_max_error_s": 4.749745128457272e-10,
+    "joint_first3_rmse_deg": [
+      0.15194726345630769,
+      0.10067521721131208,
+      0.10130824131216047
+    ],
+    "raw_force_peak_N": 43.21087646484375,
+    "control_mean_force_peak_N": 20.348652172088624,
+    "last2s_mean_N": 19.232590082585812,
+    "last2s_force_rmse_N": 14.238001882435118,
+    "stable_contact_after_first_hit_s": null,
+    "stability_definition": "100Hz cycle-mean force within 5\u00b10.5 N continuously for 0.5 s",
+    "normal_position_rmse_mm": 24.8966303862751,
+    "first_contact_time_s": 8.660000411327928,
+    "pre_contact_downward_speed_mm_s": 4.843499769947439
+  }
+}

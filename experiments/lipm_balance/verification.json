@@ -1,0 +1,27 @@
+{
+  "lipm": {
+    "runs": 1458,
+    "state_samples": 9699303,
+    "max_zoh_residual": 2.886579864025407e-15,
+    "bounds_checked": true,
+    "common_physics_evaluation_checked": true,
+    "force_units_checked": true
+  },
+  "physical": {
+    "runs": 333,
+    "physics_samples": 1593715,
+    "torque_limits_checked": true,
+    "contact_frames_checked": true,
+    "recording_replays_identical": [
+      "pd",
+      "lqr"
+    ],
+    "quiet_normal_forces_N": [
+      220.72500000000002,
+      220.72500000000005,
+      220.72500000000002,
+      220.72500000000002
+    ],
+    "expected_weight_N": 220.72500000000002
+  }
+}

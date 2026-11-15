@@ -1,0 +1,70 @@
+{
+  "admittance_B20": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_B80": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_contact_gate": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_final": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_force_ramp": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_limited": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_repeat": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "admittance_slow": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "pid_admittance": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "pid_contact_gate": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "pid_gate_slow": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "pid_position": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "position_final": {
+    "timing_and_rows": "pass",
+    "free_space_force": "pass",
+    "quintic_reference": "pass"
+  },
+  "paired_first5s_max_difference_rad": 0.0,
+  "repeat_max_force_difference_N": 0.0,
+  "ordinary_pid_paired_first5s_difference_rad": 0.0
+}

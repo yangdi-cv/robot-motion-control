@@ -1,0 +1,488 @@
+[
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424184,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.06
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.8267301941097486e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.06
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424184,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.26
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.8267301941097486e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.26
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424184,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.66
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.8267301941097486e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.66
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424299,
+    "exhausted_fraction": 0.1935483870967742,
+    "coverage_margin_s": -0.04000000000000001
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.024054606287389712,
+    "exhausted_fraction": 0.1935483870967742,
+    "coverage_margin_s": -0.04000000000000001
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424299,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.16000000000000003
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.153694467646183e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.16000000000000003
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424299,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.56
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.153694467646183e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.56
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.22357236033772912,
+    "exhausted_fraction": 0.5806451612903226,
+    "coverage_margin_s": -0.24000000000000002
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.2172278327148259,
+    "exhausted_fraction": 0.5806451612903226,
+    "coverage_margin_s": -0.24000000000000002
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424345,
+    "exhausted_fraction": 0.0967741935483871,
+    "coverage_margin_s": -0.03999999999999998
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.017009192802695725,
+    "exhausted_fraction": 0.0967741935483871,
+    "coverage_margin_s": -0.03999999999999998
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.07856135225424345,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.36
+  },
+  {
+    "delay_s": 0.04,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.128273843923125e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.36
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.23754723631465952,
+    "exhausted_fraction": 0.19672131147540983,
+    "coverage_margin_s": -0.01999999999999999
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.014001528251878125,
+    "exhausted_fraction": 0.19672131147540983,
+    "coverage_margin_s": -0.01999999999999999
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.23754723631465952,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.18000000000000002
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.8893662727683045e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.18000000000000002
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.23754723631465952,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.5800000000000001
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.8893662727683045e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.5800000000000001
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.2375472363146607,
+    "exhausted_fraction": 0.5901639344262295,
+    "coverage_margin_s": -0.12
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.11286371082993853,
+    "exhausted_fraction": 0.5901639344262295,
+    "coverage_margin_s": -0.12
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.2375472363146607,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.08000000000000002
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.15913317367219e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.08000000000000002
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.2375472363146607,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.48000000000000004
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.15913317367219e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.48000000000000004
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.36564894972634004,
+    "exhausted_fraction": 0.7868852459016393,
+    "coverage_margin_s": -0.32
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.33444526738369795,
+    "exhausted_fraction": 0.7868852459016393,
+    "coverage_margin_s": -0.32
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.23754723631466113,
+    "exhausted_fraction": 0.29508196721311475,
+    "coverage_margin_s": -0.12
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.07980709522399772,
+    "exhausted_fraction": 0.29508196721311475,
+    "coverage_margin_s": -0.12
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.23754723631466113,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.28
+  },
+  {
+    "delay_s": 0.12,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.1194968405624544e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.28
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.48063030984628985,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.13999999999999999
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.1989317238461334,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.13999999999999999
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.48063030984628985,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.060000000000000026
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.053871841697633e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.060000000000000026
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.48063030984628985,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.4600000000000001
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.1,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.053871841697633e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.4600000000000001
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.480630309846291,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.24
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.31263258370918184,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.24
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.480630309846291,
+    "exhausted_fraction": 0.19327731092436976,
+    "coverage_margin_s": -0.03999999999999998
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.024553988182182327,
+    "exhausted_fraction": 0.19327731092436976,
+    "coverage_margin_s": -0.03999999999999998
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.480630309846291,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.36000000000000004
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.2,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 5.170642476900879e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.36000000000000004
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.6000628919878074,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.44
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.2,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.5417027024092809,
+    "exhausted_fraction": 1.0,
+    "coverage_margin_s": -0.44
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.48063030984629146,
+    "exhausted_fraction": 0.5966386554621849,
+    "coverage_margin_s": -0.24
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.4,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 0.2217463661963835,
+    "exhausted_fraction": 0.5966386554621849,
+    "coverage_margin_s": -0.24
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_naive",
+    "command_rmse_deg": 0.48063030984629146,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.16000000000000003
+  },
+  {
+    "delay_s": 0.24,
+    "period_s": 0.4,
+    "horizon_s": 0.8,
+    "method": "delayed_timestamp",
+    "command_rmse_deg": 4.288300695872059e-15,
+    "exhausted_fraction": 0.0,
+    "coverage_margin_s": 0.16000000000000003
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "network": {
+    "runs": 1188,
+    "physics_states": 8172458,
+    "max_zoh_residual": 2.886579864025407e-15,
+    "causality_checked": true,
+    "stale_terminations": 68
+  },
+  "gait": {
+    "runs": 423,
+    "physics_states": 1748441,
+    "max_zoh_residual": 8.881784197001252e-16,
+    "nonnegative_load_split_checked": true,
+    "individual_sole_cops_checked": true,
+    "swing_ground_clearance_checked": true,
+    "swing_speed_checked": true,
+    "minimum_successful_swing_z_m": 0.0
+  },
+  "biped": {
+    "runs": 51,
+    "physics_samples": 316192,
+    "unactuated_base_checked": true,
+    "torque_limits_checked": true,
+    "max_forward_kinematics_residual_m": 0.0,
+    "max_joint_integration_residual": 1.1102230246251565e-16,
+    "max_qp_dynamics_residual": 0.00028351310564214693,
+    "eight_measured_landings_checked": true,
+    "joint_state_resets_detected": false
+  }
+}

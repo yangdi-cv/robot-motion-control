@@ -1,0 +1,19 @@
+{
+  "case": "outage",
+  "transport": "UDP 127.0.0.1, separate processes, same host monotonic clock",
+  "source": "analytic quintic future action chunks; no VLA and no robot",
+  "duration_wall_s": 4.0,
+  "sender_hz": 20,
+  "receiver_target_hz": 100,
+  "packet_count": 60,
+  "receive_poll_latency_p95_ms": 10.095343399802914,
+  "generation_to_receive_p95_ms": 10.241687899963381,
+  "receiver_lateness_p95_ms": 0.3469809000989698,
+  "hold_samples": 57,
+  "hold_events_including_startup": 2,
+  "injected_application_delay_ms": 0,
+  "injected_sender_outage_s": [
+    1,
+    2
+  ]
+}

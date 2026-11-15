@@ -1,0 +1,6 @@
+numpy>=1.26
+matplotlib>=3.8
+Pillow>=10
+imageio-ffmpeg>=0.5
+# Isaac Sim 5.1 requires its own Python 3.11 environment; do not pip-install it into ROS2.
+# report.py additionally requires a local Google Chrome executable for PDF export.

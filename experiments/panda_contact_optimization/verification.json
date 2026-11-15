@@ -1,0 +1,310 @@
+{
+  "candidate_velocity3": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "candidate_velocity30": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_default": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_friction_high": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_friction_low": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_half_step": {
+    "physics_rows": 64000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_higher": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_higher5mm": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_lower": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_lower5mm": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_repeat": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_selected": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_soft": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_soft_half_step": {
+    "physics_rows": 64000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_soft_higher5mm": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "final_soft_lower5mm": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gravity_gripper": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gravity_probe": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gravity_uncompensated": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gripper_brake": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gripper_ramp": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "gripper_soft": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "no_gravity_probe": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_braking": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_combined": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_damping100": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_damping100_slow": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_damping300": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "refine_velocity": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_20ms": {
+    "physics_rows": 20000,
+    "control_rows": 1000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_5ms": {
+    "physics_rows": 20000,
+    "control_rows": 4000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_friction_high": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_friction_low": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_higher": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_higher5mm": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_lower": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_lower5mm": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_mass_matrix": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_repeat": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_soft_2k": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_soft_50k": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "validation_solver4": {
+    "physics_rows": 20000,
+    "control_rows": 2000,
+    "clock_error_s": 9.499490261077881e-07,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "video_admittance": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  },
+  "video_position": {
+    "physics_rows": 32000,
+    "control_rows": 3200,
+    "clock_error_s": 1.519918441772461e-06,
+    "finite": true,
+    "reference_step_guard": true
+  }
+}

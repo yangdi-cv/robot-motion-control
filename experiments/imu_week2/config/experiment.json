@@ -1,0 +1,67 @@
+{
+  "isaac_sim_version": "5.1.0",
+  "ros_distro": "humble",
+  "ros_domain_id": 51,
+  "physics_dt_s": 0.01,
+  "trajectory_duration_s": 5.0,
+  "initial_positions_rad": [
+    0.0,
+    -0.7853981634,
+    0.0,
+    -2.3561944902,
+    0.0,
+    1.5707963268,
+    0.7853981634,
+    0.04,
+    0.04
+  ],
+  "target_positions_rad": [
+    0.4,
+    -0.5,
+    -0.3,
+    -2.3561944902,
+    0.0,
+    1.5707963268,
+    0.7853981634,
+    0.04,
+    0.04
+  ],
+  "joint_names": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3",
+    "panda_joint4",
+    "panda_joint5",
+    "panda_joint6",
+    "panda_joint7",
+    "panda_finger_joint1",
+    "panda_finger_joint2"
+  ],
+  "command_topic": "/panda_week2/joint_command",
+  "state_topic": "/panda_week2/raw_joint_states",
+  "clock_topic": "/panda_week2/clock",
+  "time_basis": "Isaac simulation time; wall timing logged separately",
+  "controlled_joints": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3"
+  ],
+  "trajectory": "rest-to-rest quintic, zero velocity and acceleration at both endpoints",
+  "feedback_rates_hz": [
+    25,
+    25,
+    50,
+    50,
+    100,
+    100,
+    100,
+    100,
+    50,
+    50,
+    25,
+    25
+  ],
+  "phase_duration_s": 9,
+  "hold_before_s": 2,
+  "hold_after_s": 2
+}

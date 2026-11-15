@@ -1,0 +1,97 @@
+{
+  "pid_contact_gate": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_freeze": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_freeze_ema": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_freeze_last": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_freeze_5ms": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_freeze_20ms": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_ik_previous": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_ik_tight": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": false
+  },
+  "stability_differential_moving": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_differential_frozen": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_differential_ema": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_differential_5ms": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_validation_repeat": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_validation_higher": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "stability_validation_lower": {
+    "rows_and_clock": "pass",
+    "finite": "pass",
+    "unfiltered_fixed_bin_metric": "pass",
+    "has_0_5s_window": true
+  },
+  "jump_guard": {
+    "status": "pass",
+    "abort_time_s": 5.010000237962231,
+    "proposed_jump_deg": 66.36571985825809
+  }
+}

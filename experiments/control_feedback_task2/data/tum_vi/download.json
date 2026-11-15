@@ -1,0 +1,9 @@
+{
+  "dataset": "TUM VI, Schubert et al. 2018",
+  "landing_page": "https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset",
+  "license": "CC BY 4.0",
+  "static_subset": "first120001rows, original NPY float64 columns time_s,gx,gy,gz,ax,ay,az,temp_C",
+  "room": "full original room1 imu0/data.csv extracted from uncompressed TAR by range",
+  "requests": [],
+  "full_remote_file_checksum_verified": false
+}

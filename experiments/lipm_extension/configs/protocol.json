@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-12",
+  "scope": "Three separate validation layers: packet-limited LIPM, swing-constrained DCM planning, and torque-driven planar articulated biped. Not a single integrated robot stack.",
+  "sensor": {
+    "sample_rates_hz": [25,100,200],
+    "controller_rates_hz": [100,200],
+    "delay_s": [0.02,0.08],
+    "jitter_s": [0,0.02],
+    "drop_probability": [0,0.1],
+    "colored_noise_tau_s": 0.08,
+    "random_walk_position_m_per_sqrt_s": 0.005,
+    "random_walk_velocity_m_s_per_sqrt_s": 0.02,
+    "warm_start": "One noisy frame before start; no perfect current-state fallback",
+    "ordering": "Only strictly newer generation timestamps accepted",
+    "stale_policy": "Stop model propagation once source age exceeds configured threshold; this is not a hardware stop verification"
+  },
+  "gait": {
+    "support_phases": 10,
+    "nominal_phase_s": 0.6,
+    "double_support_s": [0,0.12,0.20],
+    "nominal_step_length_m": 0.18,
+    "timing_candidates_s": [0.45,0.50,0.55,0.60,0.65,0.70,0.75],
+    "timing_commit": "At most one timing decision per phase after significant DCM error; positions may continue to adjust",
+    "swing_speed_norm_bound_m_s": [1.2,1.8,2.4],
+    "swing_acceleration_norm_bound_m_s2": 30,
+    "cop_command_speed_per_axis_m_s": 5,
+    "swing_continuity": "C2 piecewise quintic; exact component extrema provide conservative continuous norm bounds",
+    "double_support": "CoP projected to convex hull of both soles; nonnegative load split with individual CoPs within soles is reconstructed",
+    "success": "All nine exchanges, terminal distance to actual support <2cm, speed<0.08m/s, no earlier admissibility failure"
+  },
+  "biped": {
+    "unactuated_base_dof": 3,
+    "motorized_joints": 6,
+    "total_mass_kg": 27.2,
+    "reference_steps": 8,
+    "nominal_step_length_m": 0.12,
+    "controller_hz": [50,100,200],
+    "physics_dt_s": [0.001,0.0005],
+    "torque_limits_Nm": [80,80,30,80,80,30],
+    "joint_velocity_prediction_limit_rad_s": 8,
+    "joint_velocity_guard_rad_s": 10,
+    "foot_velocity_prediction_limit_m_s": 1.8,
+    "foot_velocity_constraint": "Inscribed regular octagon at next control sample",
+    "friction_cone": "|Fx| <= mu*Fz, Fz>=0, |My|<=0.09*Fz",
+    "contact_force_actuation": "QP wrenches are predictions only; simulator receives joint torques, gravity and explicitly configured push",
+    "landing_verification": "For each planned side: x error<2.5cm, |sole z|<8mm, measured ground Fz>10N continuously>=15ms within [-40,+100]ms of planned touchdown",
+    "walking_success": "Full horizon, all eight verified landings, forward progress>=planned minus10cm, terminal foot error<4cm, no tilt/height/QP/velocity guard",
+    "observation": "Ideal full-state feedback; packet/noise tests above are not yet connected to this controller",
+    "geometry": "Planar sagittal model, lateral translation/roll/yaw constrained; torso/link collisions simplified",
+    "solver": "OSQP 1.0.4 builtin, fixed adaptive-rho interval; no hard realtime claim"
+  }
+}

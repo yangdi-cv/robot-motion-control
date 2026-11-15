@@ -1,0 +1,368 @@
+[
+  {
+    "chapter": 2,
+    "report_chapter": 2,
+    "id": "s01",
+    "title": "运行环境与隔离",
+    "sources": [
+      "experiments/panda_task1/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_task1/scripts"
+    ],
+    "conclusion": "Isaac独立Python与系统ROS2分别运行，通过专用通信域连接；没有修改系统Python或原训练环境。"
+  },
+  {
+    "chapter": 2,
+    "report_chapter": 2,
+    "id": "s02",
+    "title": "Panda模型、关节与ROS2通信",
+    "sources": [
+      "experiments/panda_task1/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_task1/scripts"
+    ],
+    "conclusion": "关节名称、限位和初态来自实际加载模型；初期验证关节空间，不额外声称末端位姿或完整坐标树已验收。"
+  },
+  {
+    "chapter": 2,
+    "report_chapter": 2,
+    "id": "s03",
+    "title": "五次轨迹与默认驱动基准",
+    "sources": [
+      "experiments/panda_task1/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_task1/scripts"
+    ],
+    "conclusion": "5秒轨迹最终能到达目标，中间存在约1.36至2.00度峰值误差，为后续调参提供基准。"
+  },
+  {
+    "chapter": 2,
+    "report_chapter": 2,
+    "id": "s04",
+    "title": "驱动增益、参考速度与幅度验证",
+    "sources": [
+      "experiments/control_feedback_task2/REPORT.md"
+    ],
+    "code": [
+      "experiments/control_feedback_task2/scripts"
+    ],
+    "conclusion": "独立幅度验证的平均运动误差由0.864度降至0.082度。参考速度收益明显，但不是逆动力学力矩前馈，也不是硬件性能。"
+  },
+  {
+    "chapter": 3,
+    "report_chapter": 3,
+    "id": "s05",
+    "title": "反馈频率与虚拟传感器链路",
+    "sources": [
+      "experiments/imu_week2/REPORT.md"
+    ],
+    "code": [
+      "experiments/imu_week2/scripts"
+    ],
+    "conclusion": "25/50/100Hz比较改变外环状态与命令更新，不改变100Hz物理驱动；频率提高没有消除默认驱动滞后。"
+  },
+  {
+    "chapter": 3,
+    "report_chapter": 3,
+    "id": "s06",
+    "title": "因果滤波与ROS2消息验证",
+    "sources": [
+      "experiments/imu_week2/REPORT.md"
+    ],
+    "code": [
+      "experiments/imu_week2/scripts"
+    ],
+    "conclusion": "移动平均降低设定噪声但带来约80毫秒滞后；消息回放证明接口连通，与实体传感器联调分开。"
+  },
+  {
+    "chapter": 3,
+    "report_chapter": 3,
+    "id": "s07",
+    "title": "公开真实IMU与噪声分析",
+    "sources": [
+      "experiments/control_feedback_task2/REPORT.md"
+    ],
+    "code": [
+      "experiments/control_feedback_task2/scripts"
+    ],
+    "conclusion": "TUM-VI六轴静止标准差下降约49.2%至52.6%；缺运动真值，不能把运动波形变平解释成测量精度提高。"
+  },
+  {
+    "chapter": 3,
+    "report_chapter": 3,
+    "id": "s08",
+    "title": "发布频率、数据年龄与Jetson实体采集",
+    "sources": [
+      "experiments/control_feedback_task2/REPORT.md"
+    ],
+    "code": [
+      "experiments/control_feedback_task2/scripts"
+    ],
+    "conclusion": "实体IMU约25Hz产生新测量，200Hz发布时约87.52%重复；传输P95不足以代表包含滤波的端到端时延。"
+  },
+  {
+    "chapter": 4,
+    "report_chapter": 4,
+    "id": "s09",
+    "title": "MuJoCo法向接触模型与导纳设计",
+    "sources": [
+      "experiments/bytedance_week3/REPORT.md"
+    ],
+    "code": [
+      "experiments/bytedance_week3/scripts"
+    ],
+    "conclusion": "采用真实动力学和有限关节力矩，但仅单法向探头接触；接触参数档不是已标定材料刚度。"
+  },
+  {
+    "chapter": 4,
+    "report_chapter": 4,
+    "id": "s10",
+    "title": "力跟随、噪声与首次碰撞",
+    "sources": [
+      "experiments/bytedance_week3/REPORT.md"
+    ],
+    "code": [
+      "experiments/bytedance_week3/scripts"
+    ],
+    "conclusion": "稳定力误差可大幅下降，首次冲击仍需接近速度和阶段切换共同处理。"
+  },
+  {
+    "chapter": 4,
+    "report_chapter": 4,
+    "id": "s11",
+    "title": "Isaac普通PID与接触对照",
+    "sources": [
+      "experiments/panda_contact_isaac/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_isaac/scripts"
+    ],
+    "conclusion": "原始1毫秒峰值与10毫秒均力必须分开；关闭重力和简化碰撞的结果不能直接迁移到完整物理场景。"
+  },
+  {
+    "chapter": 4,
+    "report_chapter": 4,
+    "id": "s12",
+    "title": "恒力稳定性诊断与连续逆解",
+    "sources": [
+      "experiments/panda_contact_isaac/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_isaac/scripts"
+    ],
+    "conclusion": "组合方案通过连续0.5秒有限窗口标准，但末段仍有部分周期均力越界；这不是全程恒力。"
+  },
+  {
+    "chapter": 5,
+    "report_chapter": 5,
+    "id": "s13",
+    "title": "恢复重力与手部碰撞",
+    "sources": [
+      "experiments/panda_contact_optimization/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_optimization/scripts"
+    ],
+    "conclusion": "重力缺失补偿造成初态下坠；恢复手部与双指碰撞后重新建立对照，其他连杆碰撞仍未全面恢复。"
+  },
+  {
+    "chapter": 5,
+    "report_chapter": 5,
+    "id": "s14",
+    "title": "接近减速、目标力缓升与修正速度",
+    "sources": [
+      "experiments/panda_contact_optimization/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_optimization/scripts"
+    ],
+    "conclusion": "选用统一方案原始峰值11.11牛，末段均力约5.007牛；单因素和版本变化分别说明，不用较好先导替代复测。"
+  },
+  {
+    "chapter": 5,
+    "report_chapter": 5,
+    "id": "s15",
+    "title": "扰动、接触材质与数值敏感性",
+    "sources": [
+      "experiments/panda_contact_optimization/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_optimization/scripts"
+    ],
+    "conclusion": "刚性接触减半步长后峰值由11.11增至20.43牛，瞬时峰值未数值收敛；柔顺材质另列，不作跨材质算法提升比较。"
+  },
+  {
+    "chapter": 5,
+    "report_chapter": 5,
+    "id": "s16",
+    "title": "动作块执行、延迟与跨进程通信",
+    "sources": [
+      "experiments/panda_contact_isaac/REPORT.md",
+      "experiments/panda_contact_optimization/REPORT.md"
+    ],
+    "code": [
+      "experiments/panda_contact_isaac/scripts",
+      "experiments/panda_contact_optimization/scripts"
+    ],
+    "conclusion": "动作源是解析参考，验证时间戳、限幅、超时与恢复；这些结果不能解释为VLA网络控制成功。"
+  },
+  {
+    "chapter": 6,
+    "report_chapter": 6,
+    "id": "s17",
+    "title": "倒立摆模型、步态与控制器",
+    "sources": [
+      "experiments/lipm_balance/REPORT.md"
+    ],
+    "code": [
+      "experiments/lipm_balance/scripts"
+    ],
+    "conclusion": "LIPM将机器人简化为恒高质点，支撑输入是地面位置；PD和LQR应在相同约束与恢复判据下比较。"
+  },
+  {
+    "chapter": 6,
+    "report_chapter": 6,
+    "id": "s18",
+    "title": "推扰恢复、落脚调整与延迟预测",
+    "sources": [
+      "experiments/lipm_balance/REPORT.md"
+    ],
+    "code": [
+      "experiments/lipm_balance/scripts"
+    ],
+    "conclusion": "12牛秒与80毫秒条件可通过组合策略恢复，但伴随路线偏移；预测只使用已收测量和已发输入。"
+  },
+  {
+    "chapter": 6,
+    "report_chapter": 6,
+    "id": "s19",
+    "title": "有限脚掌非线性站立验证",
+    "sources": [
+      "experiments/lipm_balance/REPORT.md"
+    ],
+    "code": [
+      "experiments/lipm_balance/scripts"
+    ],
+    "conclusion": "MuJoCo验证脚掌接触与站立恢复，不能与简化模型步态拼接成已完成多关节行走。"
+  },
+  {
+    "chapter": 6,
+    "report_chapter": 6,
+    "id": "s20",
+    "title": "独立测量时钟与受限摆脚规划",
+    "sources": [
+      "experiments/lipm_extension/REPORT.md"
+    ],
+    "code": [
+      "experiments/lipm_extension/scripts"
+    ],
+    "conclusion": "有色噪声加漂移明显降低通过数；双支撑会挤占摆脚时间，联合调整并非在全部条件更好。"
+  },
+  {
+    "chapter": 7,
+    "report_chapter": 7,
+    "id": "s21",
+    "title": "力矩驱动的平面双足与八步验证",
+    "sources": [
+      "experiments/lipm_extension/REPORT.md"
+    ],
+    "code": [
+      "experiments/lipm_extension/scripts"
+    ],
+    "conclusion": "51个唯一动力学条件通过50个；标准八步前进约0.937米，但尚未统一全部反馈时序实验。"
+  },
+  {
+    "chapter": 7,
+    "report_chapter": 7,
+    "id": "s22",
+    "title": "质心与零力矩点到关节力矩的统一接口",
+    "sources": [
+      "experiments/biped_feedback/REPORT.md"
+    ],
+    "code": [
+      "experiments/biped_feedback/scripts"
+    ],
+    "conclusion": "统一水平加速度目标改善实际压力中心跟踪，同时增加质心误差，不是所有指标一起提高。"
+  },
+  {
+    "chapter": 7,
+    "report_chapter": 7,
+    "id": "s23",
+    "title": "连续摆腿、双支撑与二十步行走",
+    "sources": [
+      "experiments/biped_feedback/REPORT.md"
+    ],
+    "code": [
+      "experiments/biped_feedback/scripts"
+    ],
+    "conclusion": "两组二十步均完成实际落脚并前进约2.323米；名义支撑与实测接触有核对，尚无触地事件重排步时。"
+  },
+  {
+    "chapter": 7,
+    "report_chapter": 7,
+    "id": "s24",
+    "title": "频率、延迟与动力学独立核验",
+    "sources": [
+      "experiments/biped_feedback/REPORT.md"
+    ],
+    "code": [
+      "experiments/biped_feedback/scripts"
+    ],
+    "conclusion": "94个去重条件79个通过；80毫秒延迟多数失败，常速度预测不能解决全部接触切换问题。"
+  },
+  {
+    "chapter": 8,
+    "report_chapter": 8,
+    "id": "s25",
+    "title": "G1浮动基座、站立与双侧单脚支撑",
+    "sources": [
+      "experiments/humanoid_control/REPORT.md"
+    ],
+    "code": [
+      "experiments/humanoid_control/scripts"
+    ],
+    "conclusion": "真实三维浮动基座与29个受限电机完成重心转移和双侧单脚承重，未用外部支撑锁定侧向自由度。"
+  },
+  {
+    "chapter": 8,
+    "report_chapter": 8,
+    "id": "s26",
+    "title": "三维准静态交替步行",
+    "sources": [
+      "experiments/humanoid_control/REPORT.md"
+    ],
+    "code": [
+      "experiments/humanoid_control/scripts"
+    ],
+    "conclusion": "四步参考29秒前进约0.210米，六步43秒约0.330米，约7秒一步，属于准静态而非动态高速步行。"
+  },
+  {
+    "chapter": 8,
+    "report_chapter": 8,
+    "id": "s27",
+    "title": "QP求解器对照与耗时尾部",
+    "sources": [
+      "experiments/humanoid_control/REPORT.md"
+    ],
+    "code": [
+      "experiments/humanoid_control/scripts"
+    ],
+    "conclusion": "Clarabel在所测控制调用中尾部更短；这不是包含传感、通信和调度的硬实时保证。"
+  },
+  {
+    "chapter": 8,
+    "report_chapter": 8,
+    "id": "s28",
+    "title": "冻结条件、强扰动与保存核验",
+    "sources": [
+      "experiments/humanoid_control/REPORT.md"
+    ],
+    "code": [
+      "experiments/humanoid_control/scripts"
+    ],
+    "conclusion": "正式52个条件51个通过，另八个强扰动仅两个通过；状态估计、触地时序、自碰撞和真实执行器仍待补齐。"
+  }
+]

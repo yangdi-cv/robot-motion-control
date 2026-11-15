@@ -1,0 +1,39 @@
+{
+  "config": {
+    "scenario": "walk",
+    "duration": 29,
+    "hz": 100,
+    "dt": 0.001,
+    "push_x": 0.0,
+    "push_y": 0.0,
+    "push_time": 2.7,
+    "push_duration": 0.1,
+    "friction": 0.6,
+    "shift": 0.06,
+    "lift": 0.05,
+    "step_distance": 0.06,
+    "walk_steps": 4
+  },
+  "success": false,
+  "failure": "constraint_residual row=55 value=0.009561",
+  "duration": 0.8700000000000007,
+  "mass": 33.341142000000005,
+  "nq": 36,
+  "nv": 35,
+  "nu": 29,
+  "steps": 870,
+  "updates": 87,
+  "qp_p95_ms": 3.331822799555084,
+  "max_qp_residual": 0.00011053989326812171,
+  "com_rmse": [
+    8.216984843102898e-05,
+    0.0004087164165714736,
+    0.00013961751493043125
+  ],
+  "max_foot_height": [
+    -0.00010000000000000286,
+    -0.00010000000000000286
+  ],
+  "min_com_height": 0.6841479409759007,
+  "max_joint_speed": 0.15961171485535164
+}

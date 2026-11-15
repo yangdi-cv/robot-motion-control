@@ -1,0 +1,9 @@
+{
+  "balanced_frequency_trials": 12,
+  "imu_physics_frames": 11125,
+  "quaternion_norm_checked": true,
+  "sensor_clock_monotonic": true,
+  "missing_feedback_sequences": 0,
+  "script_parse_count": 12,
+  "relative_links_checked": 19
+}

@@ -1,0 +1,249 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>字节_Week3柔顺控制</title><style>@page{size:A4;margin:18mm 16mm 19mm;@bottom-right{content:counter(page);font-size:9pt;color:#6a7b8f}}body{font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif;font-size:10pt;line-height:1.7;color:#233247}h1{font-size:23pt;line-height:1.4}h2{font-size:15pt;margin-top:7mm;break-after:avoid}table{border-collapse:collapse;width:100%;font-size:8.8pt;break-inside:avoid;margin:4mm 0}th,td{border:1px solid #cad5df;padding:5px 7px;text-align:left;overflow-wrap:anywhere}th{background:#eaf0f5}img{max-width:100%;max-height:108mm;object-fit:contain}p:has(img){text-align:center;break-inside:avoid}pre{background:#f2f5f7;padding:10px;white-space:pre-wrap;font-size:8pt;line-height:1.5}code{font-family:"Noto Sans Mono CJK SC",monospace;font-size:8.6pt;overflow-wrap:anywhere}a{color:#2a6089}.refs{font-size:9pt;color:#466173;border-left:3px solid #d1e2ec;padding-left:9px}.toc{break-before:page}p{orphans:3;widows:3}</style><body><h1>Panda末端接触与导纳控制仿真实验</h1>
+<p>字节方向Week3阶段进展　2026年10月20日</p>
+<h2>摘要</h2>
+<p>本轮从自由空间轨迹跟踪推进到物理接触，使用七关节Panda动力学模型、受限关节力矩和末端探头，比较位置控制与法向导纳控制。主实验177组，包含三档接触参数、50/100/200Hz外环、人工测量噪声、反馈延迟及接近速度；另补六组关节参考跟踪记录与接触视频。</p>
+<p>在中间接触参数档，固定位置控制的稳定段力误差约18.87N，质量阻尼型导纳降到0.013N。不过同样接近速度下，首次接触峰值仍约50.6N，不能认为加导纳就消除了冲击。延长接近时间可进一步减小峰值。</p>
+<p>实验在PC端MuJoCo中完成，与之前Isaac自由空间轨迹结果分开统计。本轮没有真机、力传感器或Jetson测量，也未完成六维柔顺操作和ROS调度下的接触闭环。</p>
+<h2 class="toc">目录</h2>
+<ul>
+<li>
+<ol>
+<li>模型、接触与执行接口</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>位置控制与导纳控制</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>稳定接触和关节跟踪结果</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>噪声、频率与延迟</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>接近速度与首次冲击</li>
+</ol>
+</li>
+<li>
+<ol>
+<li>结论及后续</li>
+</ol>
+</li>
+</ul>
+<h2>1. 模型、接触与执行接口</h2>
+<p>Panda来自Google DeepMind的MuJoCo Menagerie，版本固定为 <code>62ab00f2bc44</code>，保留原模型惯量及关节结构，仅省去装饰网格。为了单独研究末端接触，在手部加入半径15mm球形探头与水平平面。其余机器人几何不参与碰撞，因此当前不研究自碰撞或机械臂其他部位撞桌。</p>
+<p>采用独立MuJoCo2.3.7／NumPy1.26.4环境，未修改原ACT环境。物理步长1ms。末端位置与固定姿态通过阻尼雅可比逆解转换为七个关节参考，内环采用带重力/偏置补偿的关节PD力矩，前四关节限87Nm，后三关节限12Nm。除场景重置与逆解用的独立状态外，不直接改写动态机器人的关节位置，没有mocap焊接或把末端瞬移到目标。</p>
+<p>接触力来自mj_contactForce的法向分量。这里只有水平平面的单一法向接触，不把它称为真实六维力传感器。接触求解器刚度参数设2000/8000/20000，不能直接当成已标定材料的N/m刚度。</p>
+<p class="refs">相关代码在 <code>scripts/contact_task.py</code>，模型来源与许可在 <code>assets/panda/SOURCE.json</code> 和 <code>assets/panda/LICENSE</code>。</p>
+<h2>2. 位置控制与导纳控制</h2>
+<p>先保持0.5秒，再用五次曲线下探；位置控制继续保持固定参考。导纳控制在检测到接触后，以测量力与目标力之差调整法向位置，目标力在0.5秒内升至10N。</p>
+<p>采用 <code>M·偏移加速度＋B·偏移速度＋K·偏移＝测量力−目标力</code>，M=2kg、B=100Ns/m。主方案K=0，为质量阻尼型力跟随；另用K=200N/m对照虚拟弹簧带来的影响。偏移限−25至50mm、偏移速度限40mm/s，限制条件均保留在配置中。</p>
+<p>接触力及状态按1kHz记录，峰值从完整采样中统计，避免较低频率日志漏掉瞬时冲击。稳定段统一为第5至8秒。所有对照使用相同模型、接近参考和力矩限制。</p>
+<p><img alt="接触力和位置修正" src="figures/contact_force.png" /></p>
+<p class="refs">相关代码在 <code>scripts/contact_task.py</code>、<code>scripts/run_suite.py</code>，参数在 <code>config/suite.json</code>。</p>
+<h2>3. 稳定接触和关节跟踪结果</h2>
+<table>
+<thead>
+<tr>
+<th>接触参数档</th>
+<th>控制</th>
+<th>峰值力 / N</th>
+<th>稳定平均力 / N</th>
+<th>稳定力RMSE / N</th>
+<th>稳定力标准差 / N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2000</td>
+<td>位置</td>
+<td>34.27</td>
+<td>26.458</td>
+<td>16.469</td>
+<td>0.605</td>
+</tr>
+<tr>
+<td>2000</td>
+<td>导纳K0</td>
+<td>25.05</td>
+<td>9.987</td>
+<td>0.014</td>
+<td>0.004</td>
+</tr>
+<tr>
+<td>2000</td>
+<td>导纳K200</td>
+<td>25.05</td>
+<td>11.713</td>
+<td>1.714</td>
+<td>0.026</td>
+</tr>
+<tr>
+<td>8000</td>
+<td>位置</td>
+<td>50.62</td>
+<td>28.851</td>
+<td>18.868</td>
+<td>0.793</td>
+</tr>
+<tr>
+<td>8000</td>
+<td>导纳K0</td>
+<td>50.62</td>
+<td>9.987</td>
+<td>0.013</td>
+<td>0.003</td>
+</tr>
+<tr>
+<td>8000</td>
+<td>导纳K200</td>
+<td>50.62</td>
+<td>11.815</td>
+<td>1.815</td>
+<td>0.028</td>
+</tr>
+<tr>
+<td>20000</td>
+<td>位置</td>
+<td>82.01</td>
+<td>30.576</td>
+<td>20.589</td>
+<td>0.735</td>
+</tr>
+<tr>
+<td>20000</td>
+<td>导纳K0</td>
+<td>82.01</td>
+<td>9.989</td>
+<td>0.012</td>
+<td>0.003</td>
+</tr>
+<tr>
+<td>20000</td>
+<td>导纳K200</td>
+<td>82.01</td>
+<td>11.875</td>
+<td>1.875</td>
+<td>0.024</td>
+</tr>
+</tbody>
+</table>
+<p>K=0时可将稳定接触力保持在10N附近；加入虚拟弹簧后，保持偏移需要额外力，留下约1.7–1.9N的稳定段误差。这是当前控制形式的取舍，不把弹簧参数越大视为越好。</p>
+<p>额外六次运行保存七关节参考及实际位置。下图为中间接触参数档的全程跟踪误差，包含外力作用，不能直接与之前无接触Isaac实验的误差比较。</p>
+<p><img alt="七关节参考跟踪" src="figures/joint_tracking.png" /></p>
+<p>关闭接触求解的对照得到零接触力；启用接触时机器人产生动态偏移，说明力并非由预设曲线或目标位置人工生成。</p>
+<p><img alt="Panda末端接触画面" src="figures/admittance_contact.png" /></p>
+<p class="refs">相关代码在 <code>scripts/joint_check.py</code>；参考与实际关节记录在 <code>runs/joint_check_v3/</code>。演示视频为 <code>runs/contact_suite_v3/position.mp4</code> 和 <code>admittance.mp4</code>。</p>
+<h2>4. 噪声、频率与延迟</h2>
+<p>对位置与导纳分别组合三档接触参数、50/100/200Hz外环、额外0/20/60ms反馈延迟。导纳测量叠加每次更新标准差0.5N的高斯噪声，三个随机种子，共162组。它是人为设定的扰动，不是自有传感器噪声。</p>
+<p>下表为导纳在三档接触参数和三个种子上的平均稳定段力RMSE：</p>
+<table>
+<thead>
+<tr>
+<th>外环 / Hz</th>
+<th>附加延迟0ms / N</th>
+<th>20ms / N</th>
+<th>60ms / N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>0.294</td>
+<td>0.342</td>
+<td>0.959</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.183</td>
+<td>0.233</td>
+<td>0.781</td>
+</tr>
+<tr>
+<td>200</td>
+<td>0.117</td>
+<td>0.147</td>
+<td>0.415</td>
+</tr>
+</tbody>
+</table>
+<p>附加延迟增大后误差增加，当前设置下更高更新率通常改善稳定段力跟随，但不保证首次碰撞峰值更低。各档每次更新注入相同标准差，连续时间噪声带宽并不严格相同，因此不能把所有差异只归因于频率。</p>
+<p>177次运行共享一个姿态及平面接触任务，其中一些位置控制对照对随机种子不敏感；这些不是177个独立场景，也不代表覆盖全部稳定性边界。</p>
+<h2>5. 接近速度与首次冲击</h2>
+<p>将下探时间设为1、2、4秒，保持最终位置和控制参数不变：</p>
+<table>
+<thead>
+<tr>
+<th>接近时间 / s</th>
+<th>控制</th>
+<th>接触峰值 / N</th>
+<th>稳定力RMSE / N</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>位置</td>
+<td>93.10</td>
+<td>18.608</td>
+</tr>
+<tr>
+<td>1.0</td>
+<td>导纳</td>
+<td>93.10</td>
+<td>0.012</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>位置</td>
+<td>50.62</td>
+<td>18.868</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>导纳</td>
+<td>50.62</td>
+<td>0.013</td>
+</tr>
+<tr>
+<td>4.0</td>
+<td>位置</td>
+<td>33.39</td>
+<td>20.079</td>
+</tr>
+<tr>
+<td>4.0</td>
+<td>导纳</td>
+<td>24.72</td>
+<td>0.016</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="反馈延迟与接近时间" src="figures/delay_approach.png" /></p>
+<p>导纳要在检测到力之后作出反应，不能撤销已经发生的首次碰撞。当前结果支持将接近速度、接触检测和接触后的柔顺调节一起设计，不能只给原位置控制外面加一层导纳就认为安全问题已经解决。</p>
+<h2>6. 结论及后续</h2>
+<p>本轮完成了受力接触、力矩驱动和单法向导纳对照，补充了七关节参考误差、噪声、时延和接近速度分析。主要收益是稳定接触力跟随；首次冲击和虚拟弹簧稳态偏差仍需单独处理。</p>
+<p>下一步应扩大初始姿态与表面方向，增加缓慢接触切换和退出规则，再将控制节点接入ROS调度并测量实际周期。当前的简化探头和平面、短时单方向实验不等于完整六维柔顺操作，更不能直接用于SO101真机。Jetson及真实传感器测试后续单独开展。</p>
+<p>代码目录：</p>
+<pre><code class="language-text">experiments/bytedance_week3/
+├── scripts/
+│   ├── fetch_model.py       固定来源与模型下载
+│   ├── contact_task.py      动力学、力矩驱动、逆解与导纳
+│   ├── run_suite.py         参数批量实验
+│   ├── joint_check.py       七关节参考跟踪记录
+│   └── pilot.py            初始单例检查
+├── assets/panda/            模型、碰撞网格、来源与许可
+├── config/suite.json        所有条件与控制限制
+├── runs/contact_suite_v3/   177组记录及视频
+├── runs/joint_check_v3/        七关节参考和实际状态
+├── figures/
+└── REPORT.md、README.md
+</code></pre>
+<p>模型参考：<a href="https://github.com/google-deepmind/mujoco_menagerie/tree/main/franka_emika_panda">MuJoCo Menagerie Panda</a>。力与运动学接口参考：<a href="https://mujoco.readthedocs.io/en/stable/APIreference/APIfunctions.html">MuJoCo官方API</a>。具体运行方式见README。源码包不含实验记录或视频，本地完整保存。</p></body></html>

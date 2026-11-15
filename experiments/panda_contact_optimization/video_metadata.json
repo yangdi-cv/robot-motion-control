@@ -1,0 +1,12 @@
+{
+  "source_runs": [
+    "video_position",
+    "video_admittance"
+  ],
+  "frames": 320,
+  "fps": 10,
+  "duration_s": 32.0,
+  "force_curve": "unfiltered raw force averaged over fixed 10ms bins",
+  "camera_frame_time_s": "0.001 + k*0.1",
+  "no_interpolated_simulation_frames": true
+}

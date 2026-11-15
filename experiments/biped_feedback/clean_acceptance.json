@@ -1,0 +1,8 @@
+{
+  "returncode": 0,
+  "stdout": "",
+  "stderr": ".......\n----------------------------------------------------------------------\nRan 7 tests in 0.182s\n\nOK\n",
+  "environment": "fresh Python3.11 venv; core four requirements only; no GPU",
+  "zip_crc_ok": true,
+  "extracted": "/tmp/biped_unpacked_zjiwwd9x"
+}

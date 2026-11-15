@@ -1,0 +1,361 @@
+<!doctype html><meta charset="utf-8"><title>双足连续行走与ZMP力矩闭环改进报告</title><style>@page{size:A4;margin:17mm 16mm 18mm}body{font:10pt/1.7 "Noto Sans CJK SC","Noto Sans CJK JP",sans-serif;color:#243247}h1{font-size:24pt;color:#153c59}h2{font-size:16pt;color:#153c59;border-bottom:1px solid #c9d8e4;padding-top:12px;break-after:avoid}h3{font-size:12pt;break-after:avoid}table{width:100%;border-collapse:collapse;font-size:8.5pt;margin:12px 0;break-inside:avoid}td,th{border:1px solid #c9d8e4;padding:5px;text-align:left}th{background:#edf3f8}img{max-width:100%;max-height:230mm;object-fit:contain}p:has(img){break-inside:avoid}pre{font:8pt/1.6 "DejaVu Sans Mono","Noto Sans CJK SC",monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;background:#f1f5f8;break-inside:avoid}code{overflow-wrap:anywhere}a{color:#23577d}li{overflow-wrap:anywhere}</style><h1>双足连续行走与 ZMP 力矩闭环改进报告</h1>
+<p>2026年11月13日 · 机器人控制算法阶段进展</p>
+<h2>摘要</h2>
+<p>本轮针对摆腿动力学、ZMP与关节力矩接口、双支撑过渡及反馈时序开展改进。核对历史版本后确认，后续的lipm_extension已具备六关节力矩驱动的八步行走，本轮不把这部分重复算成新增成果，而是补上规划与实际接触之间的接口和对照。</p>
+<p>在同一MuJoCo平面双足中，用同一组质心反馈增益生成加速度与ZMP目标，通过逆动力学QP输出髋、膝、踝力矩。增加平滑负载转移、实际接触核对和力矩变化率限制，并将水平质心的延迟测量接入这套动力学控制。完成94个唯一条件，79个通过；没有把重复无噪声运行计作独立样本。</p>
+<p>100Hz、无扰动时，实际压力中心跟踪RMSE由19.41mm降至6.06mm；同时质心误差由0.28mm增至1.26mm，说明更强调ZMP会改变控制目标之间的折中。两组20步行走均完成实际落脚，前进约2.323m，其中一组在行走中承受40N、0.1s推扰。80ms延迟下多数条件失败，不能据此声称控制器已达到实际人形机器人部署水平。</p>
+<p><img src="figures/frame_142.png" alt="图1 连续20步仿真的实际相机帧，含40N推扰。" /></p>
+<h2>目录</h2>
+<ol>
+<li>反馈对应的问题与本轮范围</li>
+<li>ZMP到六关节力矩的统一接口</li>
+<li>摆腿与双支撑的物理执行</li>
+<li>频率、推扰和延迟对照</li>
+<li>运行核验与失败边界</li>
+<li>结论与建议配置</li>
+<li>代码目录和复现</li>
+<li>参考实现与取舍</li>
+</ol>
+<h2>1. 反馈对应的问题与本轮范围</h2>
+<p>原先的lipm_balance把LIPM步态分析与MuJoCo站立恢复分别验证，确实不能把它们合起来称作物理行走。之后的lipm_extension已补入浮动基座、真实摆腿及八次实测落脚，但三个实验层次仍没有完全连通。</p>
+<table>
+<thead>
+<tr>
+<th>反馈中的问题</th>
+<th>已有基础</th>
+<th>本轮新增</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只做站立恢复</td>
+<td>后续版本已有六电机八步行走</td>
+<td>同模型延长为20步，加入推扰，并保存完整实际相机录屏</td>
+</tr>
+<tr>
+<td>摆脚瞬时交换</td>
+<td>已有带惯量的腿和连续摆脚参考</td>
+<td>保留实际动力学与落脚检查，新增计划承重与实测接触核对</td>
+</tr>
+<tr>
+<td>ZMP与踝力矩割裂</td>
+<td>已有质心任务的逆动力学QP</td>
+<td>将ZMP接触力矩平衡显式接入同一个QP，记录预测与实际CoP</td>
+</tr>
+<tr>
+<td>双支撑需细化</td>
+<td>已有双足接触和负载目标</td>
+<td>C2负载转移、参考ZMP同步、末态回到两脚承重，扫描不同过渡时长</td>
+</tr>
+<tr>
+<td>不同频率与延迟</td>
+<td>原先只在简化LIPM层测试</td>
+<td>直接在多关节力矩闭环中比较50/100/200Hz与20/40/80ms水平CoM延迟</td>
+</tr>
+</tbody>
+</table>
+<p>所有新增工作仅在仿真中进行。继续使用27.2kg、9自由度的矢状面模型：三个基座自由度没有执行器，两腿各三个电机。侧向、滚转、偏航受约束；没有使用真实IMU、Jetson或硬件代测。旧目录、旧报告和旧结果保持原样。</p>
+<h2>2. ZMP到六关节力矩的统一接口</h2>
+<h3>2.1 先统一物理量，再讨论增益</h3>
+<p>ZMP是地面上的位置，单位为米；踝电机力矩单位为N·m，不能直接把两者数值对应，也不应强行让不同任务的增益相同。</p>
+<p>新接口为：</p>
+<pre><code class="language-text">步态参考CoM位置/速度/加速度
+        ↓ 同一组水平质心反馈增益
+质心加速度目标 a_cmd
+        ↓ 恒高、零质心角动量变化近似
+ZMP目标 p_cmd
+        ↓ 与CoM任务共同进入全身逆动力学QP
+六个电机力矩 τ
+        ↓ MuJoCo独立求解真实脚地接触
+实际接触力、压力中心和机器人运动
+</code></pre>
+<p>外环加速度只计算一次：<code>a_cmd = a_ff + 80(c_ref-c_obs) + 18(v_ref-v_obs)</code>。CoM任务与ZMP目标都使用这个结果，避免两个控制层分别调不同的水平反馈增益。躯干俯仰和摆脚的跟踪增益仍按各自任务设置。</p>
+<p>若竖直加速度为a_z，则采用 <code>p_cmd = c_x - c_z*a_x/(g+a_z)</code>；超出当前支撑足范围时先投影到支撑范围。每个足底的扳手以足底site为参考、按世界坐标表示为[Fx,Fz,My]，合成地面压力中心为：</p>
+<pre><code class="language-text">p = Σ(x_i Fz_i - z_i Fx_i - My_i) / ΣFz_i
+Σ[(x_i-p_cmd) Fz_i - z_i Fx_i - My_i] ≈ 0
+</code></pre>
+<p>式中的My是足底接触力矩，不是踝关节电机力矩。关节力矩由完整动力学约束确定：<code>M qdd + bias = Sᵀτ + Jᵀλ + passive</code>。浮动基座没有电机，因此QP必须通过支撑脚接触来实现加速度；求出的接触力不会直接施加到模拟器。</p>
+<h3>2.2 用软目标保留多关节动力学的差异</h3>
+<p>实际多关节模型并不严格满足恒质心高度和零角动量变化。ZMP平衡因此作为软目标加入，仍保留关节限位、力矩、摩擦、足底力矩和支撑足加速度等约束。最终运动由MuJoCo推进，不按参考直接改写qpos。</p>
+<p>新增的“仅CoM任务”对照与“CoM＋ZMP映射”共用本轮模型、步态、双支撑、增益和接触核对，区别是是否显式优化ZMP力矩平衡。这是同版本消融，不把旧报告中不同配置的成绩直接拼在一起。</p>
+<table>
+<thead>
+<tr>
+<th>控制频率（Hz）</th>
+<th>实际CoP RMSE：对照→映射（mm）</th>
+<th>CoM RMSE：对照→映射（mm）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>23.86 → 13.51</td>
+<td>0.64 → 1.37</td>
+</tr>
+<tr>
+<td>100</td>
+<td>19.41 → 6.06</td>
+<td>0.28 → 1.26</td>
+</tr>
+<tr>
+<td>200</td>
+<td>18.52 → 3.61</td>
+<td>0.15 → 1.21</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figures/mapping.png" alt="图2 相同无扰动条件下的压力中心与质心误差。" /></p>
+<p>100Hz时压力中心误差下降约68.8%，但质心位置误差由0.28mm增至1.26mm。因此这里能够确认的是映射更明确、压力中心目标跟踪更准，不能概括为所有平衡指标都更好。QP预测CoP也单独保存，不用它替代实际接触测量。</p>
+<p>实际CoP在每次新力矩施加前采样，描述当时的真实接触；QP预测对应本次新指令。二者的时间与物理含义不同。压力中心误差统计从0.5s开始；失败运行仅有终止前数据，比较时同时报告是否完成，避免把提前终止的较短轨迹当成更好表现。</p>
+<p>相关代码在 <code>scripts/biped.py</code> 的WBC.solve和 <code>scripts/feedback.py</code> 的contact_wrenches、resultant_cop。</p>
+<h2>3. 摆腿与双支撑的物理执行</h2>
+<h3>3.1 摆腿不是动画或位置强制驱动</h3>
+<p>沿用每段0.4m的髋膝踝模型、足底真实碰撞和有限电机力矩。逆运动学只在初始化生成站姿；之后摆脚采用五次多项式水平轨迹与C2离地曲线，目标通过QP转为力矩。名义步长0.12m、步时0.6s、离地高度6cm；物理积分1ms。</p>
+<p>每次落脚须满足正确侧脚接近目标位置、足底高度在允许范围内，且实际法向力超过10N持续至少15ms。完整成功还要求运行至结束、完成全部落脚、满足前进量和终端足位误差约束。</p>
+<p>两组20步条件均在14s内完成20/20次实测落脚。无扰动与40N推扰下前进量均约2.323m；这是平面模型中的连续步行，不是三维人形走路，也不是只用“不倒”作为成功标准。</p>
+<p><img src="figures/twenty_steps.png" alt="图3 连续20步的实际足位、离地高度和地面法向力。" /></p>
+<h3>3.2 双支撑负载与ZMP共同过渡</h3>
+<p>使用五次平滑函数 <code>s(u)=10u³-15u⁴+6u⁵</code> 转移计划负载，端点一、二阶导数均为0。参考ZMP按相同负载比例从旧支撑脚中心移到新支撑脚中心；最后一步后渐变到两脚各一半负载，而非一直单脚承重。负载是QP目标，实际负载由接触求解器产生，两者都保留在记录中。</p>
+<table>
+<thead>
+<tr>
+<th>双支撑时长（s）</th>
+<th>40N条件实测落脚</th>
+<th>最大相邻力矩变化（N·m）</th>
+<th>双支撑左足比例平均绝对误差（百分点）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.0</td>
+<td>8/8</td>
+<td>42.92</td>
+<td>-</td>
+</tr>
+<tr>
+<td>0.06</td>
+<td>8/8</td>
+<td>9.99</td>
+<td>14.25</td>
+</tr>
+<tr>
+<td>0.12</td>
+<td>8/8</td>
+<td>5.96</td>
+<td>7.00</td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>8/8</td>
+<td>5.75</td>
+<td>4.95</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figures/double_support.png" alt="图4 相同支撑转换附近的计划与实际左足负载比例。" /></p>
+<p>本组中，无双支撑也能走完八步，但相邻力矩跳变达到42.92N·m；0.12s双支撑下降至5.96N·m。更长过渡使本组负载跟踪更平滑，但会缩短摆腿可用时间，不能据这几组就断言越长越好。零双支撑没有有效的持续过渡区间，不报告其负载比例平均误差。</p>
+<h3>3.3 接触核对和力矩变化率</h3>
+<p>支撑集合仍有名义时间表，但计划需要承重的脚必须实际产生法向力；连续超过40ms仍不足5N则终止，不继续假设它在支撑。计划负载低于5%的卸载脚不触发这一检查。这是对支撑假设的核对，还不是基于触地事件在线重排步时。</p>
+<p>另外在QP中约束相邻控制力矩：<code>|τ_k-τ_(k-1)| ≤ rate/hz</code>。0.4s启动承重后启用，测试600和1500N·m/s，在50/100/200Hz及0/40N推扰的12组条件全部通过，保存的实际指令也逐条核对满足界限。此处限制控制指令斜率，没有建立真实电机电流环或带宽模型。</p>
+<p><img src="figures/slew.png" alt="图5 不同控制频率下的实际指令变化率。" /></p>
+<p>相关代码在 <code>scripts/biped.py</code> 的Plan.loads、Plan.feet、WBC.solve及simulate。</p>
+<h2>4. 频率、推扰和延迟对照</h2>
+<h3>4.1 相同物理模型中的频率与双向推扰</h3>
+<p>50/100/200Hz控制、0/+40/-40N水平推扰、两种映射，共18个条件；推扰发生在2.70–2.80s。9个仅CoM对照全部完成，9个显式映射完成8个；未通过项为50Hz后向推扰，因计划支撑没有得到实际接触确认而终止。更准的CoP目标跟踪并没有换来更高的条件通过数。</p>
+<p>100Hz的推扰恢复如下。恢复定义为推扰结束后，CoM位置误差小于1cm、速度误差小于0.05m/s、躯干俯仰小于0.03rad，并持续至少0.3s。它是相对运动参考的跟踪恢复，不是静止站立恢复；采样分辨率为10ms。若从推扰结束就持续处于阈值内，记0。</p>
+<table>
+<thead>
+<tr>
+<th>推力（N）</th>
+<th>推扰后CoM最大误差：对照→映射（mm）</th>
+<th>恢复时间：对照→映射（s）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>40</td>
+<td>6.96 → 5.72</td>
+<td>0.02 → 0.01</td>
+</tr>
+<tr>
+<td>-40</td>
+<td>10.58 → 14.11</td>
+<td>0.15 → 0.37</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figures/cop_com.png" alt="图6 40N前向推扰下的实际CoP与CoM误差，橙色为施力区间。" /></p>
+<p>前向推扰恢复接近，后向推扰下新映射恢复更慢。这提示在当前权重下，压力中心任务与质心、摆腿之间仍有折中；本轮不再通过不断调权重把失败样例“调没”。</p>
+<h3>4.2 延迟只施加到明确的一条反馈链</h3>
+<p>传感器以100Hz生成带时间戳的水平CoM位置和速度，分别加入1mm与0.01m/s高斯噪声；经固定20/40/80ms延迟到达外环。控制器不能读取尚未送达的测量，比较保持过去测量与常速度预测。每个组合使用3个固定噪声种子，两个方法配对使用相同测量噪声。初始化只提供一帧带噪的预启动观测。</p>
+<p>关节编码器、用于QP的模型状态、竖直CoM与接触测量仍理想，只有水平CoM外环延迟。不能把这解释成整个机器人在所有传感器均延迟的情况下完成行走。</p>
+<table>
+<thead>
+<tr>
+<th>固定延迟（ms）</th>
+<th>保持测量：完成</th>
+<th>常速度预测：完成</th>
+<th>两方法共同完成对数</th>
+<th>共同完成时CoM RMSE：保持→预测（mm）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td>9/9</td>
+<td>9/9</td>
+<td>9</td>
+<td>5.19 → 1.88</td>
+</tr>
+<tr>
+<td>40</td>
+<td>9/9</td>
+<td>8/9</td>
+<td>8</td>
+<td>9.71 → 2.64</td>
+</tr>
+<tr>
+<td>80</td>
+<td>2/9</td>
+<td>3/9</td>
+<td>2</td>
+<td>37.13 → 9.21</td>
+</tr>
+</tbody>
+</table>
+<p><img src="figures/delay.png" alt="图7 延迟条件下的完成数，每格3个噪声种子。" /></p>
+<p>20ms下，两方法均9/9，常速度预测降低了共同完成样本的CoM误差。40ms下，保持测量9/9，预测8/9；预测平均跟踪更准，并不意味着更可靠。80ms下分别只有2/9和3/9通过，这种简单外推不能覆盖较长延迟和接触切换。误差表只在共同完成的配对上比较，不混合提前终止的短轨迹。</p>
+<p>全批有9个失败条件在2.70s推扰前已终止，属于延迟、噪声或接触切换自身的问题，不能统称为“抗40N推力失败”。</p>
+<p>相关代码在 <code>scripts/feedback.py</code> 的CoMChannel，以及 <code>scripts/suite.py</code> 的固定条件矩阵。</p>
+<h2>5. 运行核验与失败边界</h2>
+<h3>5.1 条件计数</h3>
+<table>
+<thead>
+<tr>
+<th>条件组</th>
+<th>组内完成/条件数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>mapping</td>
+<td>17/18</td>
+</tr>
+<tr>
+<td>feedback</td>
+<td>40/54</td>
+</tr>
+<tr>
+<td>support</td>
+<td>8/8</td>
+</tr>
+<tr>
+<td>slew</td>
+<td>12/12</td>
+</tr>
+<tr>
+<td>integration</td>
+<td>2/2</td>
+</tr>
+<tr>
+<td>long_walk</td>
+<td>2/2</td>
+</tr>
+</tbody>
+</table>
+<p>组间共享的相同配置去重后共94个，不能把上表各行直接相加。无噪声条件没有用不同seed重复增加样本量；只有延迟噪声条件使用3个种子。条件是主动选取的实验网格，不是抽样得到的实际部署成功率。</p>
+<p>79个完成，15个未完成：12个因计划承重未被实际接触确认而终止，1个力矩数值约束未通过，1个QP不可行，1个加速度或力矩上下界冲突。全部保留，未只挑成功条件。</p>
+<p>开发中曾出现上下界冲突导致OSQP初始化抛出异常、整批中断的问题。现先检查约束界，并将求解器异常记录为该条件的终止结果；正式94组在修复后重新运行，旧开发日志另存，不合并计数。</p>
+<h3>5.2 独立轨迹核验</h3>
+<p>重新读取94条运行的qpos、qvel、实际控制指令和接触记录，而不是只采用运行器的success标记。检查包括源码快照、关节积分、足底正运动学、实际接触扳手的坐标/符号、广义接触力、压力中心重算，以及全部落脚判据。</p>
+<table>
+<thead>
+<tr>
+<th>核验项目</th>
+<th>最大残差或结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行记录与源码快照核对</td>
+<td>94组</td>
+</tr>
+<tr>
+<td>全部记录中的实测落脚</td>
+<td>690</td>
+</tr>
+<tr>
+<td>关节积分残差</td>
+<td>2.22e-16</td>
+</tr>
+<tr>
+<td>足底正运动学残差（m）</td>
+<td>0.00e+00</td>
+</tr>
+<tr>
+<td>接触虚功/广义约束力残差</td>
+<td>1.71e-13</td>
+</tr>
+<tr>
+<td>重新求解的接触扳手残差</td>
+<td>8.38e-12</td>
+</tr>
+<tr>
+<td>地面CoP重算残差（m）</td>
+<td>4.18e-15</td>
+</tr>
+<tr>
+<td>加速度到原始ZMP映射残差</td>
+<td>0.00e+00</td>
+</tr>
+<tr>
+<td>接口与物理量单元检查</td>
+<td>7项通过</td>
+</tr>
+</tbody>
+</table>
+<p>接触扳手与运动学重算采用每条运行均匀抽取的12/8个时刻；关节积分、力矩变化率和落脚检查覆盖完整保存轨迹。误差的物理单位随检查项不同，不把它们相互比较。20步视频共280帧、14.0s，逐帧解码无缺帧，录制运行与正式推扰条件的完整轨迹逐元素一致；不增加独立测试数量。</p>
+<p>相关代码在 <code>scripts/tests.py</code>、<code>scripts/verify.py</code>、<code>scripts/record.py</code>。</p>
+<h2>6. 结论与建议配置</h2>
+<p>本轮已把CoM外环、ZMP接触力矩目标、摆脚和六电机执行放到同一动力学闭环，并完成20步连续物理行走。双支撑明显降低了本组力矩跳变，显式ZMP目标改善了实际压力中心跟踪，同时暴露了CoM误差、后向恢复和低频接触转换的代价。</p>
+<p>当前可继续研究的起点是100或200Hz、0.12s双支撑、水平CoM反馈延迟不超过20ms的本模型配置。这个选择只基于已测条件，不是硬件推荐值或安全保证。常速度预测在较短延迟时有用，但尚不能作为80ms延迟的解决方案。</p>
+<p>下一步若继续，优先把名义支撑时序改为触地事件驱动的有限调整，再考虑带接触状态和执行器带宽的状态估计。三维模型、地形与真机需要另行验证，不与本轮平面结果混写。</p>
+<h2>7. 代码目录和复现</h2>
+<pre><code class="language-text">biped_feedback/
+  models/biped.xml
+  scripts/
+    biped.py        同一加速度/ZMP接口、全身QP、力矩执行
+    feedback.py     延迟队列、常速度预测、实际接触扳手
+    trajectory.py   五次轨迹与连续摆脚
+    suite.py        固定94条件、源码快照、逐条件结果
+    analyze.py      配对指标与汇总
+    verify.py       独立轨迹核验
+    tests.py        无GPU的接口与物理量检查
+    figures.py      本报告图表
+    record.py       20步实际动力学录制
+    report.py       中文报告与源码打包
+  requirements.txt / requirements-visual.txt
+  manifest.json / results.json / summary.json / metrics.csv
+  verification.json / video_metadata.json
+  RESEARCH.md / research/sources.json
+</code></pre>
+<p>核心仿真只需NumPy、SciPy、MuJoCo2.3.7和OSQP1.0.4，单独列入requirements.txt，不把系统ROS发行包当作pip依赖。复用现有隔离环境，没有修改系统Python、ROS或原有模型工程。</p>
+<pre><code class="language-bash">cd biped_feedback
+python3.10 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python scripts/tests.py
+.venv/bin/python scripts/suite.py
+.venv/bin/python scripts/analyze.py
+.venv/bin/python scripts/verify.py
+</code></pre>
+<p>源码ZIP包含模型、代码、完整配置与汇总结果，不含原始大数组或虚拟环境。suite.py重新运行后生成trace.npz和audit.npz，verify.py再读取这些轨迹核验。单元检查无需下载模型、GPU或实体传感器；录屏另需OpenGL/EGL。交付目录直接附MP4，报告内嵌图片，无需访问视频链接。</p>
+<h2>8. 参考实现与取舍</h2>
+<p>调研了未归档的Rhoban/PlaCo（MIT）和stack-of-tasks/TSID（BSD-2-Clause），并保留Caron归档LIPM控制器（BSD-2-Clause）作为分层设计参考。它们分别提供步态任务分层、接触逆动力学与ZMP稳定器的成熟思路；为保留与旧模型的可比性，本轮继续使用已有MuJoCo/OSQP实现，没有整体引入Pinocchio、mc_rtc或复制不兼容控制代码。</p>
+<ul>
+<li>PlaCo：https://github.com/Rhoban/placo</li>
+<li>TSID：https://github.com/stack-of-tasks/tsid</li>
+<li>Caron LIPM：https://github.com/stephane-caron/lipm_walking_controller</li>
+<li>MuJoCo 2.3.7接触力与动力学接口：https://mujoco.readthedocs.io/en/2.3.7/APIreference/APIfunctions.html</li>
+</ul>
+<p>查询时的仓库HEAD、维护状态及许可证见research/sources.json；具体取舍和力矩符号见RESEARCH.md。</p>
+

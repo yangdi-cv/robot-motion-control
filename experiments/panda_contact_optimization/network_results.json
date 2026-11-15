@@ -1,0 +1,53 @@
+{
+  "normal": {
+    "case": "normal",
+    "transport": "UDP 127.0.0.1, separate processes, same host monotonic clock",
+    "source": "analytic quintic future action chunks; no VLA and no robot",
+    "duration_wall_s": 4.0,
+    "sender_hz": 20,
+    "receiver_target_hz": 100,
+    "packet_count": 80,
+    "receive_poll_latency_p95_ms": 10.071415849984078,
+    "generation_to_receive_p95_ms": 10.209463699936805,
+    "receiver_lateness_p95_ms": 0.3471640501288675,
+    "hold_samples": 1,
+    "hold_events_including_startup": 1,
+    "injected_application_delay_ms": 0,
+    "injected_sender_outage_s": null
+  },
+  "delay": {
+    "case": "delay",
+    "transport": "UDP 127.0.0.1, separate processes, same host monotonic clock",
+    "source": "analytic quintic future action chunks; no VLA and no robot",
+    "duration_wall_s": 4.0,
+    "sender_hz": 20,
+    "receiver_target_hz": 100,
+    "packet_count": 79,
+    "receive_poll_latency_p95_ms": 10.040261799895234,
+    "generation_to_receive_p95_ms": 50.23463610014005,
+    "receiver_lateness_p95_ms": 0.35787395006536815,
+    "hold_samples": 5,
+    "hold_events_including_startup": 1,
+    "injected_application_delay_ms": 40,
+    "injected_sender_outage_s": null
+  },
+  "outage": {
+    "case": "outage",
+    "transport": "UDP 127.0.0.1, separate processes, same host monotonic clock",
+    "source": "analytic quintic future action chunks; no VLA and no robot",
+    "duration_wall_s": 4.0,
+    "sender_hz": 20,
+    "receiver_target_hz": 100,
+    "packet_count": 60,
+    "receive_poll_latency_p95_ms": 10.095343399802914,
+    "generation_to_receive_p95_ms": 10.241687899963381,
+    "receiver_lateness_p95_ms": 0.3469809000989698,
+    "hold_samples": 57,
+    "hold_events_including_startup": 2,
+    "injected_application_delay_ms": 0,
+    "injected_sender_outage_s": [
+      1,
+      2
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-12",
+  "basis": "Monthly work plan: inverted-pendulum locomotion and control-frequency/delay analysis",
+  "scope": "2D hybrid LIPM stepping plus separate nonlinear finite-foot standing validation; no full-body biped walking claim",
+  "main_dt_s": 0.001,
+  "control_hz": [
+    50,
+    100,
+    200
+  ],
+  "feedback_delays_s": [
+    0,
+    0.02,
+    0.04,
+    0.08,
+    0.12
+  ],
+  "mass_kg": 30,
+  "nominal_height_m": 0.8,
+  "support_phases": 12,
+  "support_duration_s": 0.6,
+  "support_exchanges": 11,
+  "nominal_progress_m": 1.98,
+  "settle_duration_s": 2,
+  "sole_half_size_m": [
+    0.1,
+    0.05
+  ],
+  "cop_safety_margin_m": 0.005,
+  "next_step_forward_range_m": [
+    0.04,
+    0.34
+  ],
+  "alternating_step_width_range_m": [
+    0.1,
+    0.24
+  ],
+  "capture_adjustment_window_s": 0.15,
+  "plant_failure": {
+    "support_distance_max_m": 0.35,
+    "horizontal_speed_max_m_s": 2.5,
+    "route_shift_max_m": 0.35,
+    "acceleration_friction_limit": "norm(F_ground_xy) <= mu*m*g; F_ground_xy=m*g/h*(c-CoP); external push is excluded"
+  },
+  "success": {
+    "full_horizon_required": true,
+    "terminal_nominal_route_error_max_m": 0.35,
+    "tail_0p5s_tracking_rmse_max_m": 0.02,
+    "tail_0p5s_velocity_error_max_m_s": 0.08
+  },
+  "recovery": "First 0.5s continuous interval after push with 2D shifted-reference position error <0.02m and velocity error <0.08m/s, only if full horizon succeeds",
+  "measurement_noise": "seeded 1mm position and 0.01m/s velocity, sampled from shared 1kHz timeline, not an IMU hardware model",
+  "prediction": "Known input model propagation only; no true current state, force disturbance or future measurement is supplied",
+  "timing": "All frequencies and delays in model time, not host hard realtime",
+  "parameter_policy": "Freeze before formal grid; keep failed cases and report route changes separately",
+  "max_landing_target_update_speed_per_axis_m_s": 0.8,
+  "evaluation": "All main LIPM error/success/recovery metrics use the common 1ms physics timeline, independent of control rate",
+  "physical_standing_success": {
+    "posture_tube_last_0p5s": "angle<0.02rad and angular speed<0.05rad/s at every physics sample",
+    "max_foot_translation_m": 0.05,
+    "max_foot_pitch_deg": 5,
+    "no_early_failure": true
+  }
+}

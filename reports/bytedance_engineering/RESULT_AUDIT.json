@@ -1,0 +1,146 @@
+{
+  "scope": "Existing saved condition counts and selected contact metrics; not a new experiment or complete re-verification of every trace.",
+  "checks": [
+    {
+      "name": "lipm_balance",
+      "file": "results.json",
+      "conditions": 1458,
+      "successes": 848,
+      "source": {
+        "path": "experiments/lipm_balance/results.json",
+        "sha256": "ca1ded364f5c91ec5602af75b23b3b1e4ba7cfddf7fffb89e9fadb4d6c95b925"
+      }
+    },
+    {
+      "name": "lipm_balance",
+      "file": "physical_results.json",
+      "conditions": 333,
+      "successes": 172,
+      "source": {
+        "path": "experiments/lipm_balance/physical_results.json",
+        "sha256": "0a73fa00beb9cfd880f51f5a281597e7e1699f3ca7bd79b7db0fbc1753ffe034"
+      }
+    },
+    {
+      "name": "lipm_extension",
+      "file": "network_results.json",
+      "conditions": 1188,
+      "successes": 692,
+      "source": {
+        "path": "experiments/lipm_extension/network_results.json",
+        "sha256": "02f687369f8efaa3d47fcf981f78eefe5708f61b763de95f200207ed6067a53a"
+      }
+    },
+    {
+      "name": "lipm_extension",
+      "file": "gait_results.json",
+      "conditions": 423,
+      "successes": 175,
+      "source": {
+        "path": "experiments/lipm_extension/gait_results.json",
+        "sha256": "c1f9f1628ac65cf89f1948b001630a24f76ea51f3a1bb6b7d71243a332f97984"
+      }
+    },
+    {
+      "name": "lipm_extension",
+      "file": "biped_results.json",
+      "conditions": 51,
+      "successes": 50,
+      "source": {
+        "path": "experiments/lipm_extension/biped_results.json",
+        "sha256": "9785004343d47153d173a2cb5debe8f575f29568c1c4c8a028b08e22c0ca94d0"
+      }
+    },
+    {
+      "name": "biped_feedback",
+      "file": "results.json",
+      "conditions": 94,
+      "successes": 79,
+      "source": {
+        "path": "experiments/biped_feedback/results.json",
+        "sha256": "edbcde5e8489d905253bf039ec5216b860a8a35212cf1363287eb35092ce5b2e"
+      }
+    },
+    {
+      "name": "humanoid_control",
+      "file": "results.json",
+      "conditions": 52,
+      "successes": 51,
+      "source": {
+        "path": "experiments/humanoid_control/results.json",
+        "sha256": "711eeabf3f0f9407239e125964ab8cd33129e6039946674d62ba45d37147b8bf"
+      }
+    },
+    {
+      "name": "humanoid_control",
+      "file": "stress_results.json",
+      "conditions": 8,
+      "successes": 2,
+      "source": {
+        "path": "experiments/humanoid_control/stress_results.json",
+        "sha256": "672550627320f3978d34cefc0ae0de2ca8ac249a5247ae3970e0e6b0f6a0f992"
+      }
+    },
+    {
+      "name": "panda_contact_optimization",
+      "conditions": 44,
+      "selected_raw_peak_N": 11.112052917480469,
+      "selected_last2_mean_N": 5.007335916042328,
+      "selected_last2_rmse_N": 0.018355646391908103,
+      "half_dt_raw_peak_N": 20.433837890625,
+      "source": {
+        "path": "experiments/panda_contact_optimization/results.json",
+        "sha256": "e521496bd65b4406db82710dfed2f249168ce25fc5ddb982e8b440cf88ea52f0"
+      }
+    },
+    {
+      "name": "panda_contact_isaac",
+      "summary": {
+        "full_length_runs": 34,
+        "full_force_samples": 599000,
+        "full_duration_s": 599.0,
+        "guarded_partial_runs": 1,
+        "full_run_names": [
+          "admittance_B20",
+          "admittance_B80",
+          "admittance_contact_gate",
+          "admittance_final",
+          "admittance_force_ramp",
+          "admittance_limited",
+          "admittance_repeat",
+          "admittance_slow",
+          "execution_delayed_naive",
+          "execution_delayed_timestamp",
+          "execution_jitter_limited",
+          "execution_jitter_raw",
+          "execution_oracle",
+          "execution_outage_hold",
+          "execution_outage_stale",
+          "pid_admittance",
+          "pid_contact_gate",
+          "pid_gate_slow",
+          "pid_position",
+          "position_final",
+          "stability_differential_5ms",
+          "stability_differential_ema",
+          "stability_differential_frozen",
+          "stability_differential_moving",
+          "stability_freeze",
+          "stability_freeze_20ms",
+          "stability_freeze_5ms",
+          "stability_freeze_ema",
+          "stability_freeze_last",
+          "stability_ik_previous",
+          "stability_ik_tight",
+          "stability_validation_higher",
+          "stability_validation_lower",
+          "stability_validation_repeat"
+        ]
+      },
+      "source": {
+        "path": "experiments/panda_contact_isaac/study_summary.json",
+        "sha256": "096e8d11e4dc018316fdc8968da19dadaf81db64a0bdb879527b045fc34eb714"
+      }
+    }
+  ]
+}

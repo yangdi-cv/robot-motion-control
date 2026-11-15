@@ -1,0 +1,132 @@
+{
+  "case": "7638a51c754fb8fb",
+  "scope": "same QP inputs, no physical actions",
+  "rows": [
+    {
+      "time": 0.83,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -18.066221750871847,
+      "iterations": 10,
+      "seconds": 0.0015106960017874371
+    },
+    {
+      "time": 0.83,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -18.066221640263315,
+      "iterations": 275,
+      "seconds": 0.0018081300004268996
+    },
+    {
+      "time": 0.97,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -31.7159995193606,
+      "iterations": 10,
+      "seconds": 0.0015508010001212824
+    },
+    {
+      "time": 0.97,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 8.87937824245455e-06,
+      "objective": -31.68548609818241,
+      "iterations": 75,
+      "seconds": 0.0011476389991003089
+    },
+    {
+      "time": 1.65,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -3870.7158815829594,
+      "iterations": 10,
+      "seconds": 0.0012726019995170645
+    },
+    {
+      "time": 1.65,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 1.7053025658242404e-13,
+      "objective": -3870.71588158296,
+      "iterations": 100,
+      "seconds": 0.0010939589992631227
+    },
+    {
+      "time": 3.0,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -12506.21539600247,
+      "iterations": 10,
+      "seconds": 0.001195828997879289
+    },
+    {
+      "time": 3.0,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 2.2737367544323206e-13,
+      "objective": -12506.215396002457,
+      "iterations": 125,
+      "seconds": 0.0011692999978549778
+    },
+    {
+      "time": 5.76,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.329070518200751e-15,
+      "objective": 7.670715580109231,
+      "iterations": 13,
+      "seconds": 0.0016624380004941486
+    },
+    {
+      "time": 5.76,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 0.016830006356259197,
+      "objective": 7.6708944891519195,
+      "iterations": 700,
+      "seconds": 0.0028289939982641954
+    },
+    {
+      "time": 8.2,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 2.6645352591003757e-15,
+      "objective": -83.72293527208986,
+      "iterations": 12,
+      "seconds": 0.001746574998833239
+    },
+    {
+      "time": 8.2,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 5.2293205314579705e-08,
+      "objective": -83.72253307184666,
+      "iterations": 125,
+      "seconds": 0.0012780420001945458
+    },
+    {
+      "time": 10.0,
+      "backend": "clarabel",
+      "status": "Solved",
+      "raw_constraint_violation": 5.684341886080802e-14,
+      "objective": -11633.053724688707,
+      "iterations": 10,
+      "seconds": 0.001208532998134615
+    },
+    {
+      "time": 10.0,
+      "backend": "osqp",
+      "status": "solved",
+      "raw_constraint_violation": 1.494299795012921e-08,
+      "objective": -11633.053724675494,
+      "iterations": 125,
+      "seconds": 0.0011520670013851486
+    }
+  ]
+}

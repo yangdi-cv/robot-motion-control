@@ -1,0 +1,15 @@
+{
+  "repo": "oxfordcontrol/Clarabel.rs",
+  "commit": "b6aa0421ec818a31c7f26ada8f6cef2558c768bf",
+  "pushed_at": "2026-04-13T08:08:29Z",
+  "archived": false,
+  "license": {
+    "key": "apache-2.0",
+    "name": "Apache License 2.0",
+    "spdx_id": "Apache-2.0",
+    "url": "https://api.github.com/licenses/apache-2.0",
+    "node_id": "MDc6TGljZW5zZTI="
+  },
+  "installed": "clarabel==0.11.1",
+  "api": "https://clarabel.org/stable/examples/py/example_qp/"
+}

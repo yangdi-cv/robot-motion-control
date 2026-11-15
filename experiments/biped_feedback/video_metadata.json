@@ -1,0 +1,14 @@
+{
+  "frames": 280,
+  "fps": 20,
+  "size": [
+    1120,
+    900
+  ],
+  "duration": 14.0,
+  "benchmark_case": "4c8bd0efff88b5dc",
+  "trace_exact_equal": true,
+  "success": true,
+  "landings": 20,
+  "progress": 2.323335929502825
+}

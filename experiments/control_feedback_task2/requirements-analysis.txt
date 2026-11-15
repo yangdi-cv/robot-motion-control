@@ -1,0 +1,7 @@
+# ROS2 Humble and Isaac5.1 use their respective supplied Python environments.
+numpy
+scipy
+matplotlib
+requests
+pyserial
+markdown

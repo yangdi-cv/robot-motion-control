@@ -1,0 +1,24 @@
+<mujoco model="planar finite-foot ankle pendulum">
+  <compiler angle="radian"/>
+  <option timestep="0.001" gravity="0 0 -9.81" integrator="implicitfast" iterations="80" tolerance="1e-10"/>
+  <visual><global offwidth="960" offheight="720"/><headlight ambient=".45 .45 .45"/></visual>
+  <default><geom friction=".8 .005 .0001" solref=".01 1" solimp=".95 .99 .001" condim="3"/></default>
+  <worldbody>
+    <light pos="0 -2 3" dir="0 .5 -1"/>
+    <geom name="ground" type="plane" size="4 2 .1" rgba=".85 .89 .92 1"/>
+    <body name="foot" pos="0 0 .025">
+      <joint name="foot_x" type="slide" axis="1 0 0" damping="0"/>
+      <joint name="foot_z" type="slide" axis="0 0 1" damping="0"/>
+      <joint name="foot_pitch" type="hinge" axis="0 1 0" damping="0"/>
+      <geom name="sole" type="box" size=".10 .055 .025" mass="2" rgba=".15 .27 .40 1"/>
+      <body name="pole" pos="0 0 .025">
+        <joint name="ankle" type="hinge" axis="0 1 0" damping=".1"/>
+        <geom name="leg" type="capsule" fromto="0 0 0 0 0 .8" size=".018" mass=".5" rgba=".55 .65 .75 1"/>
+        <body name="torso" pos="0 0 .8">
+          <geom name="mass" type="box" size=".10 .07 .08" mass="20" rgba=".10 .45 .65 1"/>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+  <actuator><motor name="ankle_motor" joint="ankle" gear="1" ctrllimited="true" ctrlrange="-25 25"/></actuator>
+</mujoco>

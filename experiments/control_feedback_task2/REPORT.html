@@ -1,0 +1,562 @@
+<!doctype html><meta charset="utf-8"><style>@page{size:A4;margin:18mm 16mm 19mm;@bottom-right{content:counter(page);font-size:9pt;color:#68778a}}body{font-family:"Noto Sans CJK SC","Microsoft YaHei",sans-serif;color:#253347;font-size:10pt;line-height:1.7}h1{font-size:22pt;line-height:1.4}h2{font-size:15pt;margin-top:8mm;break-after:avoid}h3{font-size:12pt;break-after:avoid}table{width:100%;border-collapse:collapse;font-size:8.7pt;break-inside:avoid;margin:4mm 0}td,th{border:1px solid #cbd5df;padding:5px 7px;text-align:left}th{background:#eaf0f5}img{max-width:100%;max-height:105mm;object-fit:contain}p:has(img){text-align:center;break-inside:avoid;margin:5mm 0}pre{background:#f1f5f8;padding:10px;font-size:8pt;line-height:1.5;white-space:pre-wrap}code{font-family:"Noto Sans Mono CJK SC",monospace;font-size:8.6pt;overflow-wrap:anywhere}a{color:#295f88;text-decoration:none}p{orphans:3;widows:3}.toc{break-before:page}.refs{font-size:9pt;color:#496174;border-left:3px solid #ccdfec;padding-left:9px}</style><h1>Panda轨迹跟踪改进与IMU反馈频率分析</h1>
+<p>阶段进展报告　2026年10月20日</p>
+<h2>摘要</h2>
+<p>针对上一阶段前三关节存在运动滞后的反馈，本轮在原Isaac Sim 5.1和ROS2 Humble环境中补充驱动增益与速度前馈实验，并用不同运动幅度验证选出的设置。验证组前三关节平均运动误差由0.864°降低到0.082°，降低约90.5%；拟合轨迹滞后由214.3ms减小到20.0ms，仍有采样及执行链路带来的残余滞后。</p>
+<p>同时使用公开TUM-VI真实IMU记录，完成静止、运动各30秒的六轴5点滑动平均与统计分析，并搭建三个独立ROS进程，对200Hz和25Hz输入分别测试50、100、200Hz反馈。额外补充Panda外环频率对照，以及较长静止记录的频谱和Allan分析。</p>
+<p>前半部分为工作站仿真与公开数据分析；随后补充 Jetson 实体 IMU 静止、运动采集及三档发布测试。实体设备的新测量约25Hz，发布频率达到50/100/200Hz，具体结果见第8节。</p>
+<h2>目录</h2>
+<ul>
+<li><a href="#s1">1. 本轮工作与原任务的关系</a></li>
+<li><a href="#s2">2. 驱动增益与速度前馈</a></li>
+<li><a href="#s3">3. 不同运动幅度的验证</a></li>
+<li><a href="#s4">4. 公开真实IMU与六轴滤波</a></li>
+<li><a href="#s5">5. 50/100/200Hz反馈测试</a></li>
+<li><a href="#s6">6. Panda外环频率补充实验</a></li>
+<li><a href="#s7">7. 静止频谱与Allan曲线</a></li>
+<li><a href="#s8">8. Jetson实体IMU测试</a></li>
+<li><a href="#code">附录：代码目录及运行方式</a></li>
+</ul>
+<p><a id="s1"></a></p>
+<h2>1. 本轮工作与原任务的关系</h2>
+<p>上一阶段完成了5秒五次轨迹、25/50/100Hz频率对照和虚拟IMU滤波。本轮沿用同一Panda与轨迹定义，先处理老师指出的驱动滞后，再准备Task2需要的采集、滤波和50/100/200Hz分析。</p>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>本轮状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Panda增益与速度前馈</td>
+<td>已完成24阶段参数比较、16阶段幅度验证</td>
+</tr>
+<tr>
+<td>真实六轴数据滤波</td>
+<td>已使用公开真实记录完成；不是自有设备采集</td>
+</tr>
+<tr>
+<td>ROS2 IMU话题与频率分析</td>
+<td>已完成工作站三进程数据回放、六组频率测试</td>
+</tr>
+<tr>
+<td>仿真关节外环50/100/200Hz</td>
+<td>已完成两种运行设置，各24阶段</td>
+</tr>
+<tr>
+<td>Jetson连接、采集、软件链路时延</td>
+<td>已完成实体IMU两段采集及三档频率测试；未测设备内部采样至执行器时延</td>
+</tr>
+</tbody>
+</table>
+<p>本轮仍使用原版本环境，没有更换已有ROS或系统Python，也没有发送真机运动指令。</p>
+<p><a id="s2"></a></p>
+<h2>2. 驱动增益与速度前馈</h2>
+<p>物理周期10ms，使用原来5秒、端点速度和加速度为零的五次轨迹，主要分析前三关节。驱动增益按默认值的1、2、4倍设置Kp，Kd按1、√2、2倍同步增加；分别比较是否发送参考速度。六组设置各测正反方向并重复两次，共24阶段。每阶段先保持2秒、运动5秒、再保持1秒。阶段之间重置仿真关节，统计不包含重置瞬间。</p>
+<p>这里的速度前馈是将轨迹解析速度作为关节驱动的速度目标，与位置目标一起发送；不是直接计算电机力矩的逆动力学前馈。默认前七关节Kp约22918.31、Kd约4583.66，选中设置约91673.25和9167.33，数值为当前Isaac控制接口读出的增益。它们仅用于此Panda仿真，不能直接搬到SO101。</p>
+<table>
+<thead>
+<tr>
+<th>Kp倍数 / Kd倍数</th>
+<th>参考速度</th>
+<th>平均运动RMSE / °</th>
+<th>最差绝对误差 / °</th>
+<th>拟合滞后 / ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 / 1.000</td>
+<td>无</td>
+<td>0.960</td>
+<td>1.835</td>
+<td>214.3</td>
+</tr>
+<tr>
+<td>1 / 1.000</td>
+<td>有</td>
+<td>0.095</td>
+<td>0.194</td>
+<td>20.3</td>
+</tr>
+<tr>
+<td>2 / 1.414</td>
+<td>无</td>
+<td>0.702</td>
+<td>1.344</td>
+<td>156.3</td>
+</tr>
+<tr>
+<td>2 / 1.414</td>
+<td>有</td>
+<td>0.092</td>
+<td>0.178</td>
+<td>20.2</td>
+</tr>
+<tr>
+<td>4 / 2.000</td>
+<td>无</td>
+<td>0.517</td>
+<td>0.992</td>
+<td>115.2</td>
+</tr>
+<tr>
+<td>4 / 2.000</td>
+<td>有</td>
+<td>0.091</td>
+<td>0.178</td>
+<td>20.2</td>
+</tr>
+</tbody>
+</table>
+<p>单独增加增益有改善，但收益小于加入参考速度。按前三关节平均运动RMSE选择参数，并要求最差超调不超过0.5°、保持段标准差不超过0.1°，选出Kp×4、Kd×2并加入参考速度。</p>
+<p>拟合滞后是将参考轨迹平移后与实际位置比较得到的时间差，搜索范围−100至400ms、步长1ms；它描述整体跟踪表现，不是ROS消息传输延迟。保持段接近零的抖动也受仿真休眠机制影响，不作为真实电机噪声结论。</p>
+<p><img alt="前三关节实际误差" src="figures/tracking_error.png" /></p>
+<p>相关代码在 <code>scripts/isaac_scene.py</code>、<code>scripts/controller.py</code>、<code>scripts/run_control.py</code>、<code>scripts/trajectory.py</code> 和 <code>scripts/analyze_control.py</code>；配置在 <code>config/control_suite.json</code>。</p>
+<p><a id="s3"></a></p>
+<h2>3. 不同运动幅度的验证</h2>
+<p>参数选定后，另用原位移0.6倍和1.2倍的轨迹，分别做正反方向、两次重复。默认与选中设置共16阶段，验证期间不再调整参数。</p>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th>平均运动RMSE / °</th>
+<th>最差绝对误差 / °</th>
+<th>拟合滞后 / ms</th>
+<th>最差超调 / °</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>默认</td>
+<td>0.864</td>
+<td>2.201</td>
+<td>214.3</td>
+<td>0.081</td>
+</tr>
+<tr>
+<td>增益调整＋参考速度</td>
+<td>0.082</td>
+<td>0.212</td>
+<td>20.0</td>
+<td>0.036</td>
+</tr>
+</tbody>
+</table>
+<p>不同幅度下仍有明显改善，因此这次结果不只来自原来一条轨迹。但场景、负载和机械臂模型保持不变，重复测试也不代表独立真实工况；尚未测试负载变化、碰撞、摩擦扰动或真实电机带宽。</p>
+<p>相关代码在 <code>scripts/analyze_control.py</code>；验证配置在 <code>config/control_validation.json</code>，逐关节数据在 <code>runs/control_validation/joint_metrics.csv</code>。</p>
+<p><a id="s4"></a></p>
+<h2>4. 公开真实IMU与六轴滤波</h2>
+<p>先比较了EuRoC和TUM-VI两类公开视觉惯性数据。EuRoC提供无人机上的200Hz六轴IMU，可用于后续跨设备对照；本轮选择TUM-VI，是因为它另有独立静止记录，并有手持设备运动序列，更方便分别验证静止滤波和运动响应。EuRoC本轮未下载或评测。</p>
+<p>选择TUM-VI是因为它提供三轴加速度和角速度、原始时间戳，以及独立静止记录。数据由原作者采集，许可CC BY4.0。静止数据从原始NPY取前120001行，约602秒；滤波统计取其中60–90秒。运动段来自room1序列的中间固定30秒，未按结果挑选波形。通过官方服务器HTTP范围请求提取所需IMU记录，没有下载整套相机图像。</p>
+<table>
+<thead>
+<tr>
+<th>数据段</th>
+<th>样本数</th>
+<th>实际覆盖 / s</th>
+<th>时间戳统计频率 / Hz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>静止</td>
+<td>5981</td>
+<td>29.994</td>
+<td>199.374</td>
+</tr>
+<tr>
+<td>运动</td>
+<td>5981</td>
+<td>29.995</td>
+<td>199.368</td>
+</tr>
+</tbody>
+</table>
+<p>六通道分别使用当前及过去四点的因果平均，不使用未来数据。前四点窗口尚未完整，均值和标准差比较统一排除这四点。加速度保持m/s²、角速度保持rad/s，不把静止加速度中的重力当成零偏清除。</p>
+<p>静止段统计如下：</p>
+<table>
+<thead>
+<tr>
+<th>通道</th>
+<th>单位</th>
+<th>原始均值</th>
+<th>滤波均值</th>
+<th>原始标准差</th>
+<th>滤波标准差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ax</td>
+<td>m/s²</td>
+<td>-1.416228</td>
+<td>-1.416217</td>
+<td>0.017933</td>
+<td>0.008507</td>
+</tr>
+<tr>
+<td>ay</td>
+<td>m/s²</td>
+<td>-0.396287</td>
+<td>-0.396288</td>
+<td>0.013538</td>
+<td>0.006626</td>
+</tr>
+<tr>
+<td>az</td>
+<td>m/s²</td>
+<td>10.487650</td>
+<td>10.487644</td>
+<td>0.020199</td>
+<td>0.009757</td>
+</tr>
+<tr>
+<td>gx</td>
+<td>rad/s</td>
+<td>0.029597</td>
+<td>0.029597</td>
+<td>0.001105</td>
+<td>0.000554</td>
+</tr>
+<tr>
+<td>gy</td>
+<td>rad/s</td>
+<td>0.006676</td>
+<td>0.006676</td>
+<td>0.000947</td>
+<td>0.000481</td>
+</tr>
+<tr>
+<td>gz</td>
+<td>rad/s</td>
+<td>0.016164</td>
+<td>0.016164</td>
+<td>0.000988</td>
+<td>0.000493</td>
+</tr>
+<tr>
+<td>六通道标准差降低约49.2%–52.6%。5点平均的中心相对最新采样落后两个采样周期，当前原始数据约为10.03ms；若输入只有25Hz，同样5点窗口约为80ms。平滑程度不能脱离输入采样率比较。</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><img alt="静止六轴滤波" src="figures/static_six_axes.png" /></p>
+<p><img alt="运动六轴滤波" src="figures/motion_six_axes.png" /></p>
+<p>静止均值也不作为已标定零偏；这里没有依据当前姿态的真值去分离重力、零偏和比例误差。</p>
+<p>运动段同时保存均值和标准差表，但运动信号本身会变化，标准差降低不能直接解释为噪声或测量误差下降。没有同步运动真值，当前不报告滤波后的角度或位移精度。</p>
+<p>相关代码在 <code>scripts/download_public_imu.py</code>、<code>scripts/download_motion.py</code>、<code>scripts/analyze_imu.py</code>、<code>scripts/filter_csv.py</code>；运动段统计在 <code>runs/motion_filter_statistics.csv</code>。</p>
+<p><a id="s5"></a></p>
+<h2>5. 50/100/200Hz反馈测试</h2>
+<p>三个独立ROS进程分别负责数据回放、5点平均与定频发布、状态接收。原始及滤波消息采用 <code>sensor_msgs/msg/Imu</code>，话题为 <code>/imu/data_raw</code>、<code>/imu/data</code>。额外消息记录输入序号、发布序号及同一主机上的单调时钟，方便区分重复测量、主动降采样和真正的消息缺失。</p>
+<p>输入设为名义200Hz或25Hz，输出设为50、100、200Hz，每组约30秒。低频输入由公开运动记录每8点取1点，不是自有IMU的实测采样。回放按软件定时器发送，原始记录实际约199.37Hz，不能把回放发布率当成原传感器频率。统计取稳定运行的第1至29秒，排除启动和停止过渡。</p>
+<table>
+<thead>
+<tr>
+<th>输入 / Hz</th>
+<th>目标反馈 / Hz</th>
+<th>实测反馈 / Hz</th>
+<th>间隔标准差 / ms</th>
+<th>数据年龄P95 / ms</th>
+<th>重复测量 / %</th>
+<th>发送→接收缺失</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>50</td>
+<td>50.00</td>
+<td>0.196</td>
+<td>6.065</td>
+<td>0.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>200</td>
+<td>100</td>
+<td>100.00</td>
+<td>0.241</td>
+<td>4.552</td>
+<td>0.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>200</td>
+<td>200</td>
+<td>200.00</td>
+<td>0.087</td>
+<td>1.485</td>
+<td>0.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>25</td>
+<td>50</td>
+<td>50.00</td>
+<td>0.344</td>
+<td>34.253</td>
+<td>50.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>25</td>
+<td>100</td>
+<td>100.00</td>
+<td>0.349</td>
+<td>35.710</td>
+<td>75.0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>25</td>
+<td>200</td>
+<td>200.00</td>
+<td>0.287</td>
+<td>38.196</td>
+<td>87.5</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>“数据年龄”从输入样本在回放进程被取出，到接收进程收到对应反馈为止；还未包含5点平均相对中心的滞后，更不包含真实传感器内部与串口延迟。单独的发布到接收耗时和P95保存在metrics.csv。接收节点只检查并接收状态，不构成执行器端的物理响应时间。</p>
+<p>25Hz输入提高到200Hz发布后，大量消息重复使用同一测量；更高的发布率没有增加新的传感器信息。200Hz输入降为50Hz时，有些中间样本未作为反馈发出，这是主动取最新值，不能算作网络丢帧。当前结果只针对本机有线软件进程与所设QoS，不推广为无线或Jetson性能。</p>
+<p><img alt="反馈频率与数据新鲜度" src="figures/feedback_rates.png" /></p>
+<p>相关代码在 <code>scripts/feedback_node.py</code>、<code>scripts/run_feedback.py</code> 和 <code>scripts/analyze_feedback.py</code>；详细结果在 <code>runs/feedback001/metrics.csv</code>。</p>
+<p><a id="s6"></a></p>
+<h2>6. Panda外环频率补充实验</h2>
+<p>为了进一步区分发布频率与实际跟踪表现，将Panda物理步长固定为5ms，Bridge发布200Hz模拟时间状态；外部节点按50、100、200Hz处理状态并发送位置/速度目标。默认与调优设置均测正反方向、重复两次，共24阶段。频率门限使用模拟时间，主机上实际运行频率另行统计。</p>
+<table>
+<thead>
+<tr>
+<th>外环 / Hz（模拟时间）</th>
+<th>设置</th>
+<th>平均运动RMSE / °</th>
+<th>最差绝对误差 / °</th>
+<th>主机平均频率 / Hz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>默认</td>
+<td>0.971</td>
+<td>1.830</td>
+<td>38.37</td>
+</tr>
+<tr>
+<td>50</td>
+<td>调优＋参考速度</td>
+<td>0.080</td>
+<td>0.154</td>
+<td>38.07</td>
+</tr>
+<tr>
+<td>100</td>
+<td>默认</td>
+<td>0.948</td>
+<td>1.788</td>
+<td>76.61</td>
+</tr>
+<tr>
+<td>100</td>
+<td>调优＋参考速度</td>
+<td>0.057</td>
+<td>0.111</td>
+<td>76.58</td>
+</tr>
+<tr>
+<td>200</td>
+<td>默认</td>
+<td>0.937</td>
+<td>1.768</td>
+<td>153.50</td>
+</tr>
+<tr>
+<td>200</td>
+<td>调优＋参考速度</td>
+<td>0.047</td>
+<td>0.090</td>
+<td>153.31</td>
+</tr>
+</tbody>
+</table>
+<p>第一轮虽然模拟时间达到目标，但主机实际约为38、77、153Hz，未达到实时。随后在同一物理步长和任务配置下关闭逐帧渲染，并改为按绝对时刻定时，再完成相同24阶段：</p>
+<table>
+<thead>
+<tr>
+<th>外环 / Hz（模拟时间）</th>
+<th>设置</th>
+<th>平均运动RMSE / °</th>
+<th>最差绝对误差 / °</th>
+<th>主机平均频率 / Hz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>默认</td>
+<td>0.971</td>
+<td>1.830</td>
+<td>50.00</td>
+</tr>
+<tr>
+<td>50</td>
+<td>调优＋参考速度</td>
+<td>0.080</td>
+<td>0.154</td>
+<td>50.01</td>
+</tr>
+<tr>
+<td>100</td>
+<td>默认</td>
+<td>0.948</td>
+<td>1.788</td>
+<td>100.03</td>
+</tr>
+<tr>
+<td>100</td>
+<td>调优＋参考速度</td>
+<td>0.057</td>
+<td>0.111</td>
+<td>100.03</td>
+</tr>
+<tr>
+<td>200</td>
+<td>默认</td>
+<td>0.937</td>
+<td>1.768</td>
+<td>200.00</td>
+</tr>
+<tr>
+<td>200</td>
+<td>调优＋参考速度</td>
+<td>0.047</td>
+<td>0.090</td>
+<td>200.00</td>
+</tr>
+</tbody>
+</table>
+<p>关闭不需要的渲染并调整定时后，主机频率接近目标，说明运行方式会影响反馈频率的实际含义。两处实现一起调整，当前不单独量化各自的收益；也不据此推断Jetson能够达到同样性能。</p>
+<p><img alt="无逐帧渲染的关节外环对照" src="figures/panda_frequency_norender.png" /></p>
+<p><img alt="关节外环频率对照" src="figures/panda_frequency.png" /></p>
+<p>这组测试中物理步长固定，因此组内比较主要反映外环更新频率和驱动设置的影响。它与前面10ms物理步长的调参实验分开统计。IMU回放未用于Panda关节控制，关节反馈仍来自JointState；没有据此宣称IMU姿态融合或状态估计闭环已完成。</p>
+<p>相关代码在 <code>scripts/controller.py</code>、<code>scripts/analyze_control_frequency.py</code>；配置在 <code>config/control_frequency.json</code>、<code>config/control_frequency_norender.json</code>。</p>
+<p><a id="s7"></a></p>
+<h2>7. 静止频谱与Allan曲线</h2>
+<p>在约602秒静止数据上补充频谱密度和重叠Allan偏差。前者观察不同频率上的波动分布；后者观察不同平均时间下的变化，平均时间最长约30秒。数据同时保留温度，当前范围约31.39–33.00℃。</p>
+<p><img alt="静止数据频谱" src="figures/static_psd.png" /></p>
+<p><img alt="静止数据Allan曲线" src="figures/static_allan.png" /></p>
+<p>这些图用于探索窗口长度和长时间变化，不等于完成传感器标定。当前截取长度有限，没有拟合或报告硬件噪声密度、零偏不稳定性等标定参数，也不将公开传感器参数用于自有板卡。</p>
+<p>相关代码在 <code>scripts/analyze_imu.py</code>。</p>
+<p><a id="s8"></a></p>
+<h2>8. Jetson实体IMU测试</h2>
+<p>本次把此前 PC 端流程迁移到 Jetson，完成实体 IMU 的静止、运动采集及三档 ROS 2 发布测试。没有启动机械臂，也没有修改传感器输出配置。</p>
+<h3>环境与方法</h3>
+<p>Jetson Orin Nano，Ubuntu 22.04.5、L4T R36.4.7、ROS 2 Humble。使用系统 Python 3.10.12，不修改现有 an-project Conda 环境。串口为 <code>/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0</code>，115200 波特率。</p>
+<p>采集程序解析 RAW 六轴数据，将加速度转换为 m/s²，角速度为 rad/s；每个新样本更新一次 5 点因果均值。独立进程按目标频率发布 <code>/imu/data</code>，另一个进程接收。全部测时进程位于同一 Jetson，使用同机单调时钟。姿态未参与本实验，ROS 消息将 orientation_covariance[0] 设为 -1。</p>
+<h3>静止与运动采集</h3>
+<p>两段各采集约 30 秒、749 组。静止首末样本估计 25.131 Hz，运动 25.052 Hz。静止加速度模长约 9.84 m/s²。运动包含三个方向的转动；三轴角速度绝对峰值约 4.948、4.412、3.129 rad/s。在线滤波值与离线重算一致。静止 gx、gy 为零，可能受设备量化或内部处理影响，不能解读为无噪声。</p>
+<p><img alt="静止六轴" src="runs/jetson_20261020/static_analysis_01/six_axes.png" /></p>
+<p><img alt="运动六轴" src="runs/jetson_20261020/motion_analysis_02/six_axes.png" /></p>
+<h3>发布频率测试</h3>
+<p>每档直接读取实体 IMU 约 30 秒，分析中间稳定区间，排除启动和停止尾段。</p>
+<table>
+<thead>
+<tr>
+<th>目标 Hz</th>
+<th>实际 Hz</th>
+<th>新测量 Hz</th>
+<th>重复比例</th>
+<th>间隔标准差 ms</th>
+<th>消息传输 P95 ms</th>
+<th>最新原始样本年龄 P95 ms</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>50</td>
+<td>50.000</td>
+<td>24.967</td>
+<td>50.04%</td>
+<td>0.497</td>
+<td>1.095</td>
+<td>40.109</td>
+</tr>
+<tr>
+<td>100</td>
+<td>99.999</td>
+<td>24.966</td>
+<td>75.03%</td>
+<td>0.520</td>
+<td>0.816</td>
+<td>39.605</td>
+</tr>
+<tr>
+<td>200</td>
+<td>200.001</td>
+<td>24.968</td>
+<td>87.52%</td>
+<td>0.390</td>
+<td>0.759</td>
+<td>40.164</td>
+</tr>
+</tbody>
+</table>
+<p>三档共发布并接收 10494 条反馈消息，元数据与 Imu 消息计数一致，发布至接收的序号未发现缺口。板卡协议没有在此解析设备样本序号，因此不能据此认定传感器或 USB 链路零丢样。</p>
+<p>消息传输指 relay 发布前至 sink 回调接收的时间；样本年龄从主机解析 RAW 包开始计算。两者均不是设备采样到控制执行的完整时延，也不包含 5 点滤波的约 80 ms 群延迟。提高发布频率主要减少等待下一次发布的时间，不能补足新的传感器信息。</p>
+<h3>文件与后续工作</h3>
+<p>相关代码在 <code>scripts/imu_serial_node.py</code>、<code>scripts/feedback_node.py</code>、<code>scripts/run_feedback.py</code>、<code>scripts/filter_csv.py</code>、<code>scripts/analyze_feedback.py</code>；启动环境由 <code>scripts/ros-python</code> 指定。相对路径均以本报告所在目录为根。</p>
+<p>原始数据与分析位于 <code>runs/jetson_20261020/</code>：</p>
+<pre><code class="language-text">hardware_static_20261020_01/   静止 CSV、原始串口字节、会话信息
+hardware_motion_20261020_02/   运动 CSV、原始串口字节、会话信息
+static_analysis_01/           六轴图、均值与标准差、滤波 CSV
+motion_analysis_02/           六轴图、均值与标准差、滤波 CSV
+hardware_feedback_20261020_01/
+  source25_feedback50/        三进程日志、CSV、原始字节
+  source25_feedback100/
+  source25_feedback200/
+  metrics.csv                发布频率、间隔、时延与重复比例
+  feedback_rates.png
+</code></pre>
+<p>Jetson 同名工程目录保留原始记录；上述资料已回传工作站。此前暂停的 motion_01 不用于本次分析。后续先讨论约 25 Hz 的设备输出与 80 ms 滤波延迟是否适合目标控制任务，再决定是否调整设备配置或滤波窗口；当前未改固件参数，也未运行机械臂闭环。</p>
+<p><a id="code"></a></p>
+<h2>附录：代码目录及运行方式</h2>
+<p>项目目录为 <code>experiments/control_feedback_task2/</code>。报告正文中的scripts、config、runs和data均相对此目录。</p>
+<pre><code class="language-text">control_feedback_task2/
+├── REPORT.md、REPORT.pdf
+├── README.md、PROVENANCE.json
+├── config/
+│   ├── control_suite.json
+│   ├── control_validation.json
+│   ├── control_frequency.json
+│   └── control_frequency_norender.json
+├── scripts/
+│   ├── isaac-python、ros-python
+│   ├── isaac_scene.py、controller.py、trajectory.py
+│   ├── run_control.py、analyze_control.py
+│   ├── analyze_control_frequency.py
+│   ├── download_public_imu.py、download_motion.py
+│   ├── analyze_imu.py、filter_csv.py
+│   ├── feedback_node.py、run_feedback.py、analyze_feedback.py
+│   ├── imu_serial_node.py
+│   └── check_software.py
+├── vendor/YbImuSerialLib.py
+├── data/tum_vi/             原始公开子集、30秒分析输入及来源
+├── figures/                 结果图
+└── runs/                    指标、动作与消息CSV、配置和日志
+</code></pre>
+<p>在项目根目录，使用已有Isaac5.1环境和ROS2 Humble环境。具体命令见README，新的试验使用新的输出目录，避免覆盖本轮结果。代码通过语法检查、已知正弦滤波幅相测试和序号缺失检查；这些软件检查不替代硬件测试。</p>
+<p>原Panda/IMU实验在本项目内扩展，未修改旧报告。厂家IMU解析库单独放入vendor目录，Isaac机器人资源由已安装环境加载，不随源码包复制完整平台。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset">TUM-VI数据集、原始文件与CC BY4.0许可</a></li>
+<li><a href="https://projects.asl.ethz.ch/datasets/euroc-mav/">EuRoC官方数据集说明</a></li>
+<li><a href="https://arxiv.org/abs/1804.06120">TUM VI Benchmark论文</a></li>
+<li><a href="https://docs.isaacsim.omniverse.nvidia.com/5.1.0/ros2_tutorials/tutorial_ros2_manipulation.html">Isaac Sim 5.1 ROS2关节控制</a></li>
+<li><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.group_delay.html">SciPy滤波群延迟说明</a></li>
+</ul>

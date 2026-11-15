@@ -1,0 +1,45 @@
+[
+  {
+    "repository": "frankarobotics/libfranka",
+    "url": "https://github.com/frankarobotics/libfranka",
+    "pushed_at": "2026-09-07T08:45:19Z",
+    "license": "Apache-2.0",
+    "branch": "main",
+    "commit": "e88d08f64cbf842b8f53c0b551963684064038d6",
+    "reviewed_issues": [
+      {
+        "number": 241,
+        "title": "NetworkException (UDP receive timeout) thrown from readOnce() during controller switch, causing process crash",
+        "state": "closed",
+        "url": "https://github.com/frankarobotics/libfranka/issues/241",
+        "updated_at": "2026-08-12T12:18:18Z"
+      }
+    ]
+  },
+  {
+    "repository": "ros-controls/ros2_controllers",
+    "url": "https://github.com/ros-controls/ros2_controllers",
+    "pushed_at": "2026-10-19T18:26:47Z",
+    "license": "Apache-2.0",
+    "branch": "master",
+    "commit": "e70c3573807076e93583a022620348d1a9244a3e",
+    "issue_search": [],
+    "reviewed_issues": [
+      {
+        "number": 2670,
+        "title": "[admittance_controller] A joint reference received while inactive is executed after activation",
+        "state": "open",
+        "url": "https://github.com/ros-controls/ros2_controllers/issues/2670",
+        "updated_at": "2026-09-30T08:00:37Z"
+      }
+    ]
+  },
+  {
+    "repository": "fzi-forschungszentrum-informatik/cartesian_controllers",
+    "url": "https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers",
+    "pushed_at": "2024-10-30T15:56:46Z",
+    "license": "BSD-3-Clause",
+    "branch": "ros2",
+    "commit": "f8aad77697802d9b9ca08d044b87ce58167e4bf9"
+  }
+]

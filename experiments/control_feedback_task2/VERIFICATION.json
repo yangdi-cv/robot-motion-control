@@ -1,0 +1,39 @@
+{
+  "python_scripts": 23,
+  "control002": {
+    "stages": 24,
+    "feedback_rows": 19201
+  },
+  "control_validation": {
+    "stages": 16,
+    "feedback_rows": 12801
+  },
+  "control_frequency": {
+    "stages": 24,
+    "feedback_rows": 22401
+  },
+  "control_frequency_norender": {
+    "stages": 24,
+    "feedback_rows": 22401
+  },
+  "ros_feedback": {
+    "trials": 6,
+    "messages_verified": 20993,
+    "imu_messages_match_metadata_count": true,
+    "moving_average_vs_original_csv_max_error": 0
+  },
+  "static_samples": 5981,
+  "motion_samples": 5981,
+  "software_known_signal": {
+    "scripts_parse": true,
+    "ma5_sinusoid_max_error": 2.488088480604051e-13,
+    "gain_at_10Hz_200Hz": 0.9040294042680403,
+    "group_delay_ms": 10,
+    "known_four_sequence_gaps_detected": true,
+    "duplicate_measurement_detection": true,
+    "hardware_used": false
+  },
+  "generic_filter_matches": true,
+  "hardware_used": false,
+  "passed": true
+}

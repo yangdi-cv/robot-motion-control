@@ -1,0 +1,8 @@
+[tool.ruff.lint]
+# Standard QP notation l/u; grouped imports retained in frozen experiment sources.
+ignore = ["E741"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/run.py" = ["E401"]
+"scripts/suite.py" = ["E401"]
+"scripts/stress.py" = ["E401"]

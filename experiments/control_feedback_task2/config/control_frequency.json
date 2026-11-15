@@ -1,0 +1,246 @@
+{
+  "isaac_sim_version": "5.1.0",
+  "ros_distro": "humble",
+  "ros_domain_id": 71,
+  "physics_dt_s": 0.005,
+  "trajectory_duration_s": 5.0,
+  "initial_positions_rad": [
+    0.0,
+    -0.7853981634,
+    0.0,
+    -2.3561944902,
+    0.0,
+    1.5707963268,
+    0.7853981634,
+    0.04,
+    0.04
+  ],
+  "target_positions_rad": [
+    0.4,
+    -0.5,
+    -0.3,
+    -2.3561944902,
+    0.0,
+    1.5707963268,
+    0.7853981634,
+    0.04,
+    0.04
+  ],
+  "joint_names": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3",
+    "panda_joint4",
+    "panda_joint5",
+    "panda_joint6",
+    "panda_joint7",
+    "panda_finger_joint1",
+    "panda_finger_joint2"
+  ],
+  "command_topic": "/control_task2/joint_command",
+  "state_topic": "/control_task2/joint_states",
+  "clock_topic": "/control_task2/clock",
+  "time_basis": "Isaac simulation time; wall timing logged separately",
+  "controlled_joints": [
+    "panda_joint1",
+    "panda_joint2",
+    "panda_joint3"
+  ],
+  "trajectory": "rest-to-rest quintic, zero velocity and acceleration at both endpoints",
+  "phase_duration_s": 8.0,
+  "hold_before_s": 2.0,
+  "stages": [
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "forward",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 0,
+      "direction": "reverse",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 200
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 100
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "forward",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 1.0,
+      "kd_scale": 1.0,
+      "velocity_feedforward": false,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 50
+    },
+    {
+      "kp_scale": 4.0,
+      "kd_scale": 2.0,
+      "velocity_feedforward": true,
+      "repeat": 1,
+      "direction": "reverse",
+      "feedback_hz": 50
+    }
+  ]
+}

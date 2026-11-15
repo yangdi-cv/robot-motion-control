@@ -1,0 +1,317 @@
+[
+  {
+    "local": "figures/ch08/g1_single_support_side0_saved.png",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/30efb4c204e210cc/trace.npz",
+    "source_sha256": "a658c6d82276519e75a2a15843fd77ddc1392fd64b82009b7856c4dc4c582963",
+    "model": "experiments/humanoid_control/models/scene.xml",
+    "frames": [
+      {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          -0.0008912663433247592,
+          0.040960581292349696
+        ],
+        "saved_fz_N": [
+          327.081435892106,
+          0.0
+        ]
+      },
+      {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005898171377761788,
+          -0.0005873190534253711
+        ],
+        "saved_fz_N": [
+          164.3882098243327,
+          162.6859142234944
+        ]
+      }
+    ],
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 0.0,
+      "push_time": 2.7,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "method": "mj_forward + render; no mj_step or control; contact values read from saved arrays"
+  },
+  {
+    "local": "figures/ch08/g1_single_support_side1_saved.png",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/ac57901048493e9b/trace.npz",
+    "source_sha256": "9aa594a5fa5176d1c519299360cec274b39cd84ab22cde49afcfa5093aec42fc",
+    "model": "experiments/humanoid_control/models/scene.xml",
+    "frames": [
+      {
+        "index": 500,
+        "time": 0.5,
+        "feet_z_m": [
+          -0.0005890420941788918,
+          -0.0005885416754441986
+        ],
+        "saved_fz_N": [
+          163.64837339406455,
+          163.42842841269365
+        ]
+      },
+      {
+        "index": 2800,
+        "time": 2.8000000000000003,
+        "feet_z_m": [
+          0.04096353259174824,
+          -0.0008911816181591536
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.08147521813225
+        ]
+      },
+      {
+        "index": 6800,
+        "time": 6.8,
+        "feet_z_m": [
+          -0.0005878221887264459,
+          -0.0005893067015102227
+        ],
+        "saved_fz_N": [
+          162.9098141680907,
+          164.16430742932292
+        ]
+      }
+    ],
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 0,
+      "push_time": 3.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 1,
+      "initial_yaw": 0.0
+    },
+    "method": "mj_forward + render; no mj_step or control; contact values read from saved arrays"
+  },
+  {
+    "local": "figures/ch08/g1_stress_150n_saved.png",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/94ecb4bd4e443011/trace.npz",
+    "source_sha256": "fd97ee618025d778699f852e36cae8b60bc5279ca0e5d40e0aab1363afdc87fd",
+    "model": "experiments/humanoid_control/models/scene.xml",
+    "frames": [
+      {
+        "index": 2650,
+        "time": 2.65,
+        "feet_z_m": [
+          -0.0005890390118079916,
+          -0.0005885367166720903
+        ],
+        "saved_fz_N": [
+          163.6488493216435,
+          163.42785488402666
+        ]
+      },
+      {
+        "index": 2850,
+        "time": 2.85,
+        "feet_z_m": [
+          -0.0008095638732431715,
+          0.001870721008505119
+        ],
+        "saved_fz_N": [
+          338.02662685486655,
+          0.0
+        ]
+      },
+      {
+        "index": 5999,
+        "time": 5.9990000000000006,
+        "feet_z_m": [
+          -0.0005902942367887951,
+          -0.0005844831497069033
+        ],
+        "saved_fz_N": [
+          165.1079448610687,
+          161.96872395985753
+        ]
+      }
+    ],
+    "config": {
+      "scenario": "stand",
+      "duration": 6.0,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 150,
+      "push_time": 2.7,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "method": "mj_forward + render; no mj_step or control; contact values read from saved arrays"
+  },
+  {
+    "local": "figures/ch08/g1_stress_250n_saved.png",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/e82d93dd13ca691c/trace.npz",
+    "source_sha256": "38813c5a7e4d3c93ed6421b2fa8a1c03cc8fc09e2389f343a33b23422f7f52c8",
+    "model": "experiments/humanoid_control/models/scene.xml",
+    "frames": [
+      {
+        "index": 2650,
+        "time": 2.65,
+        "feet_z_m": [
+          -0.0005890390118079916,
+          -0.0005885367166720903
+        ],
+        "saved_fz_N": [
+          163.6488493216435,
+          163.42785488402666
+        ]
+      },
+      {
+        "index": 2850,
+        "time": 2.85,
+        "feet_z_m": [
+          -0.0005869871909901653,
+          0.0034591703238557106
+        ],
+        "saved_fz_N": [
+          338.9800370196539,
+          0.0
+        ]
+      },
+      {
+        "index": 3049,
+        "time": 3.049,
+        "feet_z_m": [
+          -0.0007482226150840252,
+          0.0054704815480268315
+        ],
+        "saved_fz_N": [
+          288.1158550491143,
+          4.969104267151805
+        ]
+      }
+    ],
+    "config": {
+      "scenario": "stand",
+      "duration": 6.0,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 250,
+      "push_time": 2.7,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "method": "mj_forward + render; no mj_step or control; contact values read from saved arrays"
+  },
+  {
+    "local": "figures/ch08/g1_walk_stress_40n_saved.png",
+    "source": "experiments/humanoid_control/runs/bd9f72dc7106/stress/28dda2f81a6c4ebb/trace.npz",
+    "source_sha256": "bc6cb924eac4f5f60cb0e8a37407015d30db8ff81be3c373edd76b0ebc60b0b3",
+    "model": "experiments/humanoid_control/models/scene.xml",
+    "frames": [
+      {
+        "index": 9800,
+        "time": 9.8,
+        "feet_z_m": [
+          0.04153263654737775,
+          -0.0008951911979837093
+        ],
+        "saved_fz_N": [
+          0.0,
+          327.09638765668103
+        ]
+      },
+      {
+        "index": 10200,
+        "time": 10.200000000000001,
+        "feet_z_m": [
+          0.042532625293079274,
+          -0.0009401123047341406
+        ],
+        "saved_fz_N": [
+          0.0,
+          324.8421293950495
+        ]
+      },
+      {
+        "index": 11389,
+        "time": 11.389000000000001,
+        "feet_z_m": [
+          0.016238102020201636,
+          -0.00038270438367209864
+        ],
+        "saved_fz_N": [
+          0.0,
+          256.2654256429897
+        ]
+      }
+    ],
+    "config": {
+      "scenario": "walk",
+      "duration": 29,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 40,
+      "push_time": 10.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "method": "mj_forward + render; no mj_step or control; contact values read from saved arrays"
+  }
+]

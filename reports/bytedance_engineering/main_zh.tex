@@ -1,0 +1,37 @@
+% !TeX program = xelatex
+\input{preamble}
+\begin{document}
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+\centering\vspace*{24mm}
+{\songti\bfseries\zihao{1}机器人运动控制与反馈系统\par}
+\vspace{9mm}
+{\songti\zihao{2}从机械臂接触控制到三维人形仿真\par}
+\vspace{15mm}
+{\zihao{3}技术与工程报告\par}
+\vfill
+{\zihao{4}中文版 v1.1\par}
+\vspace{5mm}
+{\zihao{4}2026年11月15日\par}
+\vspace*{22mm}
+\end{titlepage}
+\frontmatter\hypersetup{pageanchor=true}
+\input{chapters/00_abstract}
+\tableofcontents\listoffigures\listoftables
+\mainmatter
+\input{chapters/01_overview}
+\input{chapters/02_platform}
+\input{chapters/03_feedback}
+\input{chapters/04_contact}
+\input{chapters/05_optimization}
+\input{chapters/06_lipm}
+\input{chapters/07_biped}
+\input{chapters/08_humanoid}
+\input{chapters/09_conclusions}
+\appendix
+\input{appendices/code_map}
+\input{appendices/media_index}
+\input{appendices/glossary}
+\input{appendices/reproduction}
+\backmatter\input{references}
+\end{document}

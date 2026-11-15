@@ -1,0 +1,964 @@
+\chapter{倒立摆规划与平衡恢复}
+控制分层参考公开LIPM控制器\cite{lipm}，本地模型与约束保持独立定义。
+
+
+简化模型便于分析支撑区域、落脚和延迟，但忽略了完整摆腿动力学。本章先验证模型内恢复，再用有限脚掌接触和有约束的步态说明边界。
+
+\section{倒立摆模型、步态与控制器}
+
+\label{stage:s17}
+
+\subsection{研究问题与工作范围}\label{s17-detail-1}
+
+前一阶段主要关注机械臂轨迹跟踪、反馈频率与末端接触。该阶段转向自身不稳定的系统：身体能否在推进步态时保持平衡，受到推扰后靠当前支撑脚还是下一次落脚恢复，以及状态反馈变旧以后控制是否仍有效。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2485}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3576}}@{}}
+\caption{研究问题与工作范围：设置与结果}\label{tab:s17-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+月度计划方向
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+该阶段实现
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果边界
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+月度计划方向
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+该阶段实现
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果边界
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+建立简化动力学 & 二维LIPM，恒定高度，精确零阶保持推进 & 不是完整人体或双足关节动力学 \\
+步态周期与落脚规划 & 12段支撑、11次换脚、质心与DCM参考；受约束落脚调整 & 换支撑瞬时完成，不建模双支撑和摆腿惯量 \\
+平衡控制 & PD、LQR及落脚/预测消融 & 输入是支撑面内CoP，不直接代表关节力矩 \\
+测量噪声与外扰 & 状态估计白噪声、偏置、固定时长推扰、模型高度偏差 & 不假装来自真实IMU采集 \\
+频率与反馈延迟 & 50/100/200Hz；0/20/40/80/120ms & 仿真时间设置，不是主机硬实时保证 \\
+接触进一步验证 & MuJoCo自由脚掌、踝关节与集中质量站立 & 只验证站立，未实现全身动态步行 \\
+\end{longtable}\endgroup
+
+实现参考包括Caron的LIPM控制器、MIT许可的Python步态项目及作者关于捕获点的推导；分别核对维护状态、许可与依赖，采用控制分层和可复现比较的思路，没有复制整套机器人控制代码。具体链接与取舍在 RESEARCH.md。
+
+\subsection{模型、步态与输入约束}\label{s17-detail-2}
+
+质心位置c与速度v均包含前向x和侧向y，质心高度h保持常数。输入p是地面压力中心CoP；无质心角动量变化时，在该模型中与ZMP一致。质心受到外力F时：
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+c_ddot = (g/h)*(c-p) + F/m
+omega = sqrt(g/h)
+xi = c + v/omega
+xi_dot = omega*(xi-p) + F/(m*omega)
+\end{Verbatim}
+
+名义步态先给出交替支撑脚中心，再从终点支撑向后计算DCM边界。稳定分量η=c−v/ω向前推进，从ξ和η恢复质心位置、速度。这样既满足离散动力学，也避免长时间向前积分不稳定参考造成数值漂移。终点不持续向前运动，而是在最后一个支撑脚附近停止。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3099}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6901}}@{}}
+\caption{模型、步态与输入约束：设置与结果}\label{tab:s17-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+参数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+参数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+重力/名义高度/质量 & 9.81m/s² / 0.8m / 30kg \\
+步态 & 12个支撑阶段，11次换支撑；阶段0.6s；前向落脚间距0.18m，侧向脚间距0.14m \\
+时长与前进距离 & 7.2s步态段＋2s终末段，共9.2s；名义前进1.98m \\
+脚掌尺寸与CoP & 半长0.10m、半宽0.05m；边缘保留5mm安全裕度 \\
+落脚范围 & 相对当前脚前向0.04---0.34m；交替侧向间距0.10---0.24m \\
+目标调整 & 每次换脚前最后0.15s调整；每轴目标变化\(\leq\)0.8m/s；单次修正裁剪±0.10m/±0.06m \\
+可行性检查 & 支撑距离\(\leq\)0.35m、水平速度\(\leq\)2.5m/s、累计路线平移\(\leq\)0.35m、地面反力满足摩擦限制 \\
+步长 & 主模型1ms；0.5ms另做数值检查 \\
+\end{longtable}\endgroup
+
+地面水平反力为m(g/h)(c−p)，摩擦约束检查的是这一项；作用在质心上的外推力不直接计入地面摩擦需求。落脚目标的变化速率限制只约束规划器输出，不保证真实摆腿的速度、惯量或逆运动学可行性。
+
+输入越界先投影到当前脚掌安全区；身体状态越出可行域则立即终止。模型失败表示假设和约束已不再适用，不能直接解释为真实机器人已经倒地。相关代码在 scripts/core.py，参数与判定在 configs/protocol.json。
+
+\subsection{控制器及因果延迟预测}\label{s17-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2198}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2623}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2196}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2983}}@{}}
+\caption{控制器及因果延迟预测：设置与结果}\label{tab:s17-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoP反馈
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+下一步落脚
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+延迟处理
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoP反馈
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+下一步落脚
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+延迟处理
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 位置和速度误差反馈 & 固定 & 使用延迟测量 \\
+LQR & 连续代数Riccati方程求增益 & 固定 & 使用延迟测量 \\
+LQR＋落脚调整 & 与LQR相同 & 根据落地时刻预测DCM调整 & 使用延迟测量 \\
+LQR＋延迟预测 & 与LQR相同 & 固定 & 把历史状态按已发输入推进到当前 \\
+LQR＋预测＋落脚调整 & 与LQR相同 & 受约束调整 & 先预测当前状态，再反馈和规划 \\
+\end{longtable}\endgroup
+
+LQR误差状态为{[}c−c\_ref, v−v\_ref{]}，输入为CoP相对名义支撑中心的偏移，Q=diag(20,2)、R=1。代码采用u=−K·e，K约为{[}-5.5826, -1.7060{]}；其符号由输入矩阵决定。名义连续闭环极点为-3.165、-17.755。PD按自然频率3rad/s、阻尼比0.9配置。五种方法使用相同脚掌和落脚范围限制。
+
+落脚调整不是把脚立即搬到当前捕获点，而是在剩余摆动时间内预测落地时的DCM，再对下一次落脚目标进行位置和调整速率裁剪。支撑交换后参考路线随实际落脚平移；质心状态本身不重置。报告同时给出相对调整路线的误差和相对原路线的偏差，避免把改参考当作精确回到原目标。
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+x_hat(now) = A(delay)*x_measured(past)
+             + sum(A^j * B * already_sent_CoP)
+next_landing = feasible_projection(planned_landing + predicted_DCM_error)
+\end{Verbatim}
+
+预测器只使用时间戳对应的过去测量和已经发送的输入，不读取真实当前状态、未来测量或未来推力。它无法提前知道尚未被反馈看见的推扰，模型高度错误和噪声也会影响预测。相关代码在 scripts/core.py 的 predictor 和 Controller；数学与因果性检查在 scripts/tests.py。
+
+
+\paragraph{阶段结论}LIPM将机器人简化为恒高质点，支撑输入是地面位置；PD和LQR应在相同约束与恢复判据下比较。
+
+\stagecode{s17}
+
+\FloatBarrier
+
+\section{推扰恢复、落脚调整与延迟预测}
+
+\label{stage:s18}
+
+\subsection{对照设计与评价方法}\label{s18-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2676}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2523}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4800}}@{}}
+\caption{对照设计与评价方法：设置与结果}\label{tab:s18-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+组别
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+配置数（含组间重合）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+目的
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+组别
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+配置数（含组间重合）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+目的
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+主网格 & 675 & 5方法\(\times\)3频率\(\times\)5延迟\(\times\)3推扰\(\times\)3噪声种子 \\
+推扰边界 & 360 & 100Hz，4延迟，0/3/6/9/12/15N·s；独立种子20---22 \\
+模型与测量偏差 & 160 & 高度0.72/0.88m、前后/侧向推扰、摩擦、噪声与偏置 \\
+推扰时刻验证 & 180 & 支撑阶段早/中/晚推扰；独立种子40---42 \\
+步态周期验证 & 60 & 支撑周期0.5/0.7s，检查跨步态适用性 \\
+数值检查 & 10 & 无噪声下1ms与0.5ms对照 \\
+机制演示 & 20 & 无反馈与消融对照；部分与其他组重合 \\
+\end{longtable}\endgroup
+
+按配置内容去重后共1458组，累计实际推进约9667.7s；失败组按真实终止时间统计，不补齐静止尾段。主网格种子0---2，独立验证使用不同种子；没有根据验证结果重新调整控制增益。组合并非现实工况的概率分布，不能把所有组混合的通过比例称为通用成功率。
+
+推扰通常从2.70s开始、持续0.10s。冲量6N·s和12N·s对应60N和120N的矩形水平推力；独立组还改变方向与开始时刻。默认测量噪声为位置1mm、速度0.01m/s，取自同一1kHz种子时间序列，再按控制时刻抽取，确保频率对照可配对。噪声不是实体IMU模型。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2978}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7022}}@{}}
+\caption{对照设计与评价方法：设置与结果}\label{tab:s18-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+指标
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+定义
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+指标
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+定义
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+通过 & 完成全部时长；终点原路线偏差\(\leq\)0.35m；末0.5s位置RMSE\(\leq\)0.02m、速度误差RMSE\(\leq\)0.08m/s；无可行域提前终止 \\
+恢复时间 & 推扰结束后，首次连续0.5s每点满足位置误差\textless0.02m且速度误差\textless0.08m/s；仅对完整通过组报告 \\
+位置误差 & 相对调整后路线计算，同时单列原路线偏差 \\
+采样口径 & 主对照统一用1ms状态计算，与50/100/200Hz控制周期分开；半步长组单列 \\
+已测边界 & 从0N·s起逐级检查，所有3个验证种子均通过的连续区间；不取零散较好结果作为极限 \\
+\end{longtable}\endgroup
+
+这些阈值是本项目的工程比较条件，不是工业标准。每格3个噪声种子数量较少，3/3表示这三次都通过，不代表真实环境中的100\%可靠性。相关代码在 \path|scripts/suite.py|、scripts/analyze.py。
+
+\subsection{主要结果与稳定边界}\label{s18-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2117}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}@{}}
+\caption{主要结果与稳定边界：设置与结果}\label{tab:s18-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6N·s通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+12N·s通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6N·s通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+12N·s通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 3/3 & 0.572 & 0/3 & 未达到 \\
+LQR & 3/3 & 0.028 & 0/3 & 未达到 \\
+LQR＋落脚调整 & 3/3 & 0.028 & 3/3 & 0.390 \\
+LQR＋延迟预测 & 3/3 & 0.028 & 0/3 & 未达到 \\
+LQR＋预测＋落脚调整 & 3/3 & 0.028 & 3/3 & 0.390 \\
+\end{longtable}\endgroup
+
+无延迟时，LQR对中等推扰的恢复快于所设PD，但增益并不能消除脚掌可提供控制量的上限。推扰更大后，固定落脚控制器失败；落脚调整通过改变支撑位置重新获得可行性。这里并未证明LQR在任意参数下都优于PD。
+
+\stagefigure{figures/ch06/s18_stepping_455e1724.png}{相同12N·s推扰的对照。失败轨迹在真实终止时停止；路线平移另画出，不能与原路线误差混用。}{fig:s18-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2117}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}@{}}
+\caption{主要结果与稳定边界：设置与结果}\label{tab:s18-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 9 & 6 & 起点未全通过 & 起点未全通过 \\
+LQR & 9 & 6 & 起点未全通过 & 起点未全通过 \\
+LQR＋落脚调整 & 15* & 12 & 起点未全通过 & 起点未全通过 \\
+LQR＋延迟预测 & 9 & 9 & 6 & 6 \\
+LQR＋预测＋落脚调整 & 15* & 12 & 12 & 12 \\
+\end{longtable}\endgroup
+
+上表单位为N·s，表示已测连续全通过区间的上端；*表示达到该阶段15N·s测试上限，真实极限未搜索。起点未全通过表示连0N·s条件也不是三个种子全部通过，不能将它记为可承受0N·s。
+
+\stagefigure{figures/ch06/s18_disturbance_boundary_6e46f392.png}{独立噪声种子的推扰边界。方法的优势依赖反馈延迟和控制可行域，边界不是普适常数。}{fig:s18-detail-2}
+
+\stagefigure{figures/ch06/s18_frequency_delay_642b1eb8.png}{12N·s主网格：每格三个种子，颜色表示通过比例；频率和延迟都按仿真时间设置。}{fig:s18-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2075}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}@{}}
+\caption{主要结果与稳定边界：设置与结果}\label{tab:s18-5}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+6N·s、无延迟
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+频率/Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+位置RMSE/mm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+恢复时间/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+6N·s、无延迟
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+频率/Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+位置RMSE/mm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+恢复时间/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 50 & 3/3 & 6.80 & 0.595 \\
+PD & 100 & 3/3 & 6.54 & 0.572 \\
+PD & 200 & 3/3 & 6.55 & 0.577 \\
+LQR & 50 & 3/3 & 2.44 & 0.034 \\
+LQR & 100 & 3/3 & 2.13 & 0.028 \\
+LQR & 200 & 3/3 & 2.09 & 0.027 \\
+LQR＋预测＋落脚调整 & 50 & 3/3 & 2.53 & 0.034 \\
+LQR＋预测＋落脚调整 & 100 & 3/3 & 2.56 & 0.028 \\
+LQR＋预测＋落脚调整 & 200 & 3/3 & 2.33 & 0.027 \\
+\end{longtable}\endgroup
+
+在这些中等推扰条件下，提高频率通常只有有限改善，PD从100Hz到200Hz也未继续改善。12N·s热力图的三档频率没有改变主要通过边界：输入约束和反馈数据年龄更关键，不能宣称单纯提高到200Hz就能克服80ms延迟。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3182}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2218}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2218}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2383}}@{}}
+\caption{主要结果与稳定边界：设置与结果}\label{tab:s18-6}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+80ms、12N·s条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+恢复时间/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点原路线偏差/m
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+80ms、12N·s条件
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+恢复时间/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点原路线偏差/m
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+LQR＋落脚调整 & 0/3 & 未达到 & 未达到 \\
+LQR＋预测＋落脚调整 & 3/3 & 0.684 & 0.099 \\
+\end{longtable}\endgroup
+
+延迟预测和落脚调整解决的是不同问题。预测减轻旧状态造成的控制滞后，落脚调整扩大可用支撑范围；只做其中一项不能保证应对大推扰。组合方法通过时仍有约0.10m路线偏移，不能表述为精确沿原路线行走。
+
+固定脚、无饱和的线性分析中，100Hz LQR在0ms延迟的离散谱半径约0.9688；80ms时为1.0198，已经大于1。该分析能解释部分延迟失稳趋势，但不包含落脚混合事件、输入饱和和模型噪声，不能直接当作整个步态系统的稳定性证明。
+
+\stagefigure{figures/ch06/s18_delay_analysis_39b0c131.png}{左：固定支撑线性系统的离散谱半径；右：80ms延迟下的消融轨迹。}{fig:s18-detail-4}
+
+\subsection{独立条件与数值检查}\label{s18-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2637}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}@{}}
+\caption{独立条件与数值检查：设置与结果}\label{tab:s18-7}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+模型/测量偏差
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+推扰发生时刻
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+步态周期变化
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+模型/测量偏差
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+推扰发生时刻
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+步态周期变化
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 24/32 & 9/36 & 0/12 \\
+LQR & 26/32 & 9/36 & 0/12 \\
+LQR＋落脚调整 & 29/32 & 20/36 & 6/12 \\
+LQR＋延迟预测 & 26/32 & 18/36 & 0/12 \\
+LQR＋预测＋落脚调整 & 29/32 & 30/36 & 9/12 \\
+\end{longtable}\endgroup
+
+组合方法在推扰时刻验证中通过30/36，在步态周期变化中通过9/12，说明默认条件下的成功不能扩展成所有时刻和速度下都可恢复。晚期推扰、不同步态时间以及落脚范围限制会改变可行域；状态预测也无法补足剩余摆动时间。各组配置及失败原因完整保存在 manifest.json、results.json。
+
+\stagefigure{figures/ch06/s18_heldout_641ae1f8.png}{独立验证组的固定组合汇总；比例只描述这些测试条件，不能解释为现实任务分布下的成功率。}{fig:s18-detail-5}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2264}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}@{}}
+\caption{独立条件与数值检查：设置与结果}\label{tab:s18-8}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+12N·s、无噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms终点路线误差/m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms终点路线误差/m
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+12N·s、无噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms终点路线误差/m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms终点路线误差/m
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 失败 & 失败 & 0.371 & 0.370 \\
+LQR & 失败 & 失败 & 0.330 & 0.329 \\
+LQR＋落脚调整 & 通过 & 通过 & 0.100 & 0.100 \\
+LQR＋延迟预测 & 失败 & 失败 & 0.330 & 0.329 \\
+LQR＋预测＋落脚调整 & 通过 & 通过 & 0.100 & 0.100 \\
+\end{longtable}\endgroup
+
+物理步长减半后，本组控制方法的定性结论一致。LIPM使用精确零阶保持推进，检查重点是混合事件、采样和约束触发，而非仅验证积分器。失败组终止时刻会受到检测网格分辨率影响；不比较不同长度失败轨迹的RMSE来判断谁更好。
+
+
+\paragraph{阶段结论}12牛秒与80毫秒条件可通过组合策略恢复，但伴随路线偏移；预测只使用已收测量和已发输入。
+
+
+
+% BEGIN SIM_VISUALS s18
+\subsection{简化模型的运动示意}
+下图显示LIPM参考、支撑点与控制结果的关系，属于数学模型可视化。它没有真实摆腿惯量或关节力矩，不能作为多关节动力学步行的画面。
+
+\motionfigure{figures/ch06/lipm_reference_support_visualization.png}{线性倒立摆的状态与支撑示意，不属于多关节物理相机画面。}{fig:motion-lipm_reference_support_visualization}
+
+\stagevideo{videos/ch06/lipm_model_comparison.mp4}
+% END SIM_VISUALS s18
+\stagecode{s18}
+
+\FloatBarrier
+
+\section{有限脚掌非线性站立验证}
+
+\label{stage:s19}
+
+\subsection{有限脚掌非线性接触验证}\label{s19-detail-1}
+
+为了检查简化模型之外的接触影响，另建平面内可自由平移、升降和翻转的有限脚掌，连接一个踝关节和摆杆集中质量。脚掌靠MuJoCo接触力支撑，没有固定到地面，也没有在扰动后重设位姿。该模型只能在矢状面运动，不能验证侧向平衡或双足换步。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3144}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6856}}@{}}
+\caption{有限脚掌非线性接触验证：设置与结果}\label{tab:s19-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+配置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+配置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+引擎 & MuJoCo2.3.7，重力开启，主物理周期1ms \\
+质量与几何 & 脚掌2kg、摆杆0.5kg、顶部20kg；摆杆0.8m；脚掌0.20\(\times\)0.11m \\
+控制量 & 踝关节力矩±25Nm；状态为世界倾角及角速度 \\
+比较 & PD与LQR；50/100/200Hz、0/40/80/120ms，噪声与摩擦变化 \\
+推扰 & 2.0---2.1s向顶部施加0/40/80/120N力 \\
+姿态目标 & 末0.5s每点 \\
+足部额外筛查 & 全过程脚掌移动\(\leq\)0.05m、脚掌翻转\(\leq\)5°；提前越出20°倾角或最低高度则终止 \\
+\end{longtable}\endgroup
+
+这里重新以踝关节近似动力学计算LQR，输入单位为Nm；不是把LIPM的CoP增益直接搬过来，也没有迁移落脚调整器。初始世界倾角0.02rad，噪声为角度0.002rad、角速度0.02rad/s。静态法向合力约220.725N，与22.5kg总重吻合，确认读取的是实际地面支撑。
+
+站立模型的近似踝关节转动惯量为13.016千克平方米，重力线性项约158.922牛米每弧度。该模型重新求得的反馈参数为：
+\begin{equation}
+K_{\mathrm{PD}}=[400,100],\qquad K_{\mathrm{LQR}}\approx[557.155,133.556].
+\end{equation}
+控制律为 $\tau=-K_\theta\theta-K_\omega\dot\theta$。两种方法都受相同25牛米力矩上限和有限脚掌接触限制。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{有限脚掌非线性接触验证：设置与结果}\label{tab:s19-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+推力/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+足部筛查后通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大脚掌移动/m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大世界倾角/°
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+推力/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+足部筛查后通过
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均恢复/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大脚掌移动/m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大世界倾角/°
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 40 & 3/3 & 0.314 & 0.000 & 1.36 \\
+PD & 80 & 0/3 & 未达到 & 0.036 & 2.06 \\
+PD & 120 & 0/3 & 未达到 & 1.008 & 6.58 \\
+LQR & 40 & 3/3 & 0.085 & 0.000 & 1.15 \\
+LQR & 80 & 0/3 & 未达到 & 0.036 & 4.26 \\
+LQR & 120 & 0/3 & 未达到 & 1.849 & 20.09 \\
+\end{longtable}\endgroup
+
+40N条件下两种方法均为3/3通过，LQR平均恢复更快。80N时，躯干姿态有机会恢复，但脚掌翻转超过该阶段5°阈值，因此严格足部筛查为0/3。120N则会出现明显移动或失稳。增大控制增益和力矩不能无限提高恢复能力，脚掌接触本身会成为限制。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\caption{有限脚掌非线性接触验证：设置与结果}\label{tab:s19-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+40N、100Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+40N、100Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 3/3 & 3/3 & 0/3 & 0/3 \\
+LQR & 3/3 & 0/3 & 0/3 & 0/3 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s19_physical_balance_94cd3215.png}{80N接触边界试验：世界姿态恢复不代表脚掌没有移动或翻转，需同时检查支撑状态。}{fig:s19-detail-1}
+
+全部333组中，仅按末段姿态条件通过172组，再加入足部筛查后为118组。总体数值混合了不同难度，不用于宣称控制可靠率。5°和5cm是该阶段工程筛查值，不是设备认证标准。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5276}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4724}}@{}}
+\caption{有限脚掌非线性接触验证：设置与结果}\label{tab:s19-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+脚掌翻转阈值/°（移动限制仍为5cm）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过组数
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+脚掌翻转阈值/°（移动限制仍为5cm）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过组数
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+5 & 118 \\
+10 & 125 \\
+15 & 127 \\
+\end{longtable}\endgroup
+
+足部阈值的变化会改变通过数，报告保留这一敏感性，避免把一项人为阈值当作通用结论。该模型也没有完整腿部、髋膝协调与全身角动量控制，所以不能用这些站立结果宣称动态双足步行已经实现。相关代码在 scripts/physical.py、\path|scripts/physical_suite.py|，模型在 models/ankle.xml。
+
+
+\paragraph{阶段结论}MuJoCo验证脚掌接触与站立恢复，不能与简化模型步态拼接成已完成多关节行走。
+
+
+
+% BEGIN SIM_VISUALS s19
+\subsection{有限脚掌站立与推扰画面}
+本阶段的物理模型只有有限脚掌、踝关节与上部集中质量。画面呈现PD和LQR的站立响应，与后续平面双足连续迈步分开。
+
+\motionfigure{figures/ch06/finite_foot_standing_comparison.png}{有限脚掌非线性站立模型的实际物理画面与对应姿态记录；左PD、右LQR。}{fig:motion-finite_foot_standing_comparison}
+
+\motionfigure{figures/ch06/finite_foot_push_camera_sequence.png}{有限脚掌站立推扰前、推扰后及后续恢复画面；每行左PD、右LQR，时间为视频时刻。}{fig:motion-finite_foot_push_camera_sequence}
+
+\stagevideo{videos/ch06/finite_foot_standing_comparison.mp4}
+% END SIM_VISUALS s19
+\stagecode{s19}
+
+\FloatBarrier
+
+\section{独立测量时钟与受限摆脚规划}
+
+\label{stage:s20}
+
+\subsection{固定采样率与反馈时序}\label{s20-detail-1}
+
+\subsubsection{测量产生、传输和使用}\label{s20-detail-2}
+
+传感器按独立采样时钟产生带源时间戳的噪声测量，再经延迟和抖动队列到达控制器。丢帧发生在传输环节，乱序旧帧被丢弃。控制器只接受时间戳更新的测量；没有新帧时复用旧测量。初始只提供一帧带噪声的预启动测量，不回退读取当前真实状态。
+
+预测器以已接收的过去测量为起点，结合已经发出的CoP输入向当前时刻传播；不读取未来扰动或当前真实状态。数据年龄超过阈值时停止模型推进并记录原因。这只验证了仿真终止逻辑，不能代替实体机器人的安全停止验证。相关代码在 scripts/network.py、scripts/engine.py。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4474}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5526}}@{}}
+\caption{测量产生、传输和使用：设置与结果}\label{tab:s20-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+传感器 / 控制器 & 25、100、200Hz / 100、200Hz \\
+基础延迟 / 抖动 & 20、80ms / 0、20ms \\
+独立丢帧概率 & 0、10\% \\
+有色噪声相关时间 & 0.08s \\
+偏置随机游走标准差 & 位置0.005m/√s；速度0.02(m/s)/√s \\
+组合划分 & 时序864组；噪声216组；连续断流108组 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s20_sensor_rates_a4364da8.png}{传感器帧复用与数据年龄；数据年龄在实际控制读取时刻统计。}{fig:s20-detail-1}
+
+25Hz传感器每40ms才产生新测量。在100Hz控制下约75\%的读取复用旧帧，200Hz控制下约87.5\%。提高控制率不会增加信息更新率；它只增加对既有估计的使用次数。图中的P95受控制采样相位影响，不应把微小差异理解为传输性能变化。
+
+\subsubsection{噪声和断流结果}\label{s20-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2715}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}@{}}
+\caption{噪声和断流结果：设置与结果}\label{tab:s20-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+控制方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+白噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+有色噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+有色＋漂移
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+控制方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+白噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+有色噪声
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+有色＋漂移
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+落脚调整 & 12/24 & 12/24 & 3/24 \\
+仅状态预测 & 12/24 & 12/24 & 3/24 \\
+预测＋落脚调整 & 24/24 & 24/24 & 6/24 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s20_noise_traffic_f1bbbf23.png}{同一组预设条件下的通过比例；各柱表示测试网格，不表示概率估计。}{fig:s20-detail-2}
+
+组合控制在白噪声与有色噪声子集中均通过24/24，但加入漂移后降为6/24。状态预测不能消除未知偏置，单纯提高控制频率也不能解决估计漂移。后续需要在模型中加入偏置估计或使用额外观测约束。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5470}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4530}}@{}}
+\caption{噪声和断流结果：设置与结果}\label{tab:s20-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+反馈测试结果
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+数量
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+反馈测试结果
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+数量
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+通过 & 692 \\
+落脚可达范围不足 & 399 \\
+测量过期终止 & 68 \\
+终端未恢复 & 27 \\
+路线累计偏移过大 & 2 \\
+\end{longtable}\endgroup
+
+对0.4s断流设置0.15、0.30和1s的数据年龄阈值。较短阈值可提前阻止长期使用过期估计；放宽阈值则可能保留运动连续性，但增加使用失真预测的时间。该阶段共68组因过期终止，全部检查了终止时测量年龄确实超过配置阈值。
+
+\subsection{双支撑、连续摆脚与步时调整}\label{s20-detail-4}
+
+\subsubsection{约束与规划方法}\label{s20-detail-5}
+
+这一层采用DCM反馈，分别比较固定落脚和时刻、仅位置调整、位置与时刻联合调整。三个策略使用同一套新模型和约束，不与上一版本LQR的无摆脚约束结果直接混排。名义步长0.18m、阶段时长0.6s，共十个支撑阶段和九次交换，结束后继续恢复2s。
+
+双支撑期间将CoP投影到两脚支撑区域的凸包，并构造非负负载比例与各足底内的CoP，使合成CoP与目标一致。这里的负载是简化模型的可行分配，不是接触求解器测出的地面反力。相关代码在 scripts/gait.py。
+
+摆脚使用分段五次多项式，在线重规划保持位置、速度和加速度连续。通过多项式导数的连续极值计算速度、加速度和离地高度界，拒绝超界轨迹；不是仅检查离散采样点，也不是在动画中截断穿地部分。相关代码在 scripts/trajectory.py。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4381}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5619}}@{}}
+\caption{约束与规划方法：设置与结果}\label{tab:s20-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+约束
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+约束
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+双支撑时长 & 0 / 0.12 / 0.20s \\
+步时候选 & 0.45至0.75s，间隔0.05s \\
+摆脚速度界 & 1.2 / 1.8 / 2.4m/s \\
+摆脚加速度界 & 30m/s² \\
+CoP每轴指令变化率 & 5m/s \\
+时间提交 & 每阶段最多提交一次，显著DCM误差时触发 \\
+\end{longtable}\endgroup
+
+时间选择不持续来回改期；当前阶段的落脚位置仍允许更新，并检查下一阶段摆脚是否可行。初始计划本身不可行时直接拒绝，不用后续调参掩盖启动条件不满足的问题。
+
+\subsubsection{对照结果与代价}\label{s20-detail-6}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2941}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}@{}}
+\caption{对照结果与代价：设置与结果}\label{tab:s20-5}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+无双支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.12s双支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.20s双支撑
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+方法
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+无双支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.12s双支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.20s双支撑
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+固定落脚和时刻 & 0/3 & 0/3 & 3/3 \\
+仅调整落脚位置 & 0/3 & 3/3 & 0/3 \\
+联合调整位置和时刻 & 0/3 & 3/3 & 0/3 \\
+\end{longtable}\endgroup
+
+以上为12N·s扰动、2.70s施加、摆脚速度界1.8m/s的三组种子对照。无双支撑时均在CoP变化率约束处被拒绝。0.12s双支撑下位置调整和时空调整都通过3/3；0.20s下固定策略反而通过，而两种调整策略失败。这表明局部调整策略和双支撑长度之间存在耦合，不能断言双支撑越长或优化变量越多越好。
+
+\stagefigure{figures/ch06/s20_support_timing_1d78e427.png}{双支撑对照及摆脚速度限制下的可行性。}{fig:s20-detail-3}
+
+0.12s双支撑下，仅位置调整平均运行7.40s，终端相对原始路线误差约0.0687m；时空调整平均7.45s，误差约0.1273m。两者都恢复到实际支撑附近，但后者对原路线的偏离更大。通过恢复判据不等于路线跟踪更好。当前有限候选和贪心目标没有保证全局最优。
+
+423组中通过175组；135组因CoP变化率不满足、95组因落脚可达范围不足、18组因初始摆脚不可行而停止。较长双支撑会挤占摆脚时间；1.2m/s速度界下的多组初始任务被拒绝，说明任务时长也需要与执行能力共同设计。
+
+
+\paragraph{阶段结论}有色噪声加漂移明显降低通过数；双支撑会挤占摆脚时间，联合调整并非在全部条件更好。
+
+\stagecode{s20}
+
+\FloatBarrier

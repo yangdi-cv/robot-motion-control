@@ -1,0 +1,14 @@
+{
+  "unique_runs": 1458,
+  "wall_seconds": 30.071784997000123,
+  "group_counts": {
+    "grid": 675,
+    "boundary": 360,
+    "domain": 160,
+    "numerical": 10,
+    "showcases": 20,
+    "phase_validation": 180,
+    "gait_validation": 60
+  },
+  "successes": 848
+}

@@ -1,0 +1,43 @@
+{
+  "config": {
+    "walk": true,
+    "step_length": 0.12,
+    "step_time": 0.6,
+    "ds": 0.12,
+    "steps": 8,
+    "hz": 100,
+    "dt": 0.001,
+    "duration": 6.0,
+    "push": 40.0,
+    "friction": 0.8,
+    "torque_scale": 1.0,
+    "record": true,
+    "seed": 0
+  },
+  "success": true,
+  "failure": null,
+  "duration_s": 6.000000000000338,
+  "progress_m": 0.9370272989585261,
+  "com_height_initial_m": 0.7347088149056268,
+  "mass_kg": 27.2,
+  "max_body_pitch_deg": 0.42377185181791827,
+  "contact_samples_above5N": [
+    4025,
+    3288
+  ],
+  "max_dynamics_qp_residual": 1.819050375406056e-05,
+  "qp_solve_p95_ms": 1.0050221999790645,
+  "source": "Torque-driven planar articulated biped, no prescribed qpos trajectory and no applied contact wrench",
+  "verified_landings": [
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true,
+    true
+  ],
+  "max_joint_velocity_rad_s": 2.620555948328147,
+  "terminal_foot_error_m": 0.0007906122001265346
+}

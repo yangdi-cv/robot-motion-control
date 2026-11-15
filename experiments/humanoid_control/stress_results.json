@@ -1,0 +1,487 @@
+{
+  "e82d93dd13ca691c": {
+    "config": {
+      "scenario": "stand",
+      "duration": 6.0,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 250,
+      "push_time": 2.7,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "conflicting_joint_or_torque_bounds",
+    "duration": 3.049999999999775,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 3050,
+    "updates": 305,
+    "qp_p95_ms": 2.1933442003501114,
+    "max_qp_residual": 2.2506885244411023e-11,
+    "com_rmse": [
+      7.7449757807946e-05,
+      0.027091816395485385,
+      0.002081059232577505
+    ],
+    "max_foot_tracking_error": 0.012089575474868813,
+    "max_roll_pitch": 0.03260240641205399,
+    "forward_progress": 0.0005897773085939938,
+    "terminal_com_error": 0.13792859115058628,
+    "landings": [],
+    "single_support_seconds": [],
+    "acceptance_failures": [
+      "terminal_com",
+      "com_tracking"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.005638955563533735
+    ],
+    "min_com_height": 0.6737466761785786,
+    "max_joint_speed": 4.636639453519272,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "4e7d889ba0607113": {
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": -50,
+      "push_time": 3.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "conflicting_joint_or_torque_bounds",
+    "duration": 4.039999999999684,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 4040,
+    "updates": 404,
+    "qp_p95_ms": 2.3067832518790965,
+    "max_qp_residual": 1.7053025658242404e-13,
+    "com_rmse": [
+      0.0002485331757925623,
+      0.05022154388616897,
+      0.0047539753403807875
+    ],
+    "max_foot_tracking_error": 0.011974266175815592,
+    "max_roll_pitch": 0.03762501197443683,
+    "forward_progress": 0.025310045230404768,
+    "terminal_com_error": 0.2496541238341247,
+    "landings": [
+      false
+    ],
+    "single_support_seconds": [
+      1.4000000000000001
+    ],
+    "acceptance_failures": [
+      "terminal_com",
+      "com_tracking",
+      "landing_0",
+      "final_double_support"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.041231205318545995
+    ],
+    "min_com_height": 0.6727065282470315,
+    "max_joint_speed": 1.643180986600682,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "94ecb4bd4e443011": {
+    "config": {
+      "scenario": "stand",
+      "duration": 6.0,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 150,
+      "push_time": 2.7,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": true,
+    "failure": null,
+    "duration": 6.000000000000338,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 6000,
+    "updates": 600,
+    "qp_p95_ms": 2.297155547603324,
+    "max_qp_residual": 5.388398061079158e-13,
+    "com_rmse": [
+      5.2688513854549285e-05,
+      0.010031987628522853,
+      0.0003215655386072729
+    ],
+    "max_foot_tracking_error": 0.005869129983392703,
+    "max_roll_pitch": 0.009007787211993789,
+    "forward_progress": -6.034909770580299e-05,
+    "terminal_com_error": 0.00019520095135661157,
+    "landings": [],
+    "single_support_seconds": [],
+    "acceptance_failures": [],
+    "criteria_passed": true,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.0031681088490738904
+    ],
+    "min_com_height": 0.6833467303395454,
+    "max_joint_speed": 2.725780812564001,
+    "status": "success",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "45b5d7624c5a57d6": {
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 30,
+      "push_time": 3.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "Clarabel PrimalInfeasible; primal=0.0058, dual=1.51e-10",
+    "duration": 4.899999999999971,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 4900,
+    "updates": 490,
+    "qp_p95_ms": 2.3015286491499864,
+    "max_qp_residual": 4.277023180065953e-12,
+    "com_rmse": [
+      0.00029755321790374685,
+      0.014414186757777076,
+      0.00492622825081759
+    ],
+    "max_foot_tracking_error": 0.010651501886690532,
+    "max_roll_pitch": 0.07022012930610737,
+    "forward_progress": 0.023926888077943548,
+    "terminal_com_error": 0.04939916171958395,
+    "landings": [
+      false
+    ],
+    "single_support_seconds": [
+      1.4000000000000001
+    ],
+    "acceptance_failures": [
+      "terminal_com",
+      "landing_0",
+      "final_double_support"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.04436817218480244
+    ],
+    "min_com_height": 0.6722267367651866,
+    "max_joint_speed": 4.594674506099761,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "4366182686d092ed": {
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 50,
+      "push_time": 3.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "Clarabel PrimalInfeasible; primal=0.0341, dual=1.25e-09",
+    "duration": 3.4899999999997267,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 3490,
+    "updates": 349,
+    "qp_p95_ms": 2.365622800425626,
+    "max_qp_residual": 4.831690603168681e-13,
+    "com_rmse": [
+      0.00028112920989748044,
+      0.009806408662474574,
+      0.0037940992724997185
+    ],
+    "max_foot_tracking_error": 0.0105975658503609,
+    "max_roll_pitch": 0.07966499962627518,
+    "forward_progress": 0.024614686358576568,
+    "terminal_com_error": 0.04961258518854346,
+    "landings": [
+      false
+    ],
+    "single_support_seconds": [
+      1.061
+    ],
+    "acceptance_failures": [
+      "terminal_com",
+      "landing_0",
+      "final_double_support"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.048640191143203365
+    ],
+    "min_com_height": 0.6735739834753246,
+    "max_joint_speed": 7.559019304176284,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "e7a6963849895bb3": {
+    "config": {
+      "scenario": "single",
+      "duration": 8,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": -30,
+      "push_time": 3.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": true,
+    "failure": null,
+    "duration": 8.000000000001005,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 8000,
+    "updates": 800,
+    "qp_p95_ms": 2.5543861995174666,
+    "max_qp_residual": 1.848347863653288e-13,
+    "com_rmse": [
+      0.0002271720346390977,
+      0.005318055583293776,
+      0.004650046136501661
+    ],
+    "max_foot_tracking_error": 0.0105975658503609,
+    "max_roll_pitch": 0.03762501197443683,
+    "forward_progress": -5.201106834933078e-05,
+    "terminal_com_error": 0.002964816449414894,
+    "landings": [
+      true
+    ],
+    "single_support_seconds": [
+      1.4000000000000001
+    ],
+    "acceptance_failures": [],
+    "criteria_passed": true,
+    "max_foot_height": [
+      -0.00010000000000000286,
+      0.041794399404500526
+    ],
+    "min_com_height": 0.6735739834753246,
+    "max_joint_speed": 2.8088297434168075,
+    "status": "success",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "e404c864064ff838": {
+    "config": {
+      "scenario": "walk",
+      "duration": 29,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": -40,
+      "push_time": 10.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "conflicting_joint_or_torque_bounds",
+    "duration": 10.709999999999503,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 10710,
+    "updates": 1071,
+    "qp_p95_ms": 2.440099498926429,
+    "max_qp_residual": 2.9687363678476686e-13,
+    "com_rmse": [
+      0.0003515390071196502,
+      0.008357871739468857,
+      0.004792563897836238
+    ],
+    "max_foot_tracking_error": 0.011908209308230938,
+    "max_roll_pitch": 0.18590379715307356,
+    "forward_progress": 0.08367948221743574,
+    "terminal_com_error": 0.06642094787608507,
+    "landings": [
+      true,
+      false,
+      false,
+      false
+    ],
+    "single_support_seconds": [
+      1.4000000000000001,
+      1.11,
+      0.0,
+      0.0
+    ],
+    "acceptance_failures": [
+      "terminal_com",
+      "landing_1",
+      "single_support_2",
+      "landing_2",
+      "single_support_3",
+      "landing_3",
+      "final_double_support"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      0.06061651329477007,
+      0.04545318245855725
+    ],
+    "min_com_height": 0.671193104180922,
+    "max_joint_speed": 4.843786908332015,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  },
+  "28dda2f81a6c4ebb": {
+    "config": {
+      "scenario": "walk",
+      "duration": 29,
+      "hz": 100,
+      "dt": 0.001,
+      "push_x": 0.0,
+      "push_y": 40,
+      "push_time": 10.0,
+      "push_duration": 0.1,
+      "friction": 0.6,
+      "shift": 0.06,
+      "lift": 0.05,
+      "step_distance": 0.06,
+      "walk_steps": 4,
+      "backend": "clarabel",
+      "support_side": 0,
+      "initial_yaw": 0.0
+    },
+    "success": false,
+    "failure": "conflicting_joint_or_torque_bounds",
+    "duration": 11.389999999999127,
+    "mass": 33.341142000000005,
+    "nq": 36,
+    "nv": 35,
+    "nu": 29,
+    "steps": 11390,
+    "updates": 1139,
+    "qp_p95_ms": 2.44470200050273,
+    "max_qp_residual": 2.6152691123826344e-13,
+    "com_rmse": [
+      0.00031257204012283247,
+      0.03191704598879577,
+      0.0051549285695734765
+    ],
+    "max_foot_tracking_error": 0.010996151570299617,
+    "max_roll_pitch": 0.04948125654869792,
+    "forward_progress": 0.08586006145251637,
+    "terminal_com_error": 0.25828259718545177,
+    "landings": [
+      true,
+      false,
+      false,
+      false
+    ],
+    "single_support_seconds": [
+      1.4000000000000001,
+      1.4000000000000001,
+      0.0,
+      0.0
+    ],
+    "acceptance_failures": [
+      "terminal_com",
+      "com_tracking",
+      "landing_1",
+      "single_support_2",
+      "landing_2",
+      "single_support_3",
+      "landing_3",
+      "final_double_support"
+    ],
+    "criteria_passed": false,
+    "max_foot_height": [
+      0.04575694746818395,
+      0.04545318245855725
+    ],
+    "min_com_height": 0.6594461508727395,
+    "max_joint_speed": 2.4825665389706133,
+    "status": "failed",
+    "source_sha256": "bd9f72dc7106d3e1ad857b9e4feaa5a20da53d9f61109e9c2383adb7472ab07c"
+  }
+}

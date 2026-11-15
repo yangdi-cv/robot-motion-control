@@ -1,0 +1,401 @@
+"""Build the progress report from completed experiment summaries."""
+
+from pathlib import Path
+import json, csv
+import numpy as np
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+T = Path(__file__).resolve().parents[1]
+load = lambda p: json.loads((T / p).read_text())
+control = load("runs/control002/analysis.json")
+validation = load("runs/control_validation/analysis.json")
+imu = load("runs/imu_analysis.json")
+feedback = sorted(
+    load("runs/feedback001/analysis.json"),
+    key=lambda r: (-r["source_hz"], r["feedback_target_hz"]),
+)
+freq = load("runs/control_frequency/analysis.json")
+norender = load("runs/control_frequency_norender/analysis.json")
+
+
+def table(headers, rows):
+    return (
+        "| "
+        + " | ".join(headers)
+        + " |\n|"
+        + "|".join(["---"] * len(headers))
+        + "|\n"
+        + "\n".join("| " + " | ".join(map(str, row)) + " |" for row in rows)
+        + "\n"
+    )
+
+
+baseline = validation["groups"][0]
+best = validation["groups"][1]
+reduction = (1 - best["motion_rmse_deg_mean"] / baseline["motion_rmse_deg_mean"]) * 100
+# Plot actual first forward trials, no synthetic reconstruction.
+c = load("runs/control002/config.json")
+data = np.genfromtxt(T / "runs/control002/tracking.csv", delimiter=",", names=True)
+baseidx = next(
+    i
+    for i, s in enumerate(c["stages"])
+    if s["kp_scale"] == 1
+    and not s["velocity_feedforward"]
+    and s["direction"] == "forward"
+)
+bestidx = next(
+    i
+    for i, s in enumerate(c["stages"])
+    if s["kp_scale"] == 4 and s["velocity_feedforward"] and s["direction"] == "forward"
+)
+fig, axs = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+for j, ax in enumerate(axs, 1):
+    for phase, label in [(baseidx, "Default"), (bestidx, "Kp x4, Kd x2 + velocity FF")]:
+        d = data[data["phase"] == phase]
+        t = d["phase_time_s"] - 2
+        ax.plot(t, (d[f"ref_{j}"] - d[f"actual_{j}"]) * 180 / np.pi, label=label)
+    ax.axvspan(0, 5, color="gray", alpha=0.07)
+    ax.set_ylabel(f"J{j} error [deg]")
+    ax.grid(alpha=0.2)
+axs[0].legend()
+axs[-1].set_xlabel("Time from motion start [s]")
+fig.tight_layout()
+fig.savefig(T / "figures/tracking_error.png", dpi=160)
+plt.close(fig)
+text = f"""# Panda轨迹跟踪改进与IMU反馈频率分析
+
+阶段进展报告　2026年10月20日
+
+## 摘要
+
+针对上一阶段前三关节存在运动滞后的反馈，本轮在原Isaac Sim 5.1和ROS2 Humble环境中补充驱动增益与速度前馈实验，并用不同运动幅度验证选出的设置。验证组前三关节平均运动误差由{baseline['motion_rmse_deg_mean']:.3f}°降低到{best['motion_rmse_deg_mean']:.3f}°，降低约{reduction:.1f}%；拟合轨迹滞后由{baseline['lag_fit_ms_mean']:.1f}ms减小到{best['lag_fit_ms_mean']:.1f}ms，仍有采样及执行链路带来的残余滞后。
+
+同时使用公开TUM-VI真实IMU记录，完成静止、运动各30秒的六轴5点滑动平均与统计分析，并搭建三个独立ROS进程，对200Hz和25Hz输入分别测试50、100、200Hz反馈。额外补充Panda外环频率对照，以及较长静止记录的频谱和Allan分析。
+
+本轮在Ubuntu工作站完成，没有连接自有IMU或Jetson。公开数据分析不替代要求中的自有设备采集，工作站进程间延迟也不作为Jetson硬件指标。
+
+## 目录
+
+- [1. 本轮工作与原任务的关系](#s1)
+- [2. 驱动增益与速度前馈](#s2)
+- [3. 不同运动幅度的验证](#s3)
+- [4. 公开真实IMU与六轴滤波](#s4)
+- [5. 50/100/200Hz反馈测试](#s5)
+- [6. Panda外环频率补充实验](#s6)
+- [7. 静止频谱与Allan曲线](#s7)
+- [8. 后续硬件工作](#s8)
+- [附录：代码目录及运行方式](#code)
+
+<a id="s1"></a>
+
+## 1. 本轮工作与原任务的关系
+
+上一阶段完成了5秒五次轨迹、25/50/100Hz频率对照和虚拟IMU滤波。本轮沿用同一Panda与轨迹定义，先处理老师指出的驱动滞后，再准备Task2需要的采集、滤波和50/100/200Hz分析。
+
+| 内容 | 本轮状态 |
+|---|---|
+| Panda增益与速度前馈 | 已完成24阶段参数比较、16阶段幅度验证 |
+| 真实六轴数据滤波 | 已使用公开真实记录完成；不是自有设备采集 |
+| ROS2 IMU话题与频率分析 | 已完成工作站三进程数据回放、六组频率测试 |
+| 仿真关节外环50/100/200Hz | 已完成两种运行设置，各24阶段 |
+| Jetson连接、采集、硬件延迟 | 尚未进行，待设备到位后补充 |
+
+本轮仍使用原版本环境，没有更换已有ROS或系统Python，也没有发送真机运动指令。
+
+<a id="s2"></a>
+
+## 2. 驱动增益与速度前馈
+
+物理周期10ms，使用原来5秒、端点速度和加速度为零的五次轨迹，主要分析前三关节。驱动增益按默认值的1、2、4倍设置Kp，Kd按1、√2、2倍同步增加；分别比较是否发送参考速度。六组设置各测正反方向并重复两次，共24阶段。每阶段先保持2秒、运动5秒、再保持1秒。阶段之间重置仿真关节，统计不包含重置瞬间。
+
+这里的速度前馈是将轨迹解析速度作为关节驱动的速度目标，与位置目标一起发送；不是直接计算电机力矩的逆动力学前馈。默认前七关节Kp约22918.31、Kd约4583.66，选中设置约91673.25和9167.33，数值为当前Isaac控制接口读出的增益。它们仅用于此Panda仿真，不能直接搬到SO101。
+
+"""
+text += table(
+    [
+        "Kp倍数 / Kd倍数",
+        "参考速度",
+        "平均运动RMSE / °",
+        "最差绝对误差 / °",
+        "拟合滞后 / ms",
+    ],
+    [
+        [
+            f"{r['kp_scale']:g} / {r['kd_scale']:.3f}",
+            "有" if r["velocity_feedforward"] else "无",
+            f"{r['motion_rmse_deg_mean']:.3f}",
+            f"{r['motion_max_abs_deg_worst']:.3f}",
+            f"{r['lag_fit_ms_mean']:.1f}",
+        ]
+        for r in control["groups"]
+    ],
+)
+text += """
+单独增加增益有改善，但收益小于加入参考速度。按前三关节平均运动RMSE选择参数，并要求最差超调不超过0.5°、保持段标准差不超过0.1°，选出Kp×4、Kd×2并加入参考速度。
+
+拟合滞后是将参考轨迹平移后与实际位置比较得到的时间差，搜索范围−100至400ms、步长1ms；它描述整体跟踪表现，不是ROS消息传输延迟。保持段接近零的抖动也受仿真休眠机制影响，不作为真实电机噪声结论。
+
+![前三关节实际误差](figures/tracking_error.png)
+
+相关代码在 `scripts/isaac_scene.py`、`scripts/controller.py`、`scripts/run_control.py`、`scripts/trajectory.py` 和 `scripts/analyze_control.py`；配置在 `config/control_suite.json`。
+
+<a id="s3"></a>
+
+## 3. 不同运动幅度的验证
+
+参数选定后，另用原位移0.6倍和1.2倍的轨迹，分别做正反方向、两次重复。默认与选中设置共16阶段，验证期间不再调整参数。
+
+"""
+text += table(
+    ["设置", "平均运动RMSE / °", "最差绝对误差 / °", "拟合滞后 / ms", "最差超调 / °"],
+    [
+        [
+            "默认" if not r["velocity_feedforward"] else "增益调整＋参考速度",
+            f"{r['motion_rmse_deg_mean']:.3f}",
+            f"{r['motion_max_abs_deg_worst']:.3f}",
+            f"{r['lag_fit_ms_mean']:.1f}",
+            f"{r['overshoot_deg_worst']:.3f}",
+        ]
+        for r in validation["groups"]
+    ],
+)
+text += """
+不同幅度下仍有明显改善，因此这次结果不只来自原来一条轨迹。但场景、负载和机械臂模型保持不变，重复测试也不代表独立真实工况；尚未测试负载变化、碰撞、摩擦扰动或真实电机带宽。
+
+相关代码在 `scripts/analyze_control.py`；验证配置在 `config/control_validation.json`，逐关节数据在 `runs/control_validation/joint_metrics.csv`。
+
+<a id="s4"></a>
+
+## 4. 公开真实IMU与六轴滤波
+
+先比较了EuRoC和TUM-VI两类公开视觉惯性数据。EuRoC提供无人机上的200Hz六轴IMU，可用于后续跨设备对照；本轮选择TUM-VI，是因为它另有独立静止记录，并有手持设备运动序列，更方便分别验证静止滤波和运动响应。EuRoC本轮未下载或评测。
+
+选择TUM-VI是因为它提供三轴加速度和角速度、原始时间戳，以及独立静止记录。数据由原作者采集，许可CC BY4.0。静止数据从原始NPY取前120001行，约602秒；滤波统计取其中60–90秒。运动段来自room1序列的中间固定30秒，未按结果挑选波形。通过官方服务器HTTP范围请求提取所需IMU记录，没有下载整套相机图像。
+
+"""
+text += table(
+    ["数据段", "样本数", "实际覆盖 / s", "时间戳统计频率 / Hz"],
+    [
+        [
+            label,
+            imu[key]["samples"],
+            f"{imu[key]['duration_s']:.3f}",
+            f"{imu[key]['mean_rate_hz']:.3f}",
+        ]
+        for key, label in [("static", "静止"), ("motion", "运动")]
+    ],
+)
+text += """
+六通道分别使用当前及过去四点的因果平均，不使用未来数据。前四点窗口尚未完整，均值和标准差比较统一排除这四点。加速度保持m/s²、角速度保持rad/s，不把静止加速度中的重力当成零偏清除。
+
+静止段统计如下：
+
+"""
+text += table(
+    ["通道", "单位", "原始均值", "滤波均值", "原始标准差", "滤波标准差"],
+    [
+        [
+            r["channel"],
+            "m/s²" if r["channel"][0] == "a" else "rad/s",
+            *[
+                f"{r[k]:.6f}"
+                for k in ["raw_mean", "filtered_mean", "raw_std", "filtered_std"]
+            ],
+        ]
+        for r in imu["static"]["statistics"]
+    ],
+)
+reductions = [
+    (1 - r["filtered_std"] / r["raw_std"]) * 100 for r in imu["static"]["statistics"]
+]
+text += f"""六通道标准差降低约{min(reductions):.1f}%–{max(reductions):.1f}%。5点平均的中心相对最新采样落后两个采样周期，当前原始数据约为10.03ms；若输入只有25Hz，同样5点窗口约为80ms。平滑程度不能脱离输入采样率比较。
+
+![静止六轴滤波](figures/static_six_axes.png)
+
+![运动六轴滤波](figures/motion_six_axes.png)
+
+静止均值也不作为已标定零偏；这里没有依据当前姿态的真值去分离重力、零偏和比例误差。
+
+运动段同时保存均值和标准差表，但运动信号本身会变化，标准差降低不能直接解释为噪声或测量误差下降。没有同步运动真值，当前不报告滤波后的角度或位移精度。
+
+相关代码在 `scripts/download_public_imu.py`、`scripts/download_motion.py`、`scripts/analyze_imu.py`、`scripts/filter_csv.py`；运动段统计在 `runs/motion_filter_statistics.csv`。
+
+<a id="s5"></a>
+
+## 5. 50/100/200Hz反馈测试
+
+三个独立ROS进程分别负责数据回放、5点平均与定频发布、状态接收。原始及滤波消息采用 `sensor_msgs/msg/Imu`，话题为 `/imu/data_raw`、`/imu/data`。额外消息记录输入序号、发布序号及同一主机上的单调时钟，方便区分重复测量、主动降采样和真正的消息缺失。
+
+输入设为名义200Hz或25Hz，输出设为50、100、200Hz，每组约30秒。低频输入由公开运动记录每8点取1点，不是自有IMU的实测采样。回放按软件定时器发送，原始记录实际约199.37Hz，不能把回放发布率当成原传感器频率。统计取稳定运行的第1至29秒，排除启动和停止过渡。
+
+"""
+text += table(
+    [
+        "输入 / Hz",
+        "目标反馈 / Hz",
+        "实测反馈 / Hz",
+        "间隔标准差 / ms",
+        "数据年龄P95 / ms",
+        "重复测量 / %",
+        "发送→接收缺失",
+    ],
+    [
+        [
+            r["source_hz"],
+            r["feedback_target_hz"],
+            f"{r['mean_feedback_hz']:.2f}",
+            f"{r['interval_std_ms']:.3f}",
+            f"{r['source_age_p95_ms']:.3f}",
+            f"{100*r['duplicate_source_fraction']:.1f}",
+            r["lost_total_vs_publisher"],
+        ]
+        for r in feedback
+    ],
+)
+text += """
+“数据年龄”从输入样本在回放进程被取出，到接收进程收到对应反馈为止；还未包含5点平均相对中心的滞后，更不包含真实传感器内部与串口延迟。单独的发布到接收耗时和P95保存在metrics.csv。接收节点只检查并接收状态，不构成执行器端的物理响应时间。
+
+25Hz输入提高到200Hz发布后，大量消息重复使用同一测量；更高的发布率没有增加新的传感器信息。200Hz输入降为50Hz时，有些中间样本未作为反馈发出，这是主动取最新值，不能算作网络丢帧。当前结果只针对本机有线软件进程与所设QoS，不推广为无线或Jetson性能。
+
+![反馈频率与数据新鲜度](figures/feedback_rates.png)
+
+相关代码在 `scripts/feedback_node.py`、`scripts/run_feedback.py` 和 `scripts/analyze_feedback.py`；详细结果在 `runs/feedback001/metrics.csv`。
+
+<a id="s6"></a>
+
+## 6. Panda外环频率补充实验
+
+为了进一步区分发布频率与实际跟踪表现，将Panda物理步长固定为5ms，Bridge发布200Hz模拟时间状态；外部节点按50、100、200Hz处理状态并发送位置/速度目标。默认与调优设置均测正反方向、重复两次，共24阶段。频率门限使用模拟时间，主机上实际运行频率另行统计。
+
+"""
+text += table(
+    [
+        "外环 / Hz（模拟时间）",
+        "设置",
+        "平均运动RMSE / °",
+        "最差绝对误差 / °",
+        "主机平均频率 / Hz",
+    ],
+    [
+        [
+            r["feedback_hz"],
+            "调优＋参考速度" if r["tuned_and_velocity_ff"] else "默认",
+            f"{r['mean_rmse_deg']:.3f}",
+            f"{r['worst_abs_deg']:.3f}",
+            f"{r['mean_host_hz']:.2f}",
+        ]
+        for r in freq["groups"]
+    ],
+)
+text += """
+
+第一轮虽然模拟时间达到目标，但主机实际约为38、77、153Hz，未达到实时。随后在同一物理步长和任务配置下关闭逐帧渲染，并改为按绝对时刻定时，再完成相同24阶段：
+
+"""
+text += table(
+    [
+        "外环 / Hz（模拟时间）",
+        "设置",
+        "平均运动RMSE / °",
+        "最差绝对误差 / °",
+        "主机平均频率 / Hz",
+    ],
+    [
+        [
+            r["feedback_hz"],
+            "调优＋参考速度" if r["tuned_and_velocity_ff"] else "默认",
+            f"{r['mean_rmse_deg']:.3f}",
+            f"{r['worst_abs_deg']:.3f}",
+            f"{r['mean_host_hz']:.2f}",
+        ]
+        for r in norender["groups"]
+    ],
+)
+text += """
+
+关闭不需要的渲染并调整定时后，主机频率接近目标，说明运行方式会影响反馈频率的实际含义。两处实现一起调整，当前不单独量化各自的收益；也不据此推断Jetson能够达到同样性能。
+
+![无逐帧渲染的关节外环对照](figures/panda_frequency_norender.png)
+
+"""
+text += """
+![关节外环频率对照](figures/panda_frequency.png)
+
+这组测试中物理步长固定，因此组内比较主要反映外环更新频率和驱动设置的影响。它与前面10ms物理步长的调参实验分开统计。IMU回放未用于Panda关节控制，关节反馈仍来自JointState；没有据此宣称IMU姿态融合或状态估计闭环已完成。
+
+相关代码在 `scripts/controller.py`、`scripts/analyze_control_frequency.py`；配置在 `config/control_frequency.json`、`config/control_frequency_norender.json`。
+
+<a id="s7"></a>
+
+## 7. 静止频谱与Allan曲线
+
+在约602秒静止数据上补充频谱密度和重叠Allan偏差。前者观察不同频率上的波动分布；后者观察不同平均时间下的变化，平均时间最长约30秒。数据同时保留温度，当前范围约31.39–33.00℃。
+
+![静止数据频谱](figures/static_psd.png)
+
+![静止数据Allan曲线](figures/static_allan.png)
+
+这些图用于探索窗口长度和长时间变化，不等于完成传感器标定。当前截取长度有限，没有拟合或报告硬件噪声密度、零偏不稳定性等标定参数，也不将公开传感器参数用于自有板卡。
+
+相关代码在 `scripts/analyze_imu.py`。
+
+<a id="s8"></a>
+
+## 8. 后续硬件工作
+
+设备到位后先核对Jetson系统、ROS环境、串口与单位，关闭占用同一串口的旧服务，再采集静止30秒和缓慢转动30秒。现有入口将保存串口字节、六轴原始值、滤波值及接收时间，并发布ROS2 Imu消息。使用同一分析脚本重跑均值、标准差和图表，才能与公开数据的结果比较。
+
+随后在Jetson上重复频率测试，分别检查传感器新数据率、ROS发布率、消息缺失与处理耗时。由于没有设备时钟，目前程序只能从主机收到数据开始计时；真正的传感器到执行器响应还需要额外同步或可观测动作设计。
+
+本轮改善了仿真跟踪，也把软件和分析流程准备到了可继续的状态；自有IMU和Jetson测试仍是下一阶段的明确工作，不以公开数据替代。
+
+相关代码在 `scripts/imu_serial_node.py`、`scripts/filter_csv.py` 和 `vendor/YbImuSerialLib.py`。
+
+<a id="code"></a>
+
+## 附录：代码目录及运行方式
+
+项目目录为 `experiments/control_feedback_task2/`。报告正文中的scripts、config、runs和data均相对此目录。
+
+```text
+control_feedback_task2/
+├── REPORT.md、REPORT.pdf
+├── README.md、PROVENANCE.json
+├── config/
+│   ├── control_suite.json
+│   ├── control_validation.json
+│   ├── control_frequency.json
+│   └── control_frequency_norender.json
+├── scripts/
+│   ├── isaac-python、ros-python
+│   ├── isaac_scene.py、controller.py、trajectory.py
+│   ├── run_control.py、analyze_control.py
+│   ├── analyze_control_frequency.py
+│   ├── download_public_imu.py、download_motion.py
+│   ├── analyze_imu.py、filter_csv.py
+│   ├── feedback_node.py、run_feedback.py、analyze_feedback.py
+│   ├── imu_serial_node.py
+│   └── check_software.py
+├── vendor/YbImuSerialLib.py
+├── data/tum_vi/             原始公开子集、30秒分析输入及来源
+├── figures/                 结果图
+└── runs/                    指标、动作与消息CSV、配置和日志
+```
+
+在项目根目录，使用已有Isaac5.1环境和ROS2 Humble环境。具体命令见README，新的试验使用新的输出目录，避免覆盖本轮结果。代码通过语法检查、已知正弦滤波幅相测试和序号缺失检查；这些软件检查不替代硬件测试。
+
+原Panda/IMU实验在本项目内扩展，未修改旧报告。厂家IMU解析库单独放入vendor目录，Isaac机器人资源由已安装环境加载，不随源码包复制完整平台。
+
+参考资料：
+
+- [TUM-VI数据集、原始文件与CC BY4.0许可](https://cvg.cit.tum.de/data/datasets/visual-inertial-dataset)
+- [EuRoC官方数据集说明](https://projects.asl.ethz.ch/datasets/euroc-mav/)
+- [TUM VI Benchmark论文](https://arxiv.org/abs/1804.06120)
+- [Isaac Sim 5.1 ROS2关节控制](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/ros2_tutorials/tutorial_ros2_manipulation.html)
+- [SciPy滤波群延迟说明](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.group_delay.html)
+"""
+(T / "REPORT.md").write_text(text)
+print("report generated", len(text), "characters")

@@ -1,0 +1,12 @@
+{
+  "final_selected__final_repeat": {
+    "first5_actual_max_difference_rad": 0.0,
+    "first5_reference_max_difference_rad": 0.0,
+    "full_force_max_difference_N": 0.0
+  },
+  "video_position__video_admittance": {
+    "first5_actual_max_difference_rad": 0.0,
+    "first5_reference_max_difference_rad": 0.0,
+    "full_force_max_difference_N": 10.859016418457031
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "cases_verified": 52,
+  "verified_load_confirmations": 46,
+  "measured_single_support_seconds": 64.39999999999999,
+  "max_errors": {
+    "integration": 0.0,
+    "feet": 0.0,
+    "com": 0.0,
+    "virtual_work": 1.1368683772161603e-13,
+    "contact_rebuild": 2.383313990605984e-08
+  },
+  "source_and_assets_unchanged": true,
+  "all_chunks_match": true
+}

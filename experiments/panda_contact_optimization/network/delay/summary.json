@@ -1,0 +1,16 @@
+{
+  "case": "delay",
+  "transport": "UDP 127.0.0.1, separate processes, same host monotonic clock",
+  "source": "analytic quintic future action chunks; no VLA and no robot",
+  "duration_wall_s": 4.0,
+  "sender_hz": 20,
+  "receiver_target_hz": 100,
+  "packet_count": 79,
+  "receive_poll_latency_p95_ms": 10.040261799895234,
+  "generation_to_receive_p95_ms": 50.23463610014005,
+  "receiver_lateness_p95_ms": 0.35787395006536815,
+  "hold_samples": 5,
+  "hold_events_including_startup": 1,
+  "injected_application_delay_ms": 40,
+  "injected_sender_outage_s": null
+}

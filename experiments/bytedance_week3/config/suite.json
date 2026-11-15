@@ -1,0 +1,1565 @@
+{
+  "conditions": [
+    {
+      "group": "core",
+      "mode": "position",
+      "K": 0,
+      "stiffness": 2000
+    },
+    {
+      "group": "core",
+      "mode": "admittance",
+      "K": 0,
+      "stiffness": 2000
+    },
+    {
+      "group": "core",
+      "mode": "admittance_spring",
+      "K": 200,
+      "stiffness": 2000
+    },
+    {
+      "group": "core",
+      "mode": "position",
+      "K": 0,
+      "stiffness": 8000
+    },
+    {
+      "group": "core",
+      "mode": "admittance",
+      "K": 0,
+      "stiffness": 8000
+    },
+    {
+      "group": "core",
+      "mode": "admittance_spring",
+      "K": 200,
+      "stiffness": 8000
+    },
+    {
+      "group": "core",
+      "mode": "position",
+      "K": 0,
+      "stiffness": 20000
+    },
+    {
+      "group": "core",
+      "mode": "admittance",
+      "K": 0,
+      "stiffness": 20000
+    },
+    {
+      "group": "core",
+      "mode": "admittance_spring",
+      "K": 200,
+      "stiffness": 20000
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 2000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 8000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 50,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 100,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 0,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 20,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 0
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 1
+    },
+    {
+      "group": "stress",
+      "mode": "position",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "stress",
+      "mode": "admittance",
+      "stiffness": 20000,
+      "rate": 200,
+      "delay_ms": 60,
+      "noise_std": 0.5,
+      "seed": 2
+    },
+    {
+      "group": "approach",
+      "mode": "position",
+      "approach_s": 1.0
+    },
+    {
+      "group": "approach",
+      "mode": "admittance",
+      "approach_s": 1.0
+    },
+    {
+      "group": "approach",
+      "mode": "position",
+      "approach_s": 2.0
+    },
+    {
+      "group": "approach",
+      "mode": "admittance",
+      "approach_s": 2.0
+    },
+    {
+      "group": "approach",
+      "mode": "position",
+      "approach_s": 4.0
+    },
+    {
+      "group": "approach",
+      "mode": "admittance",
+      "approach_s": 4.0
+    }
+  ],
+  "plant_dt_s": 0.001,
+  "admittance_M": 2,
+  "admittance_B": 100,
+  "desired_force_N": 10,
+  "torque_limit_Nm": [
+    87,
+    87,
+    87,
+    87,
+    12,
+    12,
+    12
+  ],
+  "offset_limit_m": [
+    -0.025,
+    0.05
+  ],
+  "offset_velocity_limit_m_s": 0.04,
+  "contact_geometries": "probe/surface only; other robot geoms non-colliding"
+}

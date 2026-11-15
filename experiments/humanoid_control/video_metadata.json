@@ -1,0 +1,23 @@
+{
+  "frames": 580,
+  "fps": 20,
+  "duration": 29.0,
+  "decoded_frames": 580,
+  "benchmark_case": "7638a51c754fb8fb",
+  "rerun_max_difference": {
+    "qpos": 0.0,
+    "qvel": 0.0,
+    "ctrl": 0.0,
+    "com": 0.0,
+    "feet": 0.0,
+    "actual_wrench": 0.0
+  },
+  "physical_success": true,
+  "landings": [
+    true,
+    true,
+    true,
+    true
+  ],
+  "progress": 0.2098144119593765
+}

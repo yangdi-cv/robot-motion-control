@@ -1,0 +1,524 @@
+\chapter{三维人形全身控制}
+G1模型来自Menagerie\cite{menagerie}，Clarabel调用遵循官方QP接口\cite{clarabel}。
+
+
+去掉平面自由度约束，在G1完整浮动基座上验证横向重心转移、单脚承重和准静态交替迈步。强扰动失败与运行时尾部同时保留。
+
+\section{G1浮动基座、站立与双侧单脚支撑}
+
+\label{stage:s25}
+
+\subsection{从平面到三维：模型与控制接口}\label{s25-detail-1}
+
+\subsubsection{模型选择和保留内容}\label{s25-detail-2}
+
+先比较现有平面双足、H1和G1描述，选择腿部具备髋三轴、膝、踝俯仰/滚转的G1，便于直接验证横向平衡。模型来自MuJoCo Menagerie固定提交，G1目录采用BSD-3-Clause。源文件、网格、许可证与SHA256均保存，不依赖临时下载链接。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3207}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6793}}@{}}
+\caption{模型选择和保留内容：设置与结果}\label{tab:s25-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+该阶段设置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+该阶段设置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+模型质量 & 33.341142kg，来自模型，不是实测硬件质量 \\
+广义位置/速度维度 & nq=36，nv=35，含基座四元数 \\
+电机 & 29个关节motor，gear=1；前6个基座自由度无电机 \\
+基座 & 自由平移、滚转、俯仰和偏航，无焊接或平面约束 \\
+腿部力矩界 & 每侧髋88/139/88、膝139、踝50/50N·m，取自原描述 \\
+物理积分 & 1ms，implicitfast；椭圆摩擦锥 \\
+控制更新 & 50、100、200Hz，状态直接取模拟器 \\
+初态 & 原站姿基础上屈膝，初始定位只在仿真开始前进行 \\
+\end{longtable}\endgroup
+
+原模型的位置执行器不能直接接收力矩。该阶段显式替换为motor，保留原forcerange作为控制与实际作用力上限；通过检查确认执行器偏置为0、ctrl等于关节作用力矩、基座广义驱动力为0。增加足底site，仅用于计算参考点和接触扳手。
+
+模型机械参数与原描述逐项对照，包括质量、惯量、连杆、关节范围和碰撞几何。派生模型另外固定接触锥、积分及求解设置；实验中的摩擦系数显式设置，避免脚部优先级覆盖地面配置。原始上游文件没有修改。
+
+\subsubsection{三维全身逆动力学}\label{s25-detail-3}
+
+继续沿用CoM、躯干、摆脚与姿态任务分层，扩展为空间雅可比、SO(3)姿态误差和每只支撑脚6维扳手。QP变量包括35维广义加速度、29维电机力矩及接触扳手。质量矩阵、偏置、被动力和运动学由MuJoCo计算，不自行重写刚体动力学。
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+M(q) qdd + bias = S^T τ + Σ J_i^T λ_i + passive
+λ_i = [Fx, Fy, Fz, Mx, My, Mz]，以足底site为参考，世界坐标表示
+约束：非负法向力、摩擦锥近似、足底力矩范围、关节位置/速度与电机力矩界
+目标：CoM、躯干/骨盆姿态、摆脚、关节姿态、负载分配和地面CoP
+\end{Verbatim}
+
+CoM外环沿用 \path|a_cmd=a_ff+80(c_ref-c)+18(v_ref-v)|。横向与前向同时参与，接触锥在当前足坐标中约束；不存在把左右运动直接固定为0的平面假设。基座姿态通过关节力矩稳定，是控制目标，不是机械锁定。
+
+QP只输出电机力矩到data.ctrl。预测接触扳手用于求解和记录，不直接施加到模拟器。外力数组仅用于明确的推扰协议；地面反力由MuJoCo独立求解。实际地面CoP从接触力与力矩重算，与QP预测分开。
+
+相关代码在 \path|scripts/model.py|、\path|scripts/controller.py|、\path|scripts/qp.py|。
+
+\subsection{站立、重心转移与单脚支撑}\label{s25-detail-4}
+
+\subsubsection{站立与横向转移}\label{s25-detail-5}
+
+站立覆盖50/100/200Hz，以及无扰动、前后±40N、左右±40N和单向60N侧向推扰，共18个条件，均完成。推扰持续0.1s。左右重心转移以五次平滑参考移动约6cm再返回，另加0/±20N侧向推扰，6个条件均完成。
+
+另外两组初始偏航±0.3rad的站立测试通过，用于检查世界/足坐标变换；没有锁偏航自由度。这里验证的是不同朝向下站立，不是转弯行走。
+
+\subsubsection{两侧都做实际单脚承重}\label{s25-detail-6}
+
+先把CoM移向支撑脚，再卸载、抬起另一脚，保持后落回地面，最后回到双脚承重。支持左脚和右脚两种模式，100/200Hz以及0/±10N侧向推扰，共12个条件均通过。
+
+无推扰的左右模式，摆脚实际最大高度约4.23cm，目标高度5cm。验收区间要求：摆脚高于3cm、其实际法向力低于5N、支撑脚承担超过模型重量80\%，连续至少0.5s。参考条件在所选保持窗口内连续满足约1.4s，随后实际落脚并重新双脚承重。不能只依据脚的画面位置判断单脚支撑。
+
+\stagefigure{figures/ch08/s25_single_support_448676c3.png}{双侧单脚支撑：实际离地高度与真实法向力。}{fig:s25-detail-1}
+
+开发中发现把双支撑维持到重心完全移过去，会导致卸载脚、关节范围与刚性接触要求相互冲突。该阶段把卸载与抬脚时序协调，并允许空中脚有小幅滚转；关节范围、真实接触和电机力矩上限未关闭。
+
+相关代码在 \path|scripts/run.py| 的Reference、simulate，以及 \path|scripts/metrics.py|。
+
+
+\paragraph{阶段结论}真实三维浮动基座与29个受限电机完成重心转移和双侧单脚承重，未用外部支撑锁定侧向自由度。
+
+
+
+% BEGIN SIM_VISUALS s25
+\subsection{左右单脚支撑的双视角过程}
+以下画面从已保存的关节位置与速度重建，未执行控制器或推进物理积分。各图同时列出原日志中的足高与法向力；初始和末态为双支撑，中间帧展示实际单脚承重。重建时的接触求解值不用于替代原日志的力。
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view0.png}{G1左脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side0_saved_view0}
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view1.png}{G1左脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side0_saved_view1}
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view2.png}{G1左脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side0_saved_view2}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view0.png}{G1右脚支撑流程：初始双支撑，0.500秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side1_saved_view0}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view1.png}{G1右脚支撑流程：单脚承重，2.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side1_saved_view1}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view2.png}{G1右脚支撑流程：落脚后双支撑，6.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_single_support_side1_saved_view2}
+% END SIM_VISUALS s25
+\stagecode{s25}
+
+\FloatBarrier
+
+\section{三维准静态交替步行}
+
+\label{stage:s26}
+
+\subsection{三维慢速交替行走}\label{s26-detail-1}
+
+\subsubsection{从单步到连续交替}\label{s26-detail-2}
+
+单步前移同时覆盖左右摆脚、6cm和10cm目标，共4个条件完成。连续步行按左右交替安排横向重心转移、卸载、摆脚、落地承重和回中。每个周期约7s，摆脚时间较长，目的是先验证可执行性而非追求速度。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\caption{从单步到连续交替：设置与结果}\label{tab:s26-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+控制率（Hz）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+步数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+目标步长（m）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+侧向推力（N）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+实测承重确认
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM前进量（m）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+时长（s）
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+控制率（Hz）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+步数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+目标步长（m）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+侧向推力（N）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+实测承重确认
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM前进量（m）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+时长（s）
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+100 & 4 & 0.04 & 0.0 & 4/4 & 0.1398 & 29 \\
+100 & 4 & 0.06 & 0.0 & 4/4 & 0.2098 & 29 \\
+200 & 4 & 0.04 & 0.0 & 4/4 & 0.1399 & 29 \\
+200 & 4 & 0.06 & 0.0 & 4/4 & 0.2098 & 29 \\
+100 & 4 & 0.06 & 10 & 4/4 & 0.2098 & 29 \\
+100 & 6 & 0.06 & 0.0 & 6/6 & 0.3298 & 43 \\
+\end{longtable}\endgroup
+
+前进量取实际CoM变化。四步6cm条件约0.210m，六步约0.330m；不能直接把脚的目标步长总和当成身体前进量。受扰四步条件的推力发生在第二次单脚支撑附近，强度10N、持续0.1s。
+
+\stagefigure{figures/ch08/s26_walking_contacts_4e4971b9.png}{实际足底前移、离地和左右承重转换。}{fig:s26-detail-1}
+
+\stagefigure{figures/ch08/s26_com_top_c8a80097.png}{俯视的实际CoM轨迹及足底位置，可见横向转移。}{fig:s26-detail-2}
+
+\subsubsection{承重确认与完成判据}\label{s26-detail-3}
+
+每步须有实际摆脚离地且单脚承担主要重量的时段；落脚后、下一次抬脚前，要求正确脚在目标位置1.5cm范围内、足底高度绝对值小于8mm，并有超过10N法向力持续至少50ms。末态还要恢复双脚承重，限制CoM跟踪、终端误差及机体倾角。单纯运行到结束或没有倒下，都不足以计为完成。
+
+目前支撑集合仍按名义时间表切换，实际载荷用于验收和诊断，没有实现触地触发的在线步时重排。测得的承重确认也不是``首次触地时间''，两者不混用。
+
+相关代码在 \path|scripts/run.py| 的Reference和 \path|scripts/metrics.py| 的evaluate。
+
+
+\paragraph{阶段结论}四步参考29秒前进约0.210米，六步43秒约0.330米，约7秒一步，属于准静态而非动态高速步行。
+
+
+
+% BEGIN SIM_VISUALS s26
+\subsection{三维步行的双视角关键帧}
+补入原始四步录屏中的斜前方与正前方双视角，可观察横向重心转移和交替离地。图中的“经过的步态周期”是名义时间进度，实际完成仍依据保存的足位和承重确认。
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_018.png}{G1四步准静态行走的原始双视角画面，仿真时间0.90秒；保留原始状态说明。}{fig:motion-g1_walk_dual_camera_018}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_060.png}{G1四步准静态行走的原始双视角画面，仿真时间3.00秒；保留原始状态说明。}{fig:motion-g1_walk_dual_camera_060}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_180.png}{G1四步准静态行走的原始双视角画面，仿真时间9.00秒；保留原始状态说明。}{fig:motion-g1_walk_dual_camera_180}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_340.png}{G1四步准静态行走的原始双视角画面，仿真时间17.00秒；保留原始状态说明。}{fig:motion-g1_walk_dual_camera_340}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_560.png}{G1四步准静态行走的原始双视角画面，仿真时间28.00秒；保留原始状态说明。}{fig:motion-g1_walk_dual_camera_560}
+% END SIM_VISUALS s26
+\stagecode{s26}
+
+\stagevideo{videos/ch08/g1_quasistatic_four_steps.mp4}
+
+\FloatBarrier
+
+\section{QP求解器对照与耗时尾部}
+
+\label{stage:s27}
+
+\subsection{QP后端对照与运行时间}\label{s27-detail-1}
+
+\subsubsection{同一问题，不更换模型或控制目标}\label{s27-detail-2}
+
+先导中OSQP在部分动作可以完成，但在连续步行中出现迭代上限及数值敏感性。查阅维护与许可证后，引入Apache-2.0的Clarabel 0.11.1。两个后端接收同一H、g、A、l、u：OSQP使用双边约束，Clarabel转换为等式零锥和不等式非负锥，不另换一套控制器。
+
+残差按物理量校验，区分N、N·m、m/s²及rad/s²；电机上限另外逐项核对。正式参数冻结后不再因为单个失败改容差。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3388}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3306}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3306}}@{}}
+\caption{同一问题，不更换模型或控制目标：设置与结果}\label{tab:s27-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+正式后端对照
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+单脚支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+四步行走
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+正式后端对照
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+单脚支撑
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+四步行走
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Clarabel & 完成 & 完成 \\
+OSQP & 完成 & 残差超限终止 \\
+\end{longtable}\endgroup
+
+OSQP四步对照触发的是某足底力矩不等式数值残差约0.05026N·m，略高于预设0.05N·m允许值，并非观察到机器人倒地。不能据此断言OSQP在物理稳定性上一定较差，也不能把临界的数值门槛当成算法能力的显著差距。
+
+从同一成功轨迹取7个状态，构造完全相同的QP分别重解，两后端全部返回求解成功，Clarabel约束残差更小；这些离散点不包含另一条轨迹的所有问题，不能替代整回合测试。原始矩阵对照结果在backend\_probe.json。
+
+\subsubsection{记录完整调用时间，而非只取平均}\label{s27-detail-3}
+
+以下为同一8s、100Hz单脚支撑条件的全身控制调用，包含目标/约束构建和QP，不含通信或完整物理循环：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1789}}@{}}
+\caption{记录完整调用时间，而非只取平均：设置与结果}\label{tab:s27-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+后端
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P50（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P95（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P99（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+超过10ms参考预算
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+后端
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P50（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P95（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P99（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大（ms）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+超过10ms参考预算
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+osqp & 1.66 & 10.25 & 11.96 & 61.40 & 41/800 \\
+clarabel & 1.98 & 2.49 & 2.55 & 2.97 & 0/800 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch08/s27_backend_timing_315955bc.png}{单脚支撑条件的调用耗时累计分布。}{fig:s27-detail-1}
+
+在该次50个Clarabel条件的61,000次更新中，没有记录到WBC函数超过各自控制周期预算。四步参考条件P95约2.44ms。OSQP中位数更短，但本条件的耗时尾部更长。该结果来自本机离线、三进程条件批次，不包含传感、通信和调度的端到端时延，也不是硬实时保证。
+
+相关代码在 \path|scripts/qp.py|、\path|scripts/backend_probe.py|、\path|scripts/analyze.py|。
+
+
+\paragraph{阶段结论}Clarabel在所测控制调用中尾部更短；这不是包含传感、通信和调度的硬实时保证。
+
+\stagecode{s27}
+
+\FloatBarrier
+
+\section{冻结条件、强扰动与保存核验}
+
+\label{stage:s28}
+
+\subsection{冻结条件下的结果与失效边界}\label{s28-detail-1}
+
+\subsubsection{正式条件}\label{s28-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\caption{正式条件：设置与结果}\label{tab:s28-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+组别
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过/组内条件
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+组别
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+通过/组内条件
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+站立 & 18/18 \\
+重心转移 & 6/6 \\
+单脚支撑 & 12/12 \\
+单步前移 & 4/4 \\
+交替步行 & 6/6 \\
+低摩擦 & 2/2 \\
+初始朝向 & 2/2 \\
+求解器对照 & 3/4 \\
+\end{longtable}\endgroup
+
+各组共享部分相同配置，去重后为52个，而不是把表格相加。去重同时处理整数/浮点同值，并忽略无推力时没有物理意义的推扰时间。Clarabel条件为50/50，OSQP为1/2；测试是预设条件网格，不是实际部署成功概率。
+
+\subsubsection{控制器冻结后的强扰动}\label{s28-detail-3}
+
+在原控制器、求解精度和判据不变的情况下，额外增加8个强扰动，结果如下。站立推扰在2.7s，单脚在3.0s，行走在10.0s施加，均持续0.1s。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2532}}@{}}
+\caption{控制器冻结后的强扰动：设置与结果}\label{tab:s28-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+场景
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+侧向力（N）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+运行时长（s）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原因
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+场景
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+侧向力（N）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+运行时长（s）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+原因
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+单脚支撑 & -50 & 终止 & 4.04 & 关节预测或力矩上下界冲突 \\
+单脚支撑 & -30 & 通过 & 8.00 & 完成 \\
+单脚支撑 & 30 & 终止 & 4.90 & QP判为不可行 \\
+单脚支撑 & 50 & 终止 & 3.49 & QP判为不可行 \\
+站立 & 150 & 通过 & 6.00 & 完成 \\
+站立 & 250 & 终止 & 3.05 & 关节预测或力矩上下界冲突 \\
+四步行走 & -40 & 终止 & 10.71 & 关节预测或力矩上下界冲突 \\
+四步行走 & 40 & 终止 & 11.39 & 关节预测或力矩上下界冲突 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch08/s28_push_boundary_c69c7887.png}{40/150/250N侧向站立推扰；终止轨迹只画到真实停止时刻。}{fig:s28-detail-1}
+
+150N站立条件完成，250N终止；这两个点不能确定精确的抗扰阈值。单脚和行走的抗扰范围明显小于双支撑，正负方向也不完全对称。固定步时、有限支撑范围和关节界会限制恢复，不能把站立通过的推力直接迁移为行走抗扰能力。
+
+独立重建接触时，在两个失败附近分别观察到右髋---右腕约7.8N、躯干---左肩约92.3N的自接触。模拟器保留了这些真实碰撞，但当前QP只建模足地接触；它们是后续应处理的模型差异，尚不能只凭这些抽样认定为唯一失败原因。
+
+强扰动2/8与正式51/52分开报告，不合成一个容易误解的成功率。没有通过后续调参把这批失败从结果里移除。
+
+\subsection{独立核验与保存机制}\label{s28-detail-4}
+
+重新读取保存状态，而不只采信运行器的success。检查四元数与关节积分、足底/CoM正运动学、真实接触扳手、空间雅可比虚功、电机力矩通道、全部物理验收判据及源码/资源哈希。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5906}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4094}}@{}}
+\caption{独立核验与保存机制：设置与结果}\label{tab:s28-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+核验项
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+核验项
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+结果
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+正式记录 / 强扰动记录 & 52 / 8 \\
+正式记录中承重确认 & 46 \\
+四元数与关节积分最大残差 & 0.00e+00 \\
+足位 / CoM重算残差（m） & 0.00e+00 / 0.00e+00 \\
+足地接触虚功残差 & 1.14e-13 \\
+独立接触重建最大差值 & 2.38e-08 \\
+接口/物理量单元检查 & 9项通过 \\
+视频完整解码 & 580/580帧 \\
+\end{longtable}\endgroup
+
+积分、执行器界、分块一致性和任务判据覆盖完整保存轨迹；接触与运动学独立重建在每条运行均匀抽取12个时刻。强扰动接触核验只比较相同的足地接触，额外自接触另外记录，避免把不同接触集合的广义力相减后误判为程序错误。
+
+每秒保存一块完整轨迹，并原子更新运行状态；中途退出可保留最后完整块，但不支持直接恢复模拟器继续运行。所有分块与最终完整数组逐项一致。
+
+双相机视频是同配置实际物理重跑，不是用参考轨迹强制驱动模型。录制的qpos、qvel、ctrl、CoM、足位及实际接触力与正式回合逐元素相同，最大差值为0。视频为580帧、29s，不增加独立实验数量。
+
+相关代码在 \path|scripts/tests.py|、\path|scripts/verify.py|、\path|scripts/storage.py| 和 \path|scripts/record.py|。
+
+\subsection{当前范围与后续工作}\label{s28-detail-5}
+
+该阶段已从受限平面模型推进到真实三维浮动基座、29个受限电机、实际单脚承重和交替步行，并找到了强扰动下的约束与自接触边界。还不能称为企业可部署的人形控制器：
+
+\begin{itemize}
+\tightlist
+\item
+  状态直接取自模拟器，尚未使用IMU/编码器构建有误差的状态估计。
+\item
+  步态为慢速准静态，约7s一步，未完成动态步行或在线落脚位置/时刻优化。
+\item
+  接触切换按名义时序，未处理提前/延迟触地及地形变化。
+\item
+  只建模足地接触，未加入自碰撞规避与额外接触约束。
+\item
+  使用有限力矩的理想电机，没有真实电流环、驱动带宽和通信链路。
+\item
+  未做实体机器人、软硬件在环或硬实时验证。
+\end{itemize}
+
+后续优先把触地事件、状态估计与自碰撞约束接入同一闭环，再讨论提高行走速度。继续扩大相同理想场景的条件数，不如先补这些接口。
+
+
+\paragraph{阶段结论}正式52个条件51个通过，另八个强扰动仅两个通过；状态估计、触地时序、自碰撞和真实执行器仍待补齐。
+
+
+
+% BEGIN SIM_VISUALS s28
+\subsection{强扰动完成与终止姿态}
+下面从冻结控制器测试的已保存状态重建画面。150牛站立条件完成，250牛站立及40牛侧向行走条件因约束冲突提前终止；图像只画到保存时刻，没有让终止后的模型继续下落，也不把约束冲突自动称作倒地。
+
+\motionfigure{figures/ch08/g1_stress_150n_saved_view2.png}{G1150牛站立扰动：最后保存状态，5.999秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_stress_150n_saved_view2}
+
+\motionfigure{figures/ch08/g1_stress_250n_saved_view2.png}{G1250牛站立扰动：最后保存状态，3.049秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_stress_250n_saved_view2}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view0.png}{G140牛侧向行走扰动：推扰前，9.800秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_walk_stress_40n_saved_view0}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view1.png}{G140牛侧向行走扰动：推扰后，10.200秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_walk_stress_40n_saved_view1}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view2.png}{G140牛侧向行走扰动：最后保存状态，11.389秒。依据保存状态重建，图下的足高与法向力取自历史日志。}{fig:motion-g1_walk_stress_40n_saved_view2}
+% END SIM_VISUALS s28
+\stagecode{s28}
+
+\FloatBarrier

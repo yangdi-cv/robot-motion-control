@@ -1,0 +1,513 @@
+\chapter{仿真平台与机械臂轨迹跟踪}
+通信桥与机械臂接口参考Isaac Sim官方教程\cite{isaac}。
+
+
+首先用真实ROS2消息连接轨迹节点与物理仿真，明确时间戳、关节单位和控制接口，再比较驱动增益与参考速度。
+
+\section{运行环境与隔离}
+
+\label{stage:s01}
+
+\subsection{问题与该次完成内容}\label{s01-detail-1}
+
+在已有ROS2 Humble、MoveIt2/Panda工作空间的基础上，新增独立Isaac Sim 5.1.0环境。通过真实ROS2 Bridge向物理仿真Panda发送关节目标、接收状态，在前三个关节上执行5秒五次多项式轨迹，并记录目标、实际值、控制指令及误差。本报告来自实际仿真与ROS消息，不用生成数据代替反馈。该次没有向SO101真机发送命令。
+
+\subsection{环境与隔离}\label{s01-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3439}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6561}}@{}}
+\caption{环境与隔离：设置与结果}\label{tab:s01-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+实测配置
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+项目
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+实测配置
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+系统 & Ubuntu 22.04.5 LTS，内核6.8.0-138-generic \\
+GPU & NVIDIA GeForce RTX 4090，24564 MiB \\
+NVIDIA驱动 & 580.178.04 \\
+ROS & ROS2 Humble，系统安装\path|/opt/ros/humble| \\
+外部ROS节点 & 系统Python 3.10 \\
+仿真 & Isaac Sim 5.1.0.0，独立Python 3.11.13 \\
+仿真环境路径 & \path|/home/yd/Documents/VLA/.venvs/isaacsim51| \\
+ROS中间件 & Fast DDS / rmw\_fastrtps\_cpp \\
+通信隔离 & ROS\_DOMAIN\_ID=51，localhost，专用话题前缀 \\
+physics dt & 0.010 s \\
+\end{longtable}\endgroup
+
+Isaac进程清除系统ROS Python路径，使用其内置Python 3.11版Humble库；外部控制节点单独source系统Humble。没有替换系统Python或修改已有机械臂/视觉环境。独立环境依赖检查通过，版本锁定记录见\path|setup_logs/requirements.lock.txt|，安装过程见\path|setup_logs/isaac-install.log|。
+
+实际命令输出的Ubuntu/GPU/软件版本截图：
+
+\stagefigure{figures/ch02/s01_ubuntu_environment_48389fb1.png}{环境配置截图}{fig:s01-detail-1}
+
+Isaac场景截图：
+
+\stagefigure{figures/ch02/s01_isaac_environment_85d70296.png}{Panda仿真场景}{fig:s01-detail-2}
+
+
+\paragraph{阶段结论}Isaac独立Python与系统ROS2分别运行，通过专用通信域连接；没有修改系统Python或原训练环境。
+
+\stagecode{s01}
+
+\FloatBarrier
+
+\section{Panda模型、关节与ROS2通信}
+
+\label{stage:s02}
+
+\subsection{模型、关节与通信}\label{s02-detail-1}
+
+使用NVIDIA提供的FrankaPanda \texttt{franka.usd}。7个旋转关节为panda\_joint1至panda\_joint7，另外有两个夹爪关节。关节名称在实际articulation加载后核对，范围从USD RevoluteJoint属性读取：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3755}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3186}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3059}}@{}}
+\caption{模型、关节与通信：设置与结果}\label{tab:s02-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+下限（度）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+上限（度）
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+下限（度）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+上限（度）
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & -166.003 & 166.003 \\
+panda\_joint2 & -101.001 & 101.001 \\
+panda\_joint3 & -166.003 & 166.003 \\
+panda\_joint4 & -176.001 & -3.999 \\
+panda\_joint5 & -166.003 & 166.003 \\
+panda\_joint6 & -1.003 & 215.002 \\
+panda\_joint7 & -166.003 & 166.003 \\
+\end{longtable}\endgroup
+
+初始9维位置为\path|[0, -0.785398, 0, -2.356194, 0, 1.570796, 0.785398, 0.04, 0.04]|；旋转关节使用rad，夹爪使用m。该次只改变前三个关节，其余臂关节保持目标不变。标准末端框架记录为\path|/World/Panda/panda_hand|；本实验进行关节空间验证，不计算末端位姿误差，也未另行验收完整ROS TF树。
+
+实际模型路径、关节范围、初始位姿与场景参数见\path|runs/run_20261013_003/scene_metadata.json|。\path|runs/run_20261013_003/panda_scene.usda|保存场景与OmniGraph；机器人资产仍引用官方在线USD，复现需要能访问资产或已有缓存。
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ROS2五次轨迹节点
+\item
+  /panda\_task1/joint\_command
+\item
+  Bridge Subscriber
+\item
+  Articulation Controller与PhysX
+\item
+  Bridge JointState Publisher
+\item
+  /panda\_task1/joint\_states
+\end{enumerate}
+
+OmniGraph同时发布仿真时钟\path|/clock|。控制节点按反馈帧的仿真时间计算参考，每个10ms仿真反馈周期发送一次位置目标；发送的是位置控制命令，不把轨迹速度与加速度混作另一种控制模式。命令话题有1个控制发布端和1个Bridge订阅端，状态话题有1个Bridge发布端和1个记录订阅端，原始端点与QoS记录见\path|runs/run_20261013_003/ros_graph.txt|。
+
+
+\paragraph{阶段结论}关节名称、限位和初态来自实际加载模型；初期验证关节空间，不额外声称末端位姿或完整坐标树已验收。
+
+\stagecode{s02}
+
+\FloatBarrier
+
+\section{五次轨迹与默认驱动基准}
+
+\label{stage:s03}
+
+\subsection{五次轨迹与记录方法}\label{s03-detail-1}
+
+令 $u=t/T$，$T=5\,\mathrm{s}$，采用五次插值：
+\begin{equation}
+q(t)=q_0+(q_f-q_0)(10u^3-15u^4+6u^5).
+\end{equation}
+其中 $q_0$ 和 $q_f$ 分别为起点与终点关节角。速度和加速度由该式解析求导，起止两端均为零。
+
+起止速度、加速度均为零，已用数值检查验证边界条件。设置：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3685}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3157}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3157}}@{}}
+\caption{五次轨迹与记录方法：设置与结果}\label{tab:s03-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+初始目标（rad）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点目标（rad）
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+初始目标（rad）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点目标（rad）
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & 0 & 0.4 \\
+panda\_joint2 & -0.785398 & -0.5 \\
+panda\_joint3 & 0 & -0.3 \\
+\end{longtable}\endgroup
+
+记录501个样本，包含t=0与t=5端点。每条记录保存仿真状态时间、轨迹相对时间、主机接收/发布monotonic时间、7维参考/实际位置、解析参考速度与位置误差。实际发送目标与参考位置相同。
+
+误差定义为\path|e(t_state)=q_reference(t_state)-q_actual(t_state)|，没有后移参考或补偿滞后来降低误差。最大误差为\texttt{max(\textbar{}e\textbar{})}，RMSE为\texttt{sqrt(mean(e²))}。位置信号包含驱动响应与通信/采样链路的影响，本实验未独立辨识各部分延迟。
+
+\subsection{结果}\label{s03-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1819}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1691}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1634}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1740}}@{}}
+\caption{结果：设置与结果}\label{tab:s03-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大误差rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大误差度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点误差rad
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+关节
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大误差rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最大误差度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+终点误差rad
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & 0.034990 & 0.022361 & 2.0048 & 1.2812 & 0.001800 \\
+panda\_joint2 & 0.023757 & 0.014928 & 1.3612 & 0.8553 & -0.000300 \\
+panda\_joint3 & 0.025935 & 0.016486 & 1.4859 & 0.9446 & -0.000400 \\
+\end{longtable}\endgroup
+
+时间与频率：
+
+\begin{itemize}
+\tightlist
+\item
+  实际记录仿真时长：5.000000 s。
+\item
+  仿真采样周期中位数：10.000000 ms；最大：10.000000 ms。
+\item
+  对应主机接收窗口：5.041746 s；平均反馈频率：99.172 Hz。
+\item
+  主机接收间隔中位数：9.912 ms，P95：12.662 ms。
+\item
+  该窗口实时因子：0.9917。
+\end{itemize}
+
+因此，10ms/100Hz指仿真时间基准；实际主机调度有抖动，不宣称严格硬实时100Hz。
+
+\stagefigure{figures/ch02/s03_trajectory_tracking_f6e7c8ea.png}{目标与实际轨迹}{fig:s03-detail-1}
+
+\stagefigure{figures/ch02/s03_tracking_error_9c4ff88b.png}{跟踪误差}{fig:s03-detail-2}
+
+参考与实际曲线整体同向且最终到达设置目标，但运动阶段有可见滞后，最大误差约1.36--2.00度。终点误差明显小于中途峰值。当前为默认驱动及位置目标链路的基准，没有进行增益调优、力控或速度前馈对照；不能据此宣称最优精度或真实硬件性能。
+
+
+\paragraph{阶段结论}5秒轨迹最终能到达目标，中间存在约1.36至2.00度峰值误差，为后续调参提供基准。
+
+
+
+% BEGIN SIM_VISUALS s03
+\subsection{轨迹运动的实际场景}
+下图从原始Isaac录屏按固定视频时刻提取，裁去侧栏和资源面板，保留机器人视口。视频时间不等于五次轨迹的相对时间；图像说明实际模型与姿态变化，跟踪精度仍由前面的时戳和关节记录评价。
+
+\motionfigure{figures/ch02/panda_trajectory_viewport_sequence.png}{Isaac Panda实际轨迹录屏的四个时刻；裁剪仅去除界面侧栏，时间为视频播放时刻。}{fig:motion-panda_trajectory_viewport_sequence}
+% END SIM_VISUALS s03
+\stagecode{s03}
+
+\stagevideo{videos/ch02/panda_joint_trajectory.mp4}
+
+\FloatBarrier
+
+\section{驱动增益、参考速度与幅度验证}
+
+\label{stage:s04}
+
+\subsection{驱动增益与速度前馈}\label{s04-detail-1}
+
+物理周期10ms，使用原来5秒、端点速度和加速度为零的五次轨迹，主要分析前三关节。驱动增益按默认值的1、2、4倍设置Kp，Kd按1、√2、2倍同步增加；分别比较是否发送参考速度。六组设置各测正反方向并重复两次，共24阶段。每阶段先保持2秒、运动5秒、再保持1秒。阶段之间重置仿真关节，统计不包含重置瞬间。
+
+这里的速度前馈是将轨迹解析速度作为关节驱动的速度目标，与位置目标一起发送；不是直接计算电机力矩的逆动力学前馈。默认前七关节Kp约22918.31、Kd约4583.66，选中设置约91673.25和9167.33，数值为当前Isaac控制接口读出的增益。它们仅用于此Panda仿真，不能直接搬到SO101。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2245}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}@{}}
+\caption{驱动增益与速度前馈：设置与结果}\label{tab:s04-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kp倍数 / Kd倍数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+参考速度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+拟合滞后 / ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kp倍数 / Kd倍数
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+参考速度
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+拟合滞后 / ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 / 1.000 & 无 & 0.960 & 1.835 & 214.3 \\
+1 / 1.000 & 有 & 0.095 & 0.194 & 20.3 \\
+2 / 1.414 & 无 & 0.702 & 1.344 & 156.3 \\
+2 / 1.414 & 有 & 0.092 & 0.178 & 20.2 \\
+4 / 2.000 & 无 & 0.517 & 0.992 & 115.2 \\
+4 / 2.000 & 有 & 0.091 & 0.178 & 20.2 \\
+\end{longtable}\endgroup
+
+单独增加增益有改善，但收益小于加入参考速度。按前三关节平均运动RMSE选择参数，并要求最差超调不超过0.5°、保持段标准差不超过0.1°，选出Kp\(\times\)4、Kd\(\times\)2并加入参考速度。
+
+拟合滞后是将参考轨迹平移后与实际位置比较得到的时间差，搜索范围−100至400ms、步长1ms；它描述整体跟踪表现，不是ROS消息传输延迟。保持段接近零的抖动也受仿真休眠机制影响，不作为真实电机噪声结论。
+
+\stagefigure{figures/ch02/s04_tracking_error_34a7c300.png}{前三关节实际误差}{fig:s04-detail-1}
+
+相关代码在 \path|scripts/isaac_scene.py|、\path|scripts/controller.py|、\path|scripts/run_control.py|、\path|scripts/trajectory.py| 和 \path|scripts/analyze_control.py|；配置在 \path|config/control_suite.json|。
+
+\subsection{不同运动幅度的验证}\label{s04-detail-2}
+
+参数选定后，另用原位移0.6倍和1.2倍的轨迹，分别做正反方向、两次重复。默认与选中设置共16阶段，验证期间不再调整参数。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1991}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2092}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2078}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1913}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1925}}@{}}
+\caption{不同运动幅度的验证：设置与结果}\label{tab:s04-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+拟合滞后 / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差超调 / °
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+拟合滞后 / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差超调 / °
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+默认 & 0.864 & 2.201 & 214.3 & 0.081 \\
+增益调整＋参考速度 & 0.082 & 0.212 & 20.0 & 0.036 \\
+\end{longtable}\endgroup
+
+不同幅度下仍有明显改善，因此这次结果不只来自原来一条轨迹。但场景、负载和机械臂模型保持不变，重复测试也不代表独立真实工况；尚未测试负载变化、碰撞、摩擦扰动或真实电机带宽。
+
+相关代码在 \path|scripts/analyze_control.py|；验证配置在 \path|config/control_validation.json|，逐关节数据在 \path|runs/control_validation/joint_metrics.csv|。
+
+\subsection{Panda外环频率补充实验}\label{s04-detail-3}
+
+为了进一步区分发布频率与实际跟踪表现，将Panda物理步长固定为5ms，Bridge发布200Hz模拟时间状态；外部节点按50、100、200Hz处理状态并发送位置/速度目标。默认与调优设置均测正反方向、重复两次，共24阶段。频率门限使用模拟时间，主机上实际运行频率另行统计。
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2028}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}@{}}
+\caption{Panda外环频率补充实验：设置与结果}\label{tab:s04-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz（模拟时间）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+主机平均频率 / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz（模拟时间）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+主机平均频率 / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 默认 & 0.971 & 1.830 & 38.37 \\
+50 & 调优＋参考速度 & 0.080 & 0.154 & 38.07 \\
+100 & 默认 & 0.948 & 1.788 & 76.61 \\
+100 & 调优＋参考速度 & 0.057 & 0.111 & 76.58 \\
+200 & 默认 & 0.937 & 1.768 & 153.50 \\
+200 & 调优＋参考速度 & 0.047 & 0.090 & 153.31 \\
+\end{longtable}\endgroup
+
+第一轮虽然模拟时间达到目标，但主机实际约为38、77、153Hz，未达到实时。随后在同一物理步长和任务配置下关闭逐帧渲染，并改为按绝对时刻定时，再完成相同24阶段：
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2028}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}@{}}
+\caption{Panda外环频率补充实验：设置与结果}\label{tab:s04-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz（模拟时间）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+主机平均频率 / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+外环 / Hz（模拟时间）
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+设置
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+平均运动RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+最差绝对误差 / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+主机平均频率 / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 默认 & 0.971 & 1.830 & 50.00 \\
+50 & 调优＋参考速度 & 0.080 & 0.154 & 50.01 \\
+100 & 默认 & 0.948 & 1.788 & 100.03 \\
+100 & 调优＋参考速度 & 0.057 & 0.111 & 100.03 \\
+200 & 默认 & 0.937 & 1.768 & 200.00 \\
+200 & 调优＋参考速度 & 0.047 & 0.090 & 200.00 \\
+\end{longtable}\endgroup
+
+关闭不需要的渲染并调整定时后，主机频率接近目标，说明运行方式会影响反馈频率的实际含义。两处实现一起调整，当前不单独量化各自的收益；也不据此推断Jetson能够达到同样性能。
+
+\stagefigure{figures/ch02/s04_panda_frequency_norender_b1d39b52.png}{无逐帧渲染的关节外环对照}{fig:s04-detail-2}
+
+\stagefigure{figures/ch02/s04_panda_frequency_f2e821dd.png}{关节外环频率对照}{fig:s04-detail-3}
+
+这组测试中物理步长固定，因此组内比较主要反映外环更新频率和驱动设置的影响。它与前面10ms物理步长的调参实验分开统计。IMU回放未用于Panda关节控制，关节反馈仍来自JointState；没有据此宣称IMU姿态融合或状态估计闭环已完成。
+
+相关代码在 \path|scripts/controller.py|、\path|scripts/analyze_control_frequency.py|；配置在 \path|config/control_frequency.json|、\path|config/control_frequency_norender.json|。
+
+
+\paragraph{阶段结论}独立幅度验证的平均运动误差由0.864度降至0.082度。参考速度收益明显，但不是逆动力学力矩前馈，也不是硬件性能。
+
+\stagecode{s04}
+
+\FloatBarrier

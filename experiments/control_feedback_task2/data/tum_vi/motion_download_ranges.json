@@ -1,0 +1,12 @@
+[
+  {
+    "url": "https://cdn3.vision.in.tum.de/tumvi/exported/euroc/512_16/dataset-room1_512_16.tar",
+    "range": "bytes 845166592-846215167/1707110400",
+    "sha256": "8e41f5a14aa5da918ef71248efb154c2363e9e3a11315a031acc170a2cb845a3"
+  },
+  {
+    "url": "https://cdn3.vision.in.tum.de/tumvi/exported/euroc/512_16/dataset-room1_512_16.tar",
+    "range": "bytes 845987328-848819131/1707110400",
+    "sha256": "8cd471ca2c1425260534228fbe0f3e27bd6711199dfce7c971447cdf184569e2"
+  }
+]

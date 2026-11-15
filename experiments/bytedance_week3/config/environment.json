@@ -1,0 +1,8 @@
+{
+  "numpy": "1.26.4",
+  "mujoco": "2.3.7",
+  "camera_array_strides": [
+    8
+  ],
+  "isolated_environment": ".venvs/panda-contact"
+}

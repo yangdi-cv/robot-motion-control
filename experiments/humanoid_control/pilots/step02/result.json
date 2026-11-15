@@ -1,0 +1,39 @@
+{
+  "config": {
+    "scenario": "step",
+    "duration": 8,
+    "hz": 100,
+    "dt": 0.001,
+    "push_x": 0.0,
+    "push_y": 0.0,
+    "push_time": 2.7,
+    "push_duration": 0.1,
+    "friction": 0.6,
+    "shift": 0.06,
+    "lift": 0.05,
+    "step_distance": 0.06,
+    "walk_steps": 4
+  },
+  "success": false,
+  "failure": "QP maximum iterations reached; primal=1.64e-10, dual=0.000411",
+  "duration": 0.9700000000000008,
+  "mass": 33.341142000000005,
+  "nq": 36,
+  "nv": 35,
+  "nu": 29,
+  "steps": 970,
+  "updates": 97,
+  "qp_p95_ms": 4.533718400489305,
+  "max_qp_residual": 1.7053025658242404e-13,
+  "com_rmse": [
+    0.00013039026892180827,
+    0.0005482970641978679,
+    0.00018871505700907026
+  ],
+  "max_foot_height": [
+    -0.00010000000000000286,
+    -0.00010000000000000286
+  ],
+  "min_com_height": 0.6838247626561774,
+  "max_joint_speed": 0.2185730505751954
+}

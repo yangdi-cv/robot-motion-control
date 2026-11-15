@@ -1,0 +1,101 @@
+{
+  "n": 333,
+  "posture_successes": 172,
+  "standing_successes": 118,
+  "nominal": {
+    "pd_0.0": {
+      "n": 3,
+      "successes": 3,
+      "recovery_mean_s": 0.0,
+      "foot_max_m": 0.00017595979917459616,
+      "max_angle_deg": 1.1503482687570585
+    },
+    "pd_40.0": {
+      "n": 3,
+      "successes": 3,
+      "recovery_mean_s": 0.3136666666666666,
+      "foot_max_m": 0.000175702157838835,
+      "max_angle_deg": 1.3636238796656845
+    },
+    "pd_80.0": {
+      "n": 3,
+      "successes": 0,
+      "recovery_mean_s": null,
+      "foot_max_m": 0.03557497457467657,
+      "max_angle_deg": 2.0630617716690587
+    },
+    "pd_120.0": {
+      "n": 3,
+      "successes": 0,
+      "recovery_mean_s": null,
+      "foot_max_m": 1.0084366328289502,
+      "max_angle_deg": 6.576951237535759
+    },
+    "lqr_0.0": {
+      "n": 3,
+      "successes": 3,
+      "recovery_mean_s": 0.0,
+      "foot_max_m": 0.000245102721245967,
+      "max_angle_deg": 1.1489510824832976
+    },
+    "lqr_40.0": {
+      "n": 3,
+      "successes": 3,
+      "recovery_mean_s": 0.08533333333333326,
+      "foot_max_m": 0.00024481308341923964,
+      "max_angle_deg": 1.1489510824832976
+    },
+    "lqr_80.0": {
+      "n": 3,
+      "successes": 0,
+      "recovery_mean_s": null,
+      "foot_max_m": 0.03645331410314305,
+      "max_angle_deg": 4.264910773325277
+    },
+    "lqr_120.0": {
+      "n": 3,
+      "successes": 0,
+      "recovery_mean_s": null,
+      "foot_max_m": 1.8490455947294295,
+      "max_angle_deg": 20.093532754494177
+    }
+  },
+  "delay": {
+    "pd": {
+      "0.0": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.04": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.08": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.12": {
+        "n": 3,
+        "successes": 0
+      }
+    },
+    "lqr": {
+      "0.0": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.04": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.08": {
+        "n": 3,
+        "successes": 0
+      },
+      "0.12": {
+        "n": 3,
+        "successes": 0
+      }
+    }
+  }
+}
