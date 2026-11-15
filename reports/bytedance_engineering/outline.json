@@ -364,5 +364,19 @@
       "experiments/humanoid_control/scripts"
     ],
     "conclusion": "正式52个条件51个通过，另八个强扰动仅两个通过；状态估计、触地时序、自碰撞和真实执行器仍待补齐。"
+  },
+  {
+    "chapter": 9,
+    "report_chapter": 9,
+    "id": "s29",
+    "title": "官方强化学习行走基线与接触、方向和停止复核",
+    "sources": [
+      "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/REPORT.md"
+    ],
+    "code": [
+      "experiments/unitree_g1_rl_baseline/validation",
+      "experiments/unitree_g1_rl_baseline/tests"
+    ],
+    "conclusion": "12种固定工况共245秒；官方预训练策略未改。方向保持与归零站定尚待完善。"
   }
 ]

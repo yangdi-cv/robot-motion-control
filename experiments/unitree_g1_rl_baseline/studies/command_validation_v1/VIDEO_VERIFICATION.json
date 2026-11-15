@@ -1,0 +1,80 @@
+[
+  {
+    "file": "cases/backward_02/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2780548
+  },
+  {
+    "file": "cases/forward_02/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2898007
+  },
+  {
+    "file": "cases/forward_05/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 3264565
+  },
+  {
+    "file": "cases/forward_08/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 3547527
+  },
+  {
+    "file": "cases/forward_turn/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 3465086
+  },
+  {
+    "file": "cases/left_02/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2702788
+  },
+  {
+    "file": "cases/mixed_commands/rollout_20fps.mp4",
+    "frames": 500,
+    "fps": 20.0,
+    "bytes": 3335595
+  },
+  {
+    "file": "cases/right_02/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2660842
+  },
+  {
+    "file": "cases/walk_stop/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2795435
+  },
+  {
+    "file": "cases/yaw_left_05/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2665245
+  },
+  {
+    "file": "cases/yaw_right_05/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2732843
+  },
+  {
+    "file": "cases/zero/rollout_20fps.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 2489880
+  },
+  {
+    "file": "wbc_vs_official_rl_first20s.mp4",
+    "frames": 400,
+    "fps": 20.0,
+    "bytes": 1897981
+  }
+]

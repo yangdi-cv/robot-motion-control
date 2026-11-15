@@ -1,0 +1,264 @@
+{
+  "id": "walk_stop",
+  "completed": true,
+  "termination": null,
+  "duration_s": 19.999999999999794,
+  "base_delta_m": [
+    4.399855222123592,
+    -0.5736250071473568,
+    -0.014203928356841589
+  ],
+  "base_velocity_body_mean": [
+    0.2661475027722847,
+    -0.0066609863656714435,
+    -0.0005099981053231889
+  ],
+  "command_tracking_rmse": [
+    0.02924377252459392,
+    0.07053324958792456,
+    0.06750330799842777
+  ],
+  "velocity_target_met": true,
+  "heading_change_deg": -10.566121604743095,
+  "tilt_max_deg": 4.948860072201387,
+  "tilt_p95_deg": 3.6968060856932814,
+  "base_height_range_steady_m": [
+    0.7626057050252047,
+    0.7811553087694744
+  ],
+  "base_height_p95_p05_span_m": 0.016553379806116708,
+  "whole_body_com_height_range_steady_m": [
+    0.6746937388168363,
+    0.6926364788805003
+  ],
+  "support_fraction": {
+    "left": 0.509907289583712,
+    "right": 0.5777131430648973,
+    "both": 0.08762043264860934,
+    "neither": 0.0
+  },
+  "loaded_contact_tangent_speed_rms_mps": 0.07643429719986004,
+  "foot_max_clearance_m": [
+    0.039914788493915304,
+    0.04214038903933837
+  ],
+  "touchdowns_after_clear_liftoff": 49,
+  "touchdown_events": [
+    {
+      "side": 1,
+      "time": 0.4000000000000003
+    },
+    {
+      "side": 0,
+      "time": 0.8040000000000006
+    },
+    {
+      "side": 1,
+      "time": 1.2160000000000009
+    },
+    {
+      "side": 0,
+      "time": 1.6200000000000012
+    },
+    {
+      "side": 1,
+      "time": 2.0159999999999996
+    },
+    {
+      "side": 0,
+      "time": 2.419999999999955
+    },
+    {
+      "side": 1,
+      "time": 2.8159999999999115
+    },
+    {
+      "side": 0,
+      "time": 3.217999999999867
+    },
+    {
+      "side": 1,
+      "time": 3.611999999999824
+    },
+    {
+      "side": 0,
+      "time": 4.043999999999777
+    },
+    {
+      "side": 1,
+      "time": 4.425999999999735
+    },
+    {
+      "side": 0,
+      "time": 4.82999999999969
+    },
+    {
+      "side": 1,
+      "time": 5.223999999999647
+    },
+    {
+      "side": 0,
+      "time": 5.6339999999996015
+    },
+    {
+      "side": 1,
+      "time": 6.025999999999558
+    },
+    {
+      "side": 0,
+      "time": 6.433999999999513
+    },
+    {
+      "side": 1,
+      "time": 6.8239999999994705
+    },
+    {
+      "side": 0,
+      "time": 7.233999999999425
+    },
+    {
+      "side": 1,
+      "time": 7.625999999999382
+    },
+    {
+      "side": 0,
+      "time": 8.033999999999352
+    },
+    {
+      "side": 1,
+      "time": 8.423999999999483
+    },
+    {
+      "side": 0,
+      "time": 8.83399999999962
+    },
+    {
+      "side": 1,
+      "time": 9.22599999999975
+    },
+    {
+      "side": 0,
+      "time": 9.633999999999887
+    },
+    {
+      "side": 1,
+      "time": 10.024000000000017
+    },
+    {
+      "side": 0,
+      "time": 10.434000000000154
+    },
+    {
+      "side": 1,
+      "time": 10.826000000000285
+    },
+    {
+      "side": 0,
+      "time": 11.234000000000421
+    },
+    {
+      "side": 1,
+      "time": 11.624000000000551
+    },
+    {
+      "side": 0,
+      "time": 12.036000000000689
+    },
+    {
+      "side": 1,
+      "time": 12.420000000000817
+    },
+    {
+      "side": 0,
+      "time": 12.806000000000946
+    },
+    {
+      "side": 1,
+      "time": 13.214000000001082
+    },
+    {
+      "side": 0,
+      "time": 13.620000000001218
+    },
+    {
+      "side": 1,
+      "time": 14.01600000000135
+    },
+    {
+      "side": 0,
+      "time": 14.420000000001485
+    },
+    {
+      "side": 1,
+      "time": 14.816000000001617
+    },
+    {
+      "side": 0,
+      "time": 15.220000000001752
+    },
+    {
+      "side": 1,
+      "time": 15.616000000001884
+    },
+    {
+      "side": 0,
+      "time": 16.020000000002
+    },
+    {
+      "side": 1,
+      "time": 16.41600000000178
+    },
+    {
+      "side": 0,
+      "time": 16.820000000001556
+    },
+    {
+      "side": 1,
+      "time": 17.216000000001337
+    },
+    {
+      "side": 0,
+      "time": 17.620000000001113
+    },
+    {
+      "side": 1,
+      "time": 18.016000000000894
+    },
+    {
+      "side": 0,
+      "time": 18.42000000000067
+    },
+    {
+      "side": 1,
+      "time": 18.81600000000045
+    },
+    {
+      "side": 0,
+      "time": 19.220000000000226
+    },
+    {
+      "side": 1,
+      "time": 19.616000000000007
+    }
+  ],
+  "nonfoot_ground_force_max_N": 0.0,
+  "steady_samples": 5501,
+  "steady_definition": "3 seconds after start of each command segment; raw start/end states retained",
+  "stop": [
+    {
+      "command_start_s": 12.0,
+      "settle_delay_s": null,
+      "final2_speed_mean_mps": 0.06904068542724132,
+      "final2_yaw_rate_abs_mean_radps": 0.024978546786098052
+    }
+  ],
+  "nominal_integrated_command_end": [
+    4.499999999999282,
+    0.0,
+    0.0
+  ],
+  "nominal_path_note": "illustrative integrated command; policy has no absolute position or heading target",
+  "straight_world_y_displacement_m": null,
+  "policy_wall_p50_ms": 0.0978699999905075,
+  "policy_wall_p95_ms": 0.10964909995436753
+}

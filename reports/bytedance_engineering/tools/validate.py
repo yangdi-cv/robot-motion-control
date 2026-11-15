@@ -3,7 +3,7 @@ from pathlib import Path
 import re,json,hashlib
 D=Path(__file__).resolve().parents[1];R=D.parents[1]
 st=json.loads((D/'outline.json').read_text());a=json.loads((D/'asset_manifest.json').read_text())
-assert len(st)==28 and len({s['id'] for s in st})==28
+assert len(st)==29 and len({s['id'] for s in st})==29
 for ch in range(2,9):assert sum(s['chapter']==ch for s in st)==4
 assert sum(p.read_text().count('\\section{') for p in (D/'chapters').glob('0[2-8]_*.tex'))==28
 for s in st:
@@ -20,4 +20,4 @@ assert (D/'build/main_zh.pdf').stat().st_size>10000
 text='\n'.join(p.read_text() for p in (D/'chapters').glob('*.tex'))
 assert len(set(re.findall(r'\\(?:stagefigure|motionfigure)\{([^}]+)\}',text)))==sum(x['kind']=='figure' for x in a)
 assert text.count('\\begin{longtable}')>=75
-print('28 stages; source/code paths; 92 figure assets, 9 videos and hashes; PDF: OK')
+print(f"29 stages; {sum(x['kind']=='figure' for x in a)} figures; {sum(x['kind']=='video' for x in a)} videos; paths and hashes: OK")

@@ -1386,5 +1386,131 @@
     "sha256": "07064e66541b7075a3f2520eac6f6fb2b8b8d051e88e62ab36e810bb2769ab35",
     "caption": "有限脚掌物理站立",
     "derivation": "copied existing video"
+  },
+  {
+    "kind": "figure",
+    "local": "figures/ch09/all_cases_camera_overview.png",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/all_cases_camera_overview.png",
+    "sha256": "b68226166e1eac8710712c0963352785fb90410252cd477ea1eb280afbd2445d",
+    "stage": "s29"
+  },
+  {
+    "kind": "figure",
+    "local": "figures/ch09/forward_drift.png",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/forward_drift.png",
+    "sha256": "a1b97e04f8d4d86d01f52c05f5606ba9c02a9beeb24a77dcfdcb3333ee77a41b",
+    "stage": "s29"
+  },
+  {
+    "kind": "figure",
+    "local": "figures/ch09/tracking_rmse.png",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/tracking_rmse.png",
+    "sha256": "65d8753287989bbea9bccdb23d5ae6c54f172cf49ed64552a984000910297c7c",
+    "stage": "s29"
+  },
+  {
+    "kind": "figure",
+    "local": "figures/ch09/walk_stop.png",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/walk_stop.png",
+    "sha256": "28725838b58a0d5fafb9228a765b363151a2d98b1c72fa4cabdac7c57269e186",
+    "stage": "s29"
+  },
+  {
+    "kind": "figure",
+    "local": "figures/ch09/world_paths.png",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/world_paths.png",
+    "sha256": "94e2ea99241ea0fdcc3d87daa3bd0bf12d1e209314f36b726d4ddcb32058f487",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_backward_02.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/rollout_20fps.mp4",
+    "sha256": "2950abc1cca02d5c6ffbf1c9470db6a59786c72c523d32c38e9a9b0d612e5e28",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_forward_02.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/rollout_20fps.mp4",
+    "sha256": "8bb17e04fe25e20c5b9a911ca00364cf57536a15bf09072c2adfeea810044ab2",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_forward_05.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/rollout_20fps.mp4",
+    "sha256": "65d0d92c6a5567b35ea7f9237ce1ec98d0eaa4a069124d1449adf72c429a2c7e",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_forward_08.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/rollout_20fps.mp4",
+    "sha256": "3a7888eacabf466503a3475051aae0cccec2995cf8a3d55926635725ec6931f9",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_forward_turn.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/rollout_20fps.mp4",
+    "sha256": "5035b667d6d858f6291937a4c8ea0a8cb29cb49224d01f7117bdc90f63f6ddd5",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_left_02.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/rollout_20fps.mp4",
+    "sha256": "ef3dfec1b2df34964e2a82d505c933aa7cb3b22674f40878c2cf9ec70eecb6de",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_mixed_commands.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/rollout_20fps.mp4",
+    "sha256": "c8d54d089391a3b68817919c1d2dbbdd92fd6f1c8fbf86e968f473245f6e4326",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_right_02.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/rollout_20fps.mp4",
+    "sha256": "eb10390550a62bee204905ed68d6a0fed90a07c54815ea267a6a44855dd5b9e9",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_walk_stop.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/rollout_20fps.mp4",
+    "sha256": "8d0c2b09b6a6f92046e153dbb9183917f22d218bc81bbfd9b2b476333f86efd3",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_yaw_left_05.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/rollout_20fps.mp4",
+    "sha256": "2cf35ff8e8abe128c74edaf2276d9be2682f7216363a1d99ab4dc89bd570989b",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_yaw_right_05.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/rollout_20fps.mp4",
+    "sha256": "2eb15767b09375cde36455068e0e2f8fcd2e22aeed03a6fec4b57a5650b32cb1",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_rl_zero.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/rollout_20fps.mp4",
+    "sha256": "684d81a25448ab6bbaecd28b7629a06704c62bec35647d63d09b67c516192fe5",
+    "stage": "s29"
+  },
+  {
+    "kind": "video",
+    "local": "videos/ch09/g1_wbc_vs_official_rl.mp4",
+    "source": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/wbc_vs_official_rl_first20s.mp4",
+    "sha256": "63f4cbc7df39af2b33620c15ef380ae86330a038849650830306db7e46cca2c9",
+    "stage": "s29"
   }
 ]

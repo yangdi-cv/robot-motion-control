@@ -1,0 +1,60 @@
+{
+  "forward_05": {
+    "world_y_m": -1.4086928331666821,
+    "world_y_from_body_forward_m": -1.4422600708564484,
+    "world_y_from_body_lateral_m": 0.040660726844647416,
+    "world_y_from_body_vertical_m": -0.007093489154878464,
+    "reconstruction_residual_m": 2.886579864025407e-15,
+    "heading_at_3s_deg": -3.4934584560363686,
+    "heading_final_deg": -15.631850983574708,
+    "note": "Kinematic decomposition of measured displacements; not a causal explanation of policy drift"
+  },
+  "zero": {
+    "window_start_s": 3.0,
+    "base_displacement_after_start_m": [
+      0.18998158335137985,
+      -0.3513037182337236,
+      0.0012178526703706671
+    ],
+    "touchdowns_after_start": 42,
+    "net_stop": {
+      "window_s": 1.0,
+      "first_qualifying_window_end_after_stop_s": 0.9999999999997811,
+      "final_window_net_speed_mps": 0.015559686355940605,
+      "final_window_abs_heading_rate_radps": 0.006232866705944354,
+      "note": "Net displacement over 1s, not instantaneous rest; added diagnostic does not replace frozen stop criterion"
+    }
+  },
+  "walk_stop": {
+    "window_start_s": 12.0,
+    "base_displacement_after_start_m": [
+      0.20660834897693547,
+      -0.1835150891067459,
+      0.006563078277393886
+    ],
+    "touchdowns_after_start": 20,
+    "net_stop": {
+      "window_s": 1.0,
+      "first_qualifying_window_end_after_stop_s": 1.0980000000010435,
+      "final_window_net_speed_mps": 0.015555025413412343,
+      "final_window_abs_heading_rate_radps": 0.00623167058956641,
+      "note": "Net displacement over 1s, not instantaneous rest; added diagnostic does not replace frozen stop criterion"
+    }
+  },
+  "mixed_commands": {
+    "window_start_s": 18.0,
+    "base_displacement_after_start_m": [
+      0.042569850989038205,
+      0.13668348739407776,
+      0.00798329409030818
+    ],
+    "touchdowns_after_start": 18,
+    "net_stop": {
+      "window_s": 1.0,
+      "first_qualifying_window_end_after_stop_s": 1.0000000000003482,
+      "final_window_net_speed_mps": 0.014439329123124147,
+      "final_window_abs_heading_rate_radps": 0.009023922113733924,
+      "note": "Net displacement over 1s, not instantaneous rest; added diagnostic does not replace frozen stop criterion"
+    }
+  }
+}

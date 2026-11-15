@@ -1,0 +1,113 @@
+{
+  "cases": [
+    {
+      "id": "zero",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 1.5265566588595902e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "forward_02",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 4.440892098500626e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "forward_05",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 9.992007221626409e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "forward_08",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 1.6653345369377348e-15,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "backward_02",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 3.0531133177191805e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "left_02",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 4.440892098500626e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "right_02",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 3.885780586188048e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "yaw_left_05",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 1.5265566588595902e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "yaw_right_05",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 2.0816681711721685e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "forward_turn",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 7.91033905045424e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "walk_stop",
+      "saved_steps": 10000,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 8.881784197001252e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1000
+    },
+    {
+      "id": "mixed_commands",
+      "saved_steps": 12500,
+      "kinematic_max_error_m": 0.0,
+      "body_velocity_max_error_mps": 7.216449660063518e-16,
+      "unactuated_root": true,
+      "command_alignment": true,
+      "policy_calls": 1250
+    }
+  ],
+  "scope": "all timestamps, commands and root actuation; 31 sampled kinematic states per case; official interface checked separately"
+}

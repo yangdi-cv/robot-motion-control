@@ -77,3 +77,8 @@ https://github.com/user-attachments/assets/6a1f6185-1a37-4517-8977-9007e5414b63
 ## 相关资料
 
 [返回首页](../README.md) · [章节与代码索引](CODE_MAP.md)
+
+
+## 新增：官方G1强化学习行走
+
+[13段可直接播放视频：12种工况与WBC/RL原速对照](UNITREE_RL_DEMOS.md)。

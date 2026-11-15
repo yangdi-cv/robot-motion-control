@@ -1,0 +1,250 @@
+{
+  "cases": [
+    {
+      "id": "zero",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forward_02",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.2,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forward_05",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.5,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forward_08",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.8,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "backward_02",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            -0.2,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "left_02",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.2,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "right_02",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            -0.2,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "yaw_left_05",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.0,
+            0.5
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "yaw_right_05",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.0,
+            -0.5
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "forward_turn",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.5,
+            0.0,
+            0.3
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "walk_stop",
+      "duration": 20.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          3.0,
+          [
+            0.5,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          12.0,
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "mixed_commands",
+      "duration": 25.0,
+      "segments": [
+        [
+          0.0,
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          3.0,
+          [
+            0.5,
+            0.0,
+            0.0
+          ]
+        ],
+        [
+          8.0,
+          [
+            0.0,
+            0.2,
+            0.0
+          ]
+        ],
+        [
+          13.0,
+          [
+            0.0,
+            0.0,
+            0.5
+          ]
+        ],
+        [
+          18.0,
+          [
+            0.0,
+            0.0,
+            0.0
+          ]
+        ]
+      ]
+    }
+  ],
+  "thresholds": {
+    "settle_s": 3.0,
+    "linear_rmse_mps": 0.15,
+    "yaw_rate_rmse_radps": 0.2,
+    "stop_speed_mps": 0.1,
+    "stop_yaw_rate_radps": 0.15,
+    "stop_hold_s": 1.0,
+    "contact_force_N": 10.0,
+    "low_base_height_m": 0.4,
+    "tilt_rad": 1.0471975512,
+    "tilt_hold_s": 0.1,
+    "nonfoot_force_N": 20.0,
+    "nonfoot_hold_s": 0.1
+  },
+  "source_sha256": {
+    "validation/analyze.py": "cce0b5c337effae2accb8265a68677ba43215cdea373b691f999897b15d34c63",
+    "validation/core.py": "ebd957354939a4eb335bf29349c7ddbd0531f3acbc512a157342ba811dfe8da2",
+    "validation/protocol.py": "ab28a0d1e551bcfad2e2346ad3d2753bd09b371a995ae4941ca825fc0315272e",
+    "validation/render.py": "c27cd473b0963c565c57d7e5afc1bbb66bf44df1f812389b8e39bd295cdfd915",
+    "validation/run_study.py": "68998d4e84d548f0ed617a96fe0dcec3d4928d15c3e6620a2af0acec383e2b9c",
+    "validation/verify.py": "9f883a9e2b8663a1e7b2f54c9020fa5432a411a4d1cea76ca4b5ccc7433e5f6d"
+  },
+  "policy_sha256": "cf668f75b90d1abf73d2b87612a6e76bccc61ff7e083b63582d3f6aaa3c1759d",
+  "upstream_revision": "276801e46c5d433564f24658bac64f254b7d2d4b",
+  "python": "3.11.18 (main, Oct 26 2026, 14:05:07) [Clang 23.1.3 ]",
+  "torch": "2.7.1+cu126",
+  "mujoco": "3.2.3",
+  "numpy": "1.26.4",
+  "torch_threads": 1,
+  "description": "fixed deterministic command conditions; no retraining, no control changes, no real hardware"
+}

@@ -1,0 +1,67 @@
+{
+  "file": "rollout_20fps.mp4",
+  "frames": 500,
+  "fps": 20,
+  "simulation_duration": 24.999999999997023,
+  "render_and_encode_wall_s": 7.204377284999964,
+  "trace_sha256": [
+    "24762195d9db30d616b0771f50a261fc0d9953e01ba32be80a26f8ec1a1fb04f",
+    "80e62dbcac295d105b26553a4be3cc8d904791796c0e4ec9423acacfa4606fd1",
+    "867cdba094d96b6e056748b609aee887b6cf7679df865cf674c07bc85e279de2",
+    "75cb1f295f5b8741f9ee689e9ba46861c69a39287fd0e8d5eb0336d4c70b9996",
+    "a152d0e62663c14fcc1ecb8b47df37f000570b8b3694028544e72b7017f95f65",
+    "ed792508c77590047db71c4823b11c29862f992fee2c2b55f95728bc60fb73a1",
+    "9c1100b96004a9e6c724cfb02b903c5557f6a9a420e3ef828f2b146272eacd9f",
+    "e8fcb41c2154a404ec9523a2034fb828606a67d942870276d5c7a1688d50ef1b",
+    "25facee2da0b5f319b37c53b8ea3807b467a6b5dee757f31c7417a8707a1c7a7",
+    "a5421364883c4f47cf4cda47091aff28860860be15c07d0dbcd6cd13fabd048e",
+    "c421cbc02c396778bfcd12c616e0bf2fb0492c1f6792809d5027b5be5308745f",
+    "e1fcde07c7734f1335717ee7fa4ef099c46f42c60b02b84b82523c4e41c4e054",
+    "8e230ef72b503de3e340572db1ada7fc34d25515fbbf24230f8e804fde0b02e6",
+    "dfb8623815061802809a8cc8592914ed70e9c405cf598c21e9bdd6e499be06db",
+    "c0f2eb2fc52eb2000884e1f5550794ff40c47d22ed36da8df6cd5985e2be0262",
+    "94dcd1519670bab9eb00f99e3e5228921c1bdaa61ec7e762344628e1241fc968",
+    "c9f5152c45ef50eb63ec94812be7ceba92deac5b3c06a6e9f382327a155bf743",
+    "b98fc0d460ae8a7c69e6effa546d19a8c0dab7545387d47fa13608a4533827a7",
+    "b23678dd0f1e34ad4d695c59451b3c92b4363cd58cb8168295b4932de50d9d2d",
+    "db40e84a5a79ebde44778e1b1e54b2be29d1331dc91216a5db6064ea8871c0bb",
+    "851e70a1c401e59b4ab06f1f917b29c0b83e479ec6c9f8fe7423cd739436bbaa",
+    "95887e8a9158e7dbcb1f4183a3114b05ba4becf36404fd337568cc8a607c2304",
+    "5580e2df1bd22f3ffae4c85d47b6ea4adf37dc8be8ff9a1131dd90d0e42c9f0a",
+    "c9369d88374371f60f13d8792df896baf845c72404c30f91f3d9ed9c71160b59",
+    "54abc45499c2548572ca3916a6abef9091ab462e57f963239b2354736ef156b6"
+  ],
+  "stills": [
+    {
+      "file": "frame_0000.png",
+      "video_frame": 0,
+      "state_index": 0,
+      "simulation_time": 0.0
+    },
+    {
+      "file": "frame_0125.png",
+      "video_frame": 125,
+      "state_index": 3125,
+      "simulation_time": 6.249999999999534
+    },
+    {
+      "file": "frame_0250.png",
+      "video_frame": 250,
+      "state_index": 6250,
+      "simulation_time": 12.500000000000844
+    },
+    {
+      "file": "frame_0375.png",
+      "video_frame": 375,
+      "state_index": 9375,
+      "simulation_time": 18.750000000000487
+    },
+    {
+      "file": "frame_0499.png",
+      "video_frame": 499,
+      "state_index": 12475,
+      "simulation_time": 24.94999999999705
+    }
+  ],
+  "method": "saved qpos/qvel + mj_forward for rendering only; original logged forces; no policy calls or physics stepping"
+}

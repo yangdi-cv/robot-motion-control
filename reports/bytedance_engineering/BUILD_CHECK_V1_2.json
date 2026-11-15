@@ -1,0 +1,13 @@
+{
+  "version": "1.2",
+  "pdf_pages": 157,
+  "stages": 29,
+  "figures": 97,
+  "videos": 22,
+  "new_rl_conditions": 12,
+  "new_rl_simulation_seconds": 245,
+  "new_video_full_decode_count": 13,
+  "interface_tests_passed": 5,
+  "pdf_sha256": "f89c287e17d38e79e46e9c59067dcdb1fad276c1bfed157e2bd9b071d2323d9a",
+  "note": "Original 28 stages retained; official pretrained policy reproduction is separate from WBC."
+}

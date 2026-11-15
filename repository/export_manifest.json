@@ -1,21 +1,21 @@
 [
   {
     "path": ".gitignore",
-    "bytes": 378,
-    "sha256": "2804f48122f652568f7e974b57068a7597f82f41bd32e6ac6b95e4d4d5908b62",
+    "bytes": 480,
+    "sha256": "8dd37e70f0f1e344ed3791e610452488f71b3d1146a0e9afacd0f111ff33af1e",
     "added_for_repository": true
   },
   {
     "path": "PROJECT_LOG.md",
-    "bytes": 173704,
-    "sha256": "73e0c4a5b405e239d6e3900cd421e095ebbcde70d8621b1262a581b23eee1280",
+    "bytes": 174190,
+    "sha256": "d5b901d8e710c261b498c9c0a7fb0a856ddf0d8e343f0d6298e906a634084331",
     "original_sha256": "73e0c4a5b405e239d6e3900cd421e095ebbcde70d8621b1262a581b23eee1280",
     "changed_for_export": false
   },
   {
     "path": "README.md",
-    "bytes": 4629,
-    "sha256": "67b75bcd031f12151939fbd0a2a0781176e08e625a80c32cd2a716bfc326bd28",
+    "bytes": 5540,
+    "sha256": "2216f1bbe4e64aff418c3782075beb919d8338dbc24e826105b19c089e8c92b6",
     "added_for_repository": true
   },
   {
@@ -26,21 +26,27 @@
   },
   {
     "path": "docs/CODE_MAP.md",
-    "bytes": 3191,
-    "sha256": "bc330bc7b75932fac5bb30d03f6d24f6bf81768ed15e12dac7761a6df95ef320",
+    "bytes": 3630,
+    "sha256": "d6e23f1c35bfad3fb6c62a53ed321546d68216718b0305e5384f2ac9093d56e3",
     "added_for_repository": true
   },
   {
     "path": "docs/DEMOS.md",
     "added_for_repository": true,
-    "bytes": 2950,
-    "sha256": "3562329b13c88b64083af61edbca6649969aa51558eec751d9065ab3ae6ea042"
+    "bytes": 3080,
+    "sha256": "a1b5b8047c3c27796283fe6f9950b7ba74b75e4888ab1f25a34a2cf84cf2dc8e"
+  },
+  {
+    "path": "docs/UNITREE_RL_DEMOS.md",
+    "added_for_repository": true,
+    "bytes": 2931,
+    "sha256": "66c526ca8e08f5b75b7496a90ebcdd349f8ac9d8031b9dabfd745d1ceb834692"
   },
   {
     "path": "docs/video_attachments.json",
     "added_for_repository": true,
-    "bytes": 2799,
-    "sha256": "937587d0819f962c82f4a4c81340a363a0d7b9f31d48bc84a69fd6aa2b72ccf6"
+    "bytes": 6481,
+    "sha256": "4527020cf87ccc6df71095f14fcb01a91347c97b29aa020dbf57f7adb99ba6eb"
   },
   {
     "path": "experiments/biped_feedback/README.md",
@@ -3095,11 +3101,1133 @@
     "changed_for_export": false
   },
   {
+    "path": "experiments/unitree_g1_rl_baseline/README.md",
+    "added_for_repository": true,
+    "bytes": 3541,
+    "sha256": "d469dfd6a494cb5ac8a8ef239044c060aafecef172158292424cf8437960edda"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/REVIEW_NOTES.md",
+    "added_for_repository": true,
+    "bytes": 756,
+    "sha256": "ef52475de63bd83635cad459fbf389bb61468c3d9166f6998aaaeb4d562dbf74"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/SOURCE.md",
+    "added_for_repository": true,
+    "bytes": 1539,
+    "sha256": "a431624f6c9ec0ac83e17464bc736394894c28f87f3602c92fb2eaa3dd54ba5c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/scripts/fetch_policy.py",
+    "added_for_repository": true,
+    "bytes": 666,
+    "sha256": "d54e14e3b25b564ce623d97d001fa3c3aa9b1d4e1c64e1192638324fe10fe73b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/POSTHOC_DIAGNOSTICS.json",
+    "added_for_repository": true,
+    "bytes": 2219,
+    "sha256": "8ac0fd092d2e91ca6c1a91b8a41e40043d0ab3adee252a28c3133792a010a539"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/PROTOCOL.json",
+    "added_for_repository": true,
+    "bytes": 4470,
+    "sha256": "ba213c81ee00fe68df3b41f98e552a186adb302d47215a2b696b2dffa72e4485"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/REPORT.md",
+    "added_for_repository": true,
+    "bytes": 10533,
+    "sha256": "1224781f70321d1ba0ae19e660c800fdfd74c8569f4928fcfdbd4dedb6cba7cd"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/REPORT.pdf",
+    "added_for_repository": true,
+    "bytes": 2987655,
+    "sha256": "74226a3ba303afd8bab141f5cf836e82bf6418fc45e281f1605ebf2fc556a4c9"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/REPORT.tex",
+    "added_for_repository": true,
+    "bytes": 13739,
+    "sha256": "f5251927f9f603a80602f9b5efdd0286896d314e102a78c77372ba1b3b418547"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/STATUS.json",
+    "added_for_repository": true,
+    "bytes": 37,
+    "sha256": "0efd644ea89ea6cbc264ddf0a12ce39900ee7c2fbccc5aaa2058689f09155ad7"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/SUMMARY.json",
+    "added_for_repository": true,
+    "bytes": 70934,
+    "sha256": "4fbe433ee5e3d691a690db752a31693e8f287ef81ac36b312226156f74847c5d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/VERIFICATION.json",
+    "added_for_repository": true,
+    "bytes": 3204,
+    "sha256": "e099c94c0ddb6e408f82e1269da46f1909ea3331b89c3d58cbc39f28a48b182d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/VIDEO_VERIFICATION.json",
+    "added_for_repository": true,
+    "bytes": 1505,
+    "sha256": "b320e841860a1d0cbe8cf13fc06448b982c8c313c513046e4df000288544eec7"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 794110,
+    "sha256": "23b54cbbc26af02958cde2570edecd2d843c50dee498dfced3745cb02d9375c8"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348332,
+    "sha256": "e0501b885470570ceb5f7e2814b42c5cb4dc521109e2fb9b435530f41390479c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 350926,
+    "sha256": "79a151c85e0bf6d21cb364005f5ca122620ed53258e80518eb92e6eb0e43bf77"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 350480,
+    "sha256": "c90dffa2d650c63028938afe250baa5553b32c483cf0d962523a5054ee5ac494"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 350340,
+    "sha256": "ff4aa0cfc09781e6a6fb15f1f32ae9571f6bc6797a41ad4718934285d930a22e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351796,
+    "sha256": "7ebc7a6e11e77949398c5136a1a92cce55be5f15cf5eb466a00afef91112401b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4764,
+    "sha256": "cc8564641d7ed6ce134af73233aeb48f871f93f765ca258b9cffb4aa938b6dcd"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/result.json",
+    "added_for_repository": true,
+    "bytes": 2536,
+    "sha256": "3f1f53975c1ba0d3d154d5edd3ef544568172405590c2b327f807bfea15ee7d1"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/backward_02/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "8b6bf2c6c0ff1bb7433c29688e04a0a664b47a6b5d5cb8d045650a028441a819"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 801084,
+    "sha256": "640f619d02f79bb6c3020be1daea8bc22b9682d56c32fe0e4955a14fc5a859a4"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348148,
+    "sha256": "c4e79fbb7ba8bef4e034183e4b3ecfe38112fca461c52b9b8e12b89116d3c470"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 348347,
+    "sha256": "86030d8ceb31b5870d6eb57ef4a6037cee15878b86841b72eef68fcf4ca75564"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 349749,
+    "sha256": "bb7218beeed96eb188a4ebfbfc381d195d89e45eb18b73415458f2f58c1d6894"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 350063,
+    "sha256": "d08923c7a3614e1d58d6ecbb167cb86998b90556ab19473e42512bdf72c5fbb1"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351008,
+    "sha256": "f97464cd8df250614cb33ae0353d4e085a8ce4237350cf9145a3054835511aac"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4735,
+    "sha256": "c7661ecc6f871d7b0ff49e563644c209f168db4e37c9aa9d1607cd25aa4ae13b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/result.json",
+    "added_for_repository": true,
+    "bytes": 2524,
+    "sha256": "11aa5b19df28872f40b4bc1a6e06bfd5b08c14e713e8aeeeb2fcc7fd1b690b55"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_02/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "6463cb16bc1cf91de9821c7aa382a0838f8f889a375181ee61bc3211956588c6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 795724,
+    "sha256": "05054003f4946b8de69115f641147edc587ccade937aab396dee06bbac2eaf37"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348112,
+    "sha256": "0ea0293e28219706d45d66f1d0d842086a8552fa3f2124e8c37d1b9885bcda7a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 348951,
+    "sha256": "7b6b63a0dc51aec641333c95b3811bb249018de669be4bc3acc0b268cb8cf8c0"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 350089,
+    "sha256": "b5a59d4d7c32001a1797618730459d2519a9d7ba11dd06639e54c9217cb6d762"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 351810,
+    "sha256": "c2bd012dee40ad4386529547622cd0030efa5d45fc75e8cb149fbc8af3e93a11"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351809,
+    "sha256": "6cc905858de6759605041a0c640699d49baf328d080436e0b9525b3a3f880567"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4745,
+    "sha256": "d118c8a801d1a845a05b67d107959cdfb33633c2b2044f9334910ed7b05dc1df"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/result.json",
+    "added_for_repository": true,
+    "bytes": 2532,
+    "sha256": "fa8d8dbfaa6a393ce68c6b271c00ecb4a6a9f9ccc3bc765f986caa60781c83f4"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "8255df1a9a526d99f76416df3e3aeb9fc09c03e4db2a5c943933d315322c31c8"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 796839,
+    "sha256": "96835653706733e7e4643f73a181e0a4eb6154e8c4e7676d5750d773e3e680f9"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348304,
+    "sha256": "3e78000ee5a9405408bd0b9448f84cfbe97d7fa955203d62994007064b136a6a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 352174,
+    "sha256": "79f2f450a32a14ebedd29d6d698c86580c0c32d9171b03a6dffea139f3dd4945"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 348211,
+    "sha256": "a722f5629418013d75cf9a0f9bf404f049435a035b44f9133edbb6de18fa89d3"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 350092,
+    "sha256": "27a0f0802139e15ad73e618d2c89845ef15db1d39dc0b4c19548f103f91ec792"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 352345,
+    "sha256": "a70397ce99b26ce1c4005af8f0311b528a6117de0e290f9f58897779e8438934"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4754,
+    "sha256": "b54f18b4e46c168b0b61cb48d0afbd03f24a97952d95154825e09bf96bcc67cd"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/result.json",
+    "added_for_repository": true,
+    "bytes": 2525,
+    "sha256": "49670be358cd7468a41d67e6991b41d8d1b4b227e1d4c255e07fee73c97f64ef"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_08/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "c44a1de8da8ae3a9868c199700e6a52c5240b329c05cfb3a6903fe2a5476e96d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 799853,
+    "sha256": "03cb6054367d9599fc434054fcd7e7dc1ce2ea42821f74735842b9ed9b886148"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348404,
+    "sha256": "e346ee85b221910be87eb4911b684a61b32857436c22b28d133babf919af10b6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 354564,
+    "sha256": "badbf1ab3e00532618909ad57c62c18b766969783d4313611eba9f2bb5c8c550"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 351151,
+    "sha256": "5a810bee015508ec2151bdcfda05e0996542571e4e62f1e48c56e113cd0da453"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 352313,
+    "sha256": "b634b3adecd9d9dd2417bd02766884ae8564e41f74688b28bb33416b2c2d4b69"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 349084,
+    "sha256": "ce04d93d6d3f141a64a024a5562421c4cd7a43fcb3ae57404d6407980c6cae10"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4754,
+    "sha256": "c0cb5719bb50e46f0141e5c31a1820a85fcb8f220335d8c6d686f3bc252c9134"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/result.json",
+    "added_for_repository": true,
+    "bytes": 2531,
+    "sha256": "2709f34216def724bc87b7b931f11e989fdf56a4dd052a1207aabc153ca4176a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_turn/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "2d78f1668464909538c34f41c4d2227dd1f94d31dfbb7b2dffbf60ab1305178a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 802562,
+    "sha256": "2e1c0424e369cce571a4af5b39b6ce54dadf6bdda5a5f52ecac466332a788192"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 347369,
+    "sha256": "6dda0fdb42666ec24c3558e990f0210b655b9f53bfe14ece84b3e43ced84a506"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 350211,
+    "sha256": "6908cc7c1adbf49e056b28f4973be1267340b043285b524cec841f6dca73b254"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 349399,
+    "sha256": "0c9666e328264fac50d50732adc6d79917a25f6cd6d7bd63484d1feab1814207"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 350892,
+    "sha256": "2842d6ce879899ad6902477eb0e174238413d403e1f8a0365db6b8dfa80d2ad3"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351149,
+    "sha256": "83e1ae5fb2fa7fdbdcc2ef1add2541fa4c48e7a4175246b058b430bd7dcd4b54"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4724,
+    "sha256": "4b6f2cf760f10e45d0fb23f97b5ff8975f44b6273afcd7216f2191cf25930e5e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/result.json",
+    "added_for_repository": true,
+    "bytes": 2524,
+    "sha256": "e65e01eee4f48bd134bbf98486762e97470c1662ea401d58aae55085bf24bae7"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/left_02/video.json",
+    "added_for_repository": true,
+    "bytes": 2450,
+    "sha256": "2a2a943e036043b314bec0a2e2afa14c58f2eb8d9787d6a3716d47295d336d44"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 795001,
+    "sha256": "cd8f7bad5c05e838fa8ac372e80379816ba1437f4f293f74d244155074fd4938"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 347953,
+    "sha256": "2dc13b72a213a32f1663dd9686bbdfac88c76e69d542f9c7364de0188c306c82"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/frame_0125.png",
+    "added_for_repository": true,
+    "bytes": 349223,
+    "sha256": "6dd886058e583cbc4dddf625a374ca3f046062dba34a87e4becea0d06ad0c9f9"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/frame_0250.png",
+    "added_for_repository": true,
+    "bytes": 352397,
+    "sha256": "0d9c477763bff8490fb00bbf7057c02e406bdf4f20e14b405d5682356145abc4"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/frame_0375.png",
+    "added_for_repository": true,
+    "bytes": 349850,
+    "sha256": "d330fbb86ab713004b9e90b08b2d0edcc1c8501d52d9568db8a7467b6a585850"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/frame_0499.png",
+    "added_for_repository": true,
+    "bytes": 352212,
+    "sha256": "dcc7521f915061877bc6484fc77fa3f6fb1364ce5b7f8a729fd4236acf7467c2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/metrics.json",
+    "added_for_repository": true,
+    "bytes": 5774,
+    "sha256": "9b3a7c040a5f8f5be241177600ca7bb622a59dfcd2be4a1a70cb4865537cba6c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "dd5cee28deac60daee5fb194dfc7ba2389a42e85581b533cda96fb1a5b3241d0"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/result.json",
+    "added_for_repository": true,
+    "bytes": 2924,
+    "sha256": "f8bb78443c304b363fa108b0c5679dd809bf1c8dad0f2362fea4879491aa2bac"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/mixed_commands/video.json",
+    "added_for_repository": true,
+    "bytes": 2812,
+    "sha256": "7e14b4353682adb753ca79f275b9ca1b744ea7588b00efbcb36ba0350af2bacf"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 801585,
+    "sha256": "3704aa4c381f5975a4e503054fcd3977d5e2d2b38905667dd0ac530610a0f37c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 347564,
+    "sha256": "d2bf5a9782f6ddd20bc15950b5345c96576b431997b3202eb5d91aaa9d889931"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 349926,
+    "sha256": "da1bb8c31cf9657739860a3b4f3ef2ff0f020805b65c76e301842eb207b893a0"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 351347,
+    "sha256": "ff4d2a4f9dcfa78755efc2db681dc00548ab9aa1706c1809f682db5b423797c6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 350209,
+    "sha256": "caeac0a47dddfa7fcb567b3ee38fac53c23cb7d36450a9566dbd429dffe283ea"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 349811,
+    "sha256": "a85bfd5ed560c2571aee369110e30ded4f19043d7fac87f68a6b13aa5adf2ef5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4738,
+    "sha256": "18c215b1b68a75bd8aa5fd79dfc745ca54f8382371fb8c782ecee0a4ff9d85a8"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/result.json",
+    "added_for_repository": true,
+    "bytes": 2543,
+    "sha256": "8ad5d7c4024c7eac3053366512993cb632fd41aacc68dadc7bc5c987f6be8462"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/right_02/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "935a5cc5255c92f084e9ce618574bc2be84898e1e5fb1febba4a2d2be62d185c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 799237,
+    "sha256": "1d3beecd3cebb90504ecbcfa6cca45d5318a08a8f65d21b39fbb8b922b5d2cac"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 347609,
+    "sha256": "386f5c2baf1f44b3249ffb0abaca2c56f2d623cb35a0beedfb1c53b6b728c1cd"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 347887,
+    "sha256": "b5815d6d944348377c100614bb3fc119d62ebf403d2a26fe909e91b2d36acdbb"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 348169,
+    "sha256": "8dc56972112951ad8e8cd500676f6dfd9aa8186b613beb558a55e00043abec1e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 349801,
+    "sha256": "25d300533d0ba25294241e158b03090b3205735dd1f3287546239fd6550d5046"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351893,
+    "sha256": "6d5a3a3e3b55948a8943ec051bf6d904589cbf1645533a14beb98165e2f613ac"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4925,
+    "sha256": "8291927283212868c18085834c7945ecd2d0524016ceaf07c553e13e6c90636a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/result.json",
+    "added_for_repository": true,
+    "bytes": 2713,
+    "sha256": "59c69b1e697a4ee48c33c5c4f514515bb6f8fa097821ea681b0598b0524b5a42"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/walk_stop/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "6c209b3020c01d6e8cabd7b2c1cc61a9dac7aa87c19278324dd7b5057f38cee6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 807642,
+    "sha256": "cafa4fbaa379ee99055419465c7ed398f0556e091ba0f85e5eb2dd3496fc537f"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348226,
+    "sha256": "7e1334f837ef63a72eb6e5378b23d925642db9b3abc2b40d0888472fb059279d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 350788,
+    "sha256": "f845b047c9d64ad92c7d96e90b5c7aa2d0477ee227bdc466c57eca0eee2179c7"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 351550,
+    "sha256": "bc0bee3efce7584f6da25ad90557362c024481798b845b5b5d18887270746904"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 352851,
+    "sha256": "39256f73a81e9cb64da3d615c6337467538ec3d337c47edf8839e952bd439511"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351009,
+    "sha256": "56a0f6075695aa46da99516ace3da346a340b6b5fdc89459dd17d3ff9fa1aff2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4738,
+    "sha256": "cca48c89875d453c11f15edb9b5834f8f7d37d9a4f68ac1e76a742300d69fa27"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/result.json",
+    "added_for_repository": true,
+    "bytes": 2541,
+    "sha256": "c47b6eaf096be0c6cf2673549908363504584437f4d6f1a3e0338bef5331303c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_left_05/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "32786a26f3869711062d53621830df76f1de7f5efa53d90a141669668bf74a4e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 806536,
+    "sha256": "d4679a087bed5a44b345b29f24a31b7adef465ae70473991f164546968dbd1d9"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 348655,
+    "sha256": "3f3bab5013d8fbb60773b3b577255d259a7ad7fa383565b971def2ad652d42dd"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 352075,
+    "sha256": "e3d596602c6645e9663279077456fb95a3f4782cde54f51091c9a926ebbdf705"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 350882,
+    "sha256": "f4ceeaa81bdf27fe9ba259c2595a2132cef4a3912bf001c8204e4c4fc3637cf0"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 352663,
+    "sha256": "f66b10716b48d76c92221b75c20172de1ff136fcb7204ab007a006e31e9fea53"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 351225,
+    "sha256": "5f01197b6dc8187d38931eb0e92eb6c48eccaeb14ce94fa935a948b16b0f4b9d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4746,
+    "sha256": "23df119d12c0c61716a47051ae67631ec791dafdc646e881f734c5278b8fd39c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/result.json",
+    "added_for_repository": true,
+    "bytes": 2539,
+    "sha256": "aae3dd9f3881577881d99e3a4d68d3f563846a078847540bf0f2276c6e186ebc"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/yaw_right_05/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "311371d5d913450cbea46de86c4a383094bc9786e3d32e86aa813a88108dfc57"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/contact_sheet.png",
+    "added_for_repository": true,
+    "bytes": 799008,
+    "sha256": "5c3543aa4a09f8eac1b46549a226d35822a7dfdeb2d728b29d0e857af2cdde4b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/frame_0000.png",
+    "added_for_repository": true,
+    "bytes": 346751,
+    "sha256": "e6a4467237a301f07e353e11b9975aa5c56cf8dbc5d02745ea36e0240aa55cc2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/frame_0100.png",
+    "added_for_repository": true,
+    "bytes": 348796,
+    "sha256": "650e21372e2bcb76df9d7e355a718a554e41e1bd556cef50940ed92cfc97601d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/frame_0200.png",
+    "added_for_repository": true,
+    "bytes": 349321,
+    "sha256": "1ff0fd083444b71b2a315ac9f18d1bebd4352f6d04bc7031ff8b6c0e786a7687"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/frame_0300.png",
+    "added_for_repository": true,
+    "bytes": 347457,
+    "sha256": "40318894096304a5d34eb91d7fc5aafa4ffde7e1a19ac2e2e930a56194d07eb1"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/frame_0399.png",
+    "added_for_repository": true,
+    "bytes": 348361,
+    "sha256": "7bdc8afa2ff931027125c529ad57a2403550683fe8a07f0e770777892755022b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/metrics.json",
+    "added_for_repository": true,
+    "bytes": 4724,
+    "sha256": "c661aa112d13303eb5812f07240c68294655ff88ffd88744a5b6cd0314d547eb"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/progress.json",
+    "added_for_repository": true,
+    "bytes": 102,
+    "sha256": "8507ed1a22f4f69abc7b7df3cde8533356d1da9073612e33517d3b3313bf95f5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/result.json",
+    "added_for_repository": true,
+    "bytes": 2535,
+    "sha256": "5a4d24d51d0a92a8fe3929aa1778ea1169d4a31b77bf37917d5352fc028caec3"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/zero/video.json",
+    "added_for_repository": true,
+    "bytes": 2451,
+    "sha256": "d87558c05d99c74051e21de74e1f91369c268ba1228ca812f032d0684599142a"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/comparison_video.json",
+    "added_for_repository": true,
+    "bytes": 552,
+    "sha256": "390d521ecb54a677333d0820ef3122585271aab319779a20ba0105a3b4776eb4"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/all_cases_camera_overview.png",
+    "added_for_repository": true,
+    "bytes": 1868278,
+    "sha256": "b68226166e1eac8710712c0963352785fb90410252cd477ea1eb280afbd2445d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/forward_drift.png",
+    "added_for_repository": true,
+    "bytes": 218815,
+    "sha256": "a1b97e04f8d4d86d01f52c05f5606ba9c02a9beeb24a77dcfdcb3333ee77a41b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/tracking_rmse.png",
+    "added_for_repository": true,
+    "bytes": 115291,
+    "sha256": "65d8753287989bbea9bccdb23d5ae6c54f172cf49ed64552a984000910297c7c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/walk_stop.png",
+    "added_for_repository": true,
+    "bytes": 368457,
+    "sha256": "28725838b58a0d5fafb9228a765b363151a2d98b1c72fa4cabdac7c57269e186"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/figures/world_paths.png",
+    "added_for_repository": true,
+    "bytes": 294429,
+    "sha256": "94e2ea99241ea0fdcc3d87daa3bd0bf12d1e209314f36b726d4ddcb32058f487"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/metrics.csv",
+    "added_for_repository": true,
+    "bytes": 2266,
+    "sha256": "c9eb45b105d11d87580751e35202c13225dcc8a7ae8c37e8365e0bc1882bbbaf"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/analyze.py",
+    "added_for_repository": true,
+    "bytes": 8493,
+    "sha256": "cce0b5c337effae2accb8265a68677ba43215cdea373b691f999897b15d34c63"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/core.py",
+    "added_for_repository": true,
+    "bytes": 4022,
+    "sha256": "ebd957354939a4eb335bf29349c7ddbd0531f3acbc512a157342ba811dfe8da2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/protocol.py",
+    "added_for_repository": true,
+    "bytes": 1340,
+    "sha256": "ab28a0d1e551bcfad2e2346ad3d2753bd09b371a995ae4941ca825fc0315272e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/render.py",
+    "added_for_repository": true,
+    "bytes": 5737,
+    "sha256": "c27cd473b0963c565c57d7e5afc1bbb66bf44df1f812389b8e39bd295cdfd915"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/run_study.py",
+    "added_for_repository": true,
+    "bytes": 6467,
+    "sha256": "68998d4e84d548f0ed617a96fe0dcec3d4928d15c3e6620a2af0acec383e2b9c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/studies/command_validation_v1/source/verify.py",
+    "added_for_repository": true,
+    "bytes": 2295,
+    "sha256": "9f883a9e2b8663a1e7b2f54c9020fa5432a411a4d1cea76ca4b5ccc7433e5f6d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/tests/test_official_interface.py",
+    "added_for_repository": true,
+    "bytes": 3817,
+    "sha256": "4107f911debb11259b4ec970b74c1f6680246b8f0f4a9fdfbc7525aa43e97853"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/LICENSE",
+    "added_for_repository": true,
+    "bytes": 1561,
+    "sha256": "aef6394ba1597725a68308167324e675f562e6606027404deb1b9da254c2b9c1"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/deploy/deploy_mujoco/configs/g1.yaml",
+    "added_for_repository": true,
+    "bytes": 737,
+    "sha256": "73044e7d355c61915695c16d6e09eb3efef46eec1e3d708fd3eb9157dfe3bbbb"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/deploy/deploy_mujoco/deploy_mujoco.py",
+    "added_for_repository": true,
+    "bytes": 4862,
+    "sha256": "48e9f7a6b8ba701e68dfa48f2e89944c9f2aac1ec39c0a9915d6fe14ec71a4da"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/g1_12dof.xml",
+    "added_for_repository": true,
+    "bytes": 15579,
+    "sha256": "747ede40aa726b7352bae8353e95d0d0f908cec2257a27cbd78bc6e5a2d5a314"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/head_link.STL",
+    "added_for_repository": true,
+    "bytes": 932784,
+    "sha256": "005fb67fbd3eff94aa8bf4a6e83238174e9f91b6721f7111594322f223724411"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_ankle_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 71184,
+    "sha256": "d49e3abc6f5b12e532062cd575b87b5ef40cd2a3fc18f54a1ca5bba4f773d51d"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_ankle_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 653384,
+    "sha256": "c4092af943141d4d9f74232f3cfa345afc6565f46a077793b8ae0e68b39dc33f"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_elbow_link.STL",
+    "added_for_repository": true,
+    "bytes": 88784,
+    "sha256": "fa752198accd104d5c4c3a01382e45165b944fbbc5acce085059223324e5bed3"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_hip_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 181684,
+    "sha256": "4725168105ee768ee31638ef22b53f6be2d7641bfd7cfefe803488d884776fa4"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_hip_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 192184,
+    "sha256": "91f25922ee8a7c3152790051bebad17b4d9cd243569c38fe340285ff93a97acf"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_hip_yaw_link.STL",
+    "added_for_repository": true,
+    "bytes": 296284,
+    "sha256": "a16d88aa6ddac8083aa7ad55ed317bea44b1fa003d314fba88965b7ed0f3b55b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_knee_link.STL",
+    "added_for_repository": true,
+    "bytes": 854884,
+    "sha256": "8d92b9e3d3a636761150bb8025e32514c4602b91c7028d523ee42b3e632de477"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_shoulder_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 176784,
+    "sha256": "f0d1cfd02fcf0d42f95e678eeca33da3afbcc366ffba5c052847773ec4f31d52"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_shoulder_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 400284,
+    "sha256": "fb9df21687773522598dc384f1a2945c7519f11cbc8bd372a49170316d6eee88"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_shoulder_yaw_link.STL",
+    "added_for_repository": true,
+    "bytes": 249184,
+    "sha256": "1aa97e9748e924336567992181f78c7cd0652fd52a4afcca3df6b2ef6f9e712e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/left_wrist_roll_rubber_hand.STL",
+    "added_for_repository": true,
+    "bytes": 3484884,
+    "sha256": "e81030abd023bd9e4a308ef376d814a2c12d684d8a7670c335bbd5cd7809c909"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/logo_link.STL",
+    "added_for_repository": true,
+    "bytes": 243384,
+    "sha256": "8571a0a19bc4916fa55f91449f51d5fdefd751000054865a842449429d5f155b"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/pelvis.STL",
+    "added_for_repository": true,
+    "bytes": 1060884,
+    "sha256": "5ba6bbc888e630550140d3c26763f10206da8c8bd30ed886b8ede41c61f57a31"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/pelvis_contour_link.STL",
+    "added_for_repository": true,
+    "bytes": 1805184,
+    "sha256": "5cc5c2c7a312329e3feeb2b03d3fc09fc29705bd01864f6767e51be959662420"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_ankle_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 71184,
+    "sha256": "15be426539ec1be70246d4d82a168806db64a41301af8b35c197a33348c787a9"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_ankle_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 653784,
+    "sha256": "4b66222ea56653e627711b56d0a8949b4920da5df091da0ceb343f54e884e3a5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_elbow_link.STL",
+    "added_for_repository": true,
+    "bytes": 88784,
+    "sha256": "1be925d7aa268bb8fddf5362b9173066890c7d32092c05638608126e59d1e2ab"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_hip_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 181284,
+    "sha256": "e4f3c99d7f4a7d34eadbef9461fc66e3486cb5442db1ec50c86317d459f1a9c6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_hip_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 192684,
+    "sha256": "4c254ef66a356f492947f360dd931965477b631e3fcc841f91ccc46d945d54f6"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_hip_yaw_link.STL",
+    "added_for_repository": true,
+    "bytes": 296284,
+    "sha256": "e479c2936ca2057e9eb2f7dff6c189b7419d7b8484dea0b298cbb36a2a6aa668"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_knee_link.STL",
+    "added_for_repository": true,
+    "bytes": 852284,
+    "sha256": "63c4008449c9bbe701a6e2b557b7a252e90cf3a5abcf54cee46862b9a69f8ec8"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_shoulder_pitch_link.STL",
+    "added_for_repository": true,
+    "bytes": 176784,
+    "sha256": "24cdb387e0128dfe602770a81c56cdce3a0181d34d039a11d1aaf8819b7b8c02"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_shoulder_roll_link.STL",
+    "added_for_repository": true,
+    "bytes": 401884,
+    "sha256": "962b97c48f9ce9e8399f45dd9522e0865d19aa9fd299406b2d475a8fc4a53e81"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_shoulder_yaw_link.STL",
+    "added_for_repository": true,
+    "bytes": 249984,
+    "sha256": "a0b76489271da0c72461a344c9ffb0f0c6e64f019ea5014c1624886c442a2fe5"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/right_wrist_roll_rubber_hand.STL",
+    "added_for_repository": true,
+    "bytes": 3481584,
+    "sha256": "0729aff1ac4356f9314de13a46906267642e58bc47f0d8a7f17f6590a6242ccf"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/meshes/torso_link_23dof_rev_1_0.STL",
+    "added_for_repository": true,
+    "bytes": 7825434,
+    "sha256": "3cd0d56fde14b73c1623304684805029971c4f84b596f9914e823ca70a107fd2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/upstream/resources/robots/g1_description/scene.xml",
+    "added_for_repository": true,
+    "bytes": 859,
+    "sha256": "482d49902ca2b9fdc49d84ef5d8779fa69d66bc53ef440b4bf50079d1bac9995"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/analyze.py",
+    "added_for_repository": true,
+    "bytes": 8493,
+    "sha256": "cce0b5c337effae2accb8265a68677ba43215cdea373b691f999897b15d34c63"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/core.py",
+    "added_for_repository": true,
+    "bytes": 4022,
+    "sha256": "ebd957354939a4eb335bf29349c7ddbd0531f3acbc512a157342ba811dfe8da2"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/diagnostics.py",
+    "added_for_repository": true,
+    "bytes": 2516,
+    "sha256": "810511ec4d9655565a91c0612b3f39b1f92c4f36f4c8d17bcf28a7331e1659e8"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/protocol.py",
+    "added_for_repository": true,
+    "bytes": 1340,
+    "sha256": "ab28a0d1e551bcfad2e2346ad3d2753bd09b371a995ae4941ca825fc0315272e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/render.py",
+    "added_for_repository": true,
+    "bytes": 5855,
+    "sha256": "0c1b82d3cac114b29cea2bbee8dc095e95618a5d19f740bca3745c2303f83c8e"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/run_study.py",
+    "added_for_repository": true,
+    "bytes": 6467,
+    "sha256": "68998d4e84d548f0ed617a96fe0dcec3d4928d15c3e6620a2af0acec383e2b9c"
+  },
+  {
+    "path": "experiments/unitree_g1_rl_baseline/validation/verify.py",
+    "added_for_repository": true,
+    "bytes": 2295,
+    "sha256": "9f883a9e2b8663a1e7b2f54c9020fa5432a411a4d1cea76ca4b5ccc7433e5f6d"
+  },
+  {
     "path": "reports/bytedance_engineering/BUILD_CHECK.json",
     "bytes": 1546,
     "sha256": "da335a0a75a45b60bcfd6812e87a2c4e4617cf580f7d16f2bc6aceac8bc717c8",
     "original_sha256": "da335a0a75a45b60bcfd6812e87a2c4e4617cf580f7d16f2bc6aceac8bc717c8",
     "changed_for_export": false
+  },
+  {
+    "path": "reports/bytedance_engineering/BUILD_CHECK_V1_2.json",
+    "added_for_repository": true,
+    "bytes": 410,
+    "sha256": "a92479e2512798e8200e274996c271844ae2f9dcdd82dfebf87fcfc38337c735"
   },
   {
     "path": "reports/bytedance_engineering/PLAN.md",
@@ -3110,8 +4238,8 @@
   },
   {
     "path": "reports/bytedance_engineering/README.md",
-    "bytes": 4054,
-    "sha256": "a96027e9a3dc11c17a41ab308df166635ddb19a5eea7ff7fb5c92cf5cbfcad1c",
+    "bytes": 4518,
+    "sha256": "dbbe9180ae627c9c57fe7cfcec91e5c9fdd66eafe60c7b873b5f3c7efb90c473",
     "original_sha256": "a96027e9a3dc11c17a41ab308df166635ddb19a5eea7ff7fb5c92cf5cbfcad1c",
     "changed_for_export": false
   },
@@ -3152,8 +4280,8 @@
   },
   {
     "path": "reports/bytedance_engineering/appendices/code_map.tex",
-    "bytes": 8721,
-    "sha256": "22b682abe19d4b33273aac11195a379d42a9a4629af884a99e037302bd292781",
+    "bytes": 9148,
+    "sha256": "1ec0215c782bc3ccbff79a79c5fd7021e3136e2d93aab5460140db2fa5f2d2b7",
     "original_sha256": "22b682abe19d4b33273aac11195a379d42a9a4629af884a99e037302bd292781",
     "changed_for_export": false
   },
@@ -3180,22 +4308,22 @@
   },
   {
     "path": "reports/bytedance_engineering/asset_manifest.json",
-    "bytes": 53640,
-    "sha256": "ef6894a0259de2732e7179bc5b53a0b7e909e670b873b16f01119a2b5cb4b600",
+    "bytes": 58946,
+    "sha256": "730d6dc323e8651d30c2a28ba2be1e5d172b3634db115e4eacb17b27b8508239",
     "original_sha256": "ef6894a0259de2732e7179bc5b53a0b7e909e670b873b16f01119a2b5cb4b600",
     "changed_for_export": false
   },
   {
     "path": "reports/bytedance_engineering/build/main_zh.pdf",
-    "bytes": 20689954,
-    "sha256": "a02144cdaaaebc91f7cbcc9ad210a1c7fe6a2a7c521b122b83d6a95b69d8c42a",
+    "bytes": 23435996,
+    "sha256": "f89c287e17d38e79e46e9c59067dcdb1fad276c1bfed157e2bd9b071d2323d9a",
     "original_sha256": "a02144cdaaaebc91f7cbcc9ad210a1c7fe6a2a7c521b122b83d6a95b69d8c42a",
     "changed_for_export": false
   },
   {
     "path": "reports/bytedance_engineering/chapters/00_abstract.tex",
-    "bytes": 2206,
-    "sha256": "a3c0a11dd559c7a243b74df176305d580ab2086426a8ba6dad8c14bd368ba9f6",
+    "bytes": 2590,
+    "sha256": "1ac128a165302b238cc18c5504daef23f87360f3ce4263157abb35eed2ccba3b",
     "original_sha256": "a3c0a11dd559c7a243b74df176305d580ab2086426a8ba6dad8c14bd368ba9f6",
     "changed_for_export": false
   },
@@ -3257,10 +4385,16 @@
   },
   {
     "path": "reports/bytedance_engineering/chapters/09_conclusions.tex",
-    "bytes": 5403,
-    "sha256": "a886f5800a71d8533bf8fa9b8ebcb0d69dc0bc712b20ca3436dc87fd3c08a681",
+    "bytes": 5860,
+    "sha256": "8713991d72331911b3b885b9ee6a3652bde6e12c60704dd320f6edbba7e18217",
     "original_sha256": "a886f5800a71d8533bf8fa9b8ebcb0d69dc0bc712b20ca3436dc87fd3c08a681",
     "changed_for_export": false
+  },
+  {
+    "path": "reports/bytedance_engineering/chapters/09_rl_baseline.tex",
+    "added_for_repository": true,
+    "bytes": 12928,
+    "sha256": "90f4c9f3df4b634e70c97345947982f1396624bca42a8346484bf4520c3e93f1"
   },
   {
     "path": "reports/bytedance_engineering/code_index/ch02/s01.md",
@@ -3457,6 +4591,12 @@
     "sha256": "80bca0c6e25b334a4fb4ea63520c4d7e5a7d9d7bbba99f0ea6d1f820ec8fa052",
     "original_sha256": "80bca0c6e25b334a4fb4ea63520c4d7e5a7d9d7bbba99f0ea6d1f820ec8fa052",
     "changed_for_export": false
+  },
+  {
+    "path": "reports/bytedance_engineering/code_index/ch09/s29.md",
+    "added_for_repository": true,
+    "bytes": 330,
+    "sha256": "0cd7ab3a6a0199fdca2a3432489c539db58c60b62245fbf8e379d49f2b1cd29e"
   },
   {
     "path": "reports/bytedance_engineering/expansion_stats.json",
@@ -4110,9 +5250,39 @@
     "changed_for_export": false
   },
   {
+    "path": "reports/bytedance_engineering/figures/ch09/all_cases_camera_overview.png",
+    "added_for_repository": true,
+    "bytes": 1868278,
+    "sha256": "b68226166e1eac8710712c0963352785fb90410252cd477ea1eb280afbd2445d"
+  },
+  {
+    "path": "reports/bytedance_engineering/figures/ch09/forward_drift.png",
+    "added_for_repository": true,
+    "bytes": 218815,
+    "sha256": "a1b97e04f8d4d86d01f52c05f5606ba9c02a9beeb24a77dcfdcb3333ee77a41b"
+  },
+  {
+    "path": "reports/bytedance_engineering/figures/ch09/tracking_rmse.png",
+    "added_for_repository": true,
+    "bytes": 115291,
+    "sha256": "65d8753287989bbea9bccdb23d5ae6c54f172cf49ed64552a984000910297c7c"
+  },
+  {
+    "path": "reports/bytedance_engineering/figures/ch09/walk_stop.png",
+    "added_for_repository": true,
+    "bytes": 368457,
+    "sha256": "28725838b58a0d5fafb9228a765b363151a2d98b1c72fa4cabdac7c57269e186"
+  },
+  {
+    "path": "reports/bytedance_engineering/figures/ch09/world_paths.png",
+    "added_for_repository": true,
+    "bytes": 294429,
+    "sha256": "94e2ea99241ea0fdcc3d87daa3bd0bf12d1e209314f36b726d4ddcb32058f487"
+  },
+  {
     "path": "reports/bytedance_engineering/main_zh.tex",
-    "bytes": 1006,
-    "sha256": "167fb4085e3f5380dfb1e715ffa1944087b6bafa5baa1d6cb60bdeb593ed2156",
+    "bytes": 1038,
+    "sha256": "55477f45482952334f17ab044e1e9b602f813ba6ad491a4854e4c7cf3ba95bd5",
     "original_sha256": "167fb4085e3f5380dfb1e715ffa1944087b6bafa5baa1d6cb60bdeb593ed2156",
     "changed_for_export": false
   },
@@ -4125,8 +5295,8 @@
   },
   {
     "path": "reports/bytedance_engineering/outline.json",
-    "bytes": 11451,
-    "sha256": "019a880f74eca52fd02c7033034e675865717274535b308ddaa623ec386377ff",
+    "bytes": 11954,
+    "sha256": "0d6c20034917bdd615d4fb10d21187abab6ff9cf3e72c7b8a0756f461d66702b",
     "original_sha256": "019a880f74eca52fd02c7033034e675865717274535b308ddaa623ec386377ff",
     "changed_for_export": false
   },
@@ -4412,10 +5582,22 @@
   },
   {
     "path": "reports/bytedance_engineering/tools/validate.py",
-    "bytes": 1354,
-    "sha256": "923286370edeb5e55b8629a2b269bc17470c0bb88cbd4edeeca881fb09fa8190",
+    "bytes": 1402,
+    "sha256": "bc5c2774028e7d63ab9af40f6466c2abc0d1b3878e9d7e567252ad27ce4876d0",
     "original_sha256": "923286370edeb5e55b8629a2b269bc17470c0bb88cbd4edeeca881fb09fa8190",
     "changed_for_export": false
+  },
+  {
+    "path": "reports/bytedance_engineering/versions/v1.1/main_zh.pdf",
+    "added_for_repository": true,
+    "bytes": 20689954,
+    "sha256": "a02144cdaaaebc91f7cbcc9ad210a1c7fe6a2a7c521b122b83d6a95b69d8c42a"
+  },
+  {
+    "path": "reports/bytedance_engineering/versions/v1.1/main_zh.tex",
+    "added_for_repository": true,
+    "bytes": 1006,
+    "sha256": "167fb4085e3f5380dfb1e715ffa1944087b6bafa5baa1d6cb60bdeb593ed2156"
   },
   {
     "path": "reports/bytedance_engineering/videos/ch02/panda_joint_trajectory.mp4",
@@ -4481,6 +5663,84 @@
     "changed_for_export": false
   },
   {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_backward_02.mp4",
+    "added_for_repository": true,
+    "bytes": 2780548,
+    "sha256": "2950abc1cca02d5c6ffbf1c9470db6a59786c72c523d32c38e9a9b0d612e5e28"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_forward_02.mp4",
+    "added_for_repository": true,
+    "bytes": 2898007,
+    "sha256": "8bb17e04fe25e20c5b9a911ca00364cf57536a15bf09072c2adfeea810044ab2"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_forward_05.mp4",
+    "added_for_repository": true,
+    "bytes": 3264565,
+    "sha256": "65d0d92c6a5567b35ea7f9237ce1ec98d0eaa4a069124d1449adf72c429a2c7e"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_forward_08.mp4",
+    "added_for_repository": true,
+    "bytes": 3547527,
+    "sha256": "3a7888eacabf466503a3475051aae0cccec2995cf8a3d55926635725ec6931f9"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_forward_turn.mp4",
+    "added_for_repository": true,
+    "bytes": 3465086,
+    "sha256": "5035b667d6d858f6291937a4c8ea0a8cb29cb49224d01f7117bdc90f63f6ddd5"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_left_02.mp4",
+    "added_for_repository": true,
+    "bytes": 2702788,
+    "sha256": "ef3dfec1b2df34964e2a82d505c933aa7cb3b22674f40878c2cf9ec70eecb6de"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_mixed_commands.mp4",
+    "added_for_repository": true,
+    "bytes": 3335595,
+    "sha256": "c8d54d089391a3b68817919c1d2dbbdd92fd6f1c8fbf86e968f473245f6e4326"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_right_02.mp4",
+    "added_for_repository": true,
+    "bytes": 2660842,
+    "sha256": "eb10390550a62bee204905ed68d6a0fed90a07c54815ea267a6a44855dd5b9e9"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_walk_stop.mp4",
+    "added_for_repository": true,
+    "bytes": 2795435,
+    "sha256": "8d0c2b09b6a6f92046e153dbb9183917f22d218bc81bbfd9b2b476333f86efd3"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_yaw_left_05.mp4",
+    "added_for_repository": true,
+    "bytes": 2665245,
+    "sha256": "2cf35ff8e8abe128c74edaf2276d9be2682f7216363a1d99ab4dc89bd570989b"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_yaw_right_05.mp4",
+    "added_for_repository": true,
+    "bytes": 2732843,
+    "sha256": "2eb15767b09375cde36455068e0e2f8fcd2e22aeed03a6fec4b57a5650b32cb1"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_rl_zero.mp4",
+    "added_for_repository": true,
+    "bytes": 2489880,
+    "sha256": "684d81a25448ab6bbaecd28b7629a06704c62bec35647d63d09b67c516192fe5"
+  },
+  {
+    "path": "reports/bytedance_engineering/videos/ch09/g1_wbc_vs_official_rl.mp4",
+    "added_for_repository": true,
+    "bytes": 1897981,
+    "sha256": "63f4cbc7df39af2b33620c15ef380ae86330a038849650830306db7e46cca2c9"
+  },
+  {
     "path": "repository/PORTABILITY.md",
     "bytes": 701,
     "sha256": "cb209a4017c650497ae6a57f49afd0248606974b9f07e7b7ed0fc1438e39eef4",
@@ -4509,6 +5769,12 @@
     "bytes": 625,
     "sha256": "17594e55774b5c9580588338b977c3076fab5ab1f243ad1f5fdf3417baf457ef",
     "added_for_repository": true
+  },
+  {
+    "path": "repository/rl_player_verification.json",
+    "added_for_repository": true,
+    "bytes": 167,
+    "sha256": "7f84530a217197002271f7b8f7577c866b4df43cc55cb7e7aad04068ceb38793"
   },
   {
     "path": "scripts/check_offline.py",

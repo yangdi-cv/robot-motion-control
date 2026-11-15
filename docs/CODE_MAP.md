@@ -30,3 +30,10 @@
 | 8 | S26 | [三维准静态交替步行](../reports/bytedance_engineering/code_index/ch08/s26.md) |
 | 8 | S27 | [QP求解器对照与耗时尾部](../reports/bytedance_engineering/code_index/ch08/s27.md) |
 | 8 | S28 | [冻结条件、强扰动与保存核验](../reports/bytedance_engineering/code_index/ch08/s28.md) |
+
+
+## 第九章：官方强化学习行走复核
+
+[阶段代码](../experiments/unitree_g1_rl_baseline/validation/) · [接口检查](../experiments/unitree_g1_rl_baseline/tests/test_official_interface.py) · [结果与报告](../experiments/unitree_g1_rl_baseline/studies/command_validation_v1/)
+
+官方模型、预训练策略与BSD-3-Clause许可单独保留来源；不包含训练贡献。权重通过固定提交下载脚本恢复。

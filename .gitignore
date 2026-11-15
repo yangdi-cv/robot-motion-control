@@ -29,3 +29,6 @@ __pycache__/
 *.lot
 *.xdv
 *.synctex.gz
+
+# RL full state chunks are workstation artifacts
+experiments/unitree_g1_rl_baseline/studies/**/*.npz

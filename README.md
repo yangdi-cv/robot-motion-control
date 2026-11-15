@@ -16,6 +16,22 @@ https://github.com/user-attachments/assets/e6d07b9c-0beb-498b-b0da-dd4f7cb8c695
 
 [查看全部可播放视频](docs/DEMOS.md)
 
+### 本次新增：官方G1强化学习行走
+
+官方预训练策略复现，未训练或改权重。前进0.5米/秒时20秒前进9.23米、横移−1.41米；归零后仍踏步。与自编WBC使用不同模型，不能据此直接比较算法优劣。
+
+### 自编准静态WBC与官方RL：原速对照
+
+https://github.com/user-attachments/assets/7b201c9a-51cd-4f19-9111-31b51110c9c9
+
+### 官方RL：前进0.5米/秒
+
+https://github.com/user-attachments/assets/4c86b2b1-6092-47e1-bc0f-dea632dd1f28
+
+### 官方RL：行走后归零（12秒后）
+
+https://github.com/user-attachments/assets/5a57d19c-a52f-438a-baa4-4371d4aad6ee
+
 <!-- END INLINE DEMOS -->
 
 机器人运动控制与反馈系统：从Panda轨迹跟踪、IMU滤波与接触导纳，扩展到倒立摆平衡、平面双足连续行走和G1三维全身控制。
@@ -24,14 +40,16 @@ https://github.com/user-attachments/assets/e6d07b9c-0beb-498b-b0da-dd4f7cb8c695
 
 ## 从哪里开始
 
-- [完整技术工程报告（中文PDF，148页）](reports/bytedance_engineering/build/main_zh.pdf)
-- [按章节阅读代码](docs/CODE_MAP.md)：7个技术篇章、28个阶段。
+- [完整技术工程报告（中文PDF，157页）](reports/bytedance_engineering/build/main_zh.pdf)
+- [按章节阅读代码](docs/CODE_MAP.md)：8个技术篇章、29个阶段。
 - [轨迹与状态反馈](experiments/control_feedback_task2/)
 - [接触控制与重力优化](experiments/panda_contact_optimization/)
 - [倒立摆与延迟预测](experiments/lipm_balance/)
 - [连续摆腿与平面动力学](experiments/lipm_extension/)
 - [统一ZMP与关节力矩接口](experiments/biped_feedback/)
 - [G1三维全身控制](experiments/humanoid_control/)
+- [官方G1强化学习行走复现与复核](experiments/unitree_g1_rl_baseline/)
+- [官方RL全部可播放视频](docs/UNITREE_RL_DEMOS.md)
 
 ## 主要结果与边界
 
@@ -43,6 +61,7 @@ https://github.com/user-attachments/assets/e6d07b9c-0beb-498b-b0da-dd4f7cb8c695
 | 平面二十步 | 两组完成，前进约2.323m | 六电机、平面约束、理想或限定反馈 |
 | 平面反馈条件 | 94个去重条件79个通过 | 长延迟多数失败 |
 | G1三维正式条件 | 52个条件51个通过 | 四步29秒、约0.210m，属于准静态 |
+| 官方G1 RL复核 | 12种固定工况累计245秒，未触发终止条件 | 非随机成功率；方向漂移与停止模式仍有不足 |
 | G1额外强扰动 | 8个条件2个通过 | 与正式条件分开报告 |
 
 机器人运动结果均来自物理仿真；真实硬件记录仅限明确标注的IMU与Jetson采集。未进行企业设备代测或完整硬实时验证。动作块接口测试使用解析参考，没有运行VLA网络。

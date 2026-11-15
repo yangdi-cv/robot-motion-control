@@ -1,0 +1,11 @@
+{
+  "file": "wbc_vs_official_rl_first20s.mp4",
+  "frames": 400,
+  "fps": 20,
+  "wbc_source": "/home/yd/Documents/VLA/experiments/humanoid_control/G1_三维四步准静态行走.mp4",
+  "wbc_sha256": "86218f4ab4f286de266fa07be8a7107d257f4bb9957e00b8f832e3b31f73cb4a",
+  "rl_source": "/home/yd/Documents/VLA/experiments/unitree_g1_rl_baseline/studies/command_validation_v1/cases/forward_05/rollout_20fps.mp4",
+  "rl_sha256": "65d0d92c6a5567b35ea7f9237ce1ec98d0eaa4a069124d1449adf72c429a2c7e",
+  "same_playback_rate": true,
+  "algorithm_ablation": false
+}

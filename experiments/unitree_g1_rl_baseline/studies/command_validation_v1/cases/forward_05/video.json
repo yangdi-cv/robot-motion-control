@@ -1,0 +1,62 @@
+{
+  "file": "rollout_20fps.mp4",
+  "frames": 400,
+  "fps": 20,
+  "simulation_duration": 19.999999999999794,
+  "render_and_encode_wall_s": 5.695615935999967,
+  "trace_sha256": [
+    "d6656b8395471506b403c610fa2a037303f9044ba746576c69fe71d499a44545",
+    "c0c9c9560cc8cea0ef7ffa10cd8cd007a89a767e133fde1616571f48a99f914c",
+    "995dff3f942e5e27e5c41e5a56738dd625062013e1143a0264cf8fc8b89dcbe5",
+    "a999606cdb6beb88a69265072736ab2f8846a8db21e6fe588e00fa466b7f9da7",
+    "564edbc55c5b17d3fb28129f876910ee3d412a640ad5ee9450617907d9a9f2ee",
+    "4c28aa94c8bc8760453418dae9c32f6f2eebf9b17d6c14b85f8dd6b3df785a4f",
+    "6232b1221c54053e07e9aa777870f10afdcef7241aec7fd9cd92e6c755fbc557",
+    "064999a0aed1b0cbc386d611d496af1b391738d402399b1d4200003cf4a7aa58",
+    "55a711749cd412527284e85b8676bca56633b7c6b42a402b4430f668cecdfeec",
+    "69cf0e9e119803f4d6ec17621861a54bc2ea99ae9ea819995d7fda670defd008",
+    "820bc9afcb3aa341a8df6fdee0c85f637bce0b8c1c6a83c12fdfd389256fc752",
+    "7b543ce663f78184c19c83cfaa0fc5e9d52b387c1f35c35a39a522147c3f27c7",
+    "929b2b3586b4fb944f5b9d70ab77b2506a787a673c8d3cb7663d1675439dced8",
+    "bce3b5d9ed7bbc8995887203754e43236d5a37406ef36a413347d05418768f52",
+    "4265c85a71d7603145291e407ac68be35cd6b5639e95f982559d6df2d410bafa",
+    "0e29d3009f64cb80c0af29f31bda74125de180c47b39d4b4e972dc19f11fb88b",
+    "5a03d0b3e9258fea8d5929963058b5897153fcefcc6ce3c8c90fd45b1480572f",
+    "f19d99a3ba2ac9b0ee6b78787b9ffe8862c6fdc5f46b384212279b9b64fe52d3",
+    "cf118f062352188a525d2acad02a1fe1152d48c384ca917df9b7aa057a08e839",
+    "ca35b72664e0042ee78c076353a5c8282183773950501f13dc7b6e548ddb06d1"
+  ],
+  "stills": [
+    {
+      "file": "frame_0000.png",
+      "video_frame": 0,
+      "state_index": 0,
+      "simulation_time": 0.0
+    },
+    {
+      "file": "frame_0100.png",
+      "video_frame": 100,
+      "state_index": 2500,
+      "simulation_time": 4.999999999999671
+    },
+    {
+      "file": "frame_0200.png",
+      "video_frame": 200,
+      "state_index": 5000,
+      "simulation_time": 10.000000000000009
+    },
+    {
+      "file": "frame_0300.png",
+      "video_frame": 300,
+      "state_index": 7500,
+      "simulation_time": 15.000000000001679
+    },
+    {
+      "file": "frame_0399.png",
+      "video_frame": 399,
+      "state_index": 9975,
+      "simulation_time": 19.94999999999982
+    }
+  ],
+  "method": "saved qpos/qvel + mj_forward for rendering only; original logged forces; no policy calls or physics stepping"
+}
