@@ -57,3 +57,7 @@ python3 tools/audit_saved_results.py
 新增第九章：宇树官方G1强化学习行走复现与12种工况复核，13段新视频在videos/ch09。原WBC结果保留，官方预训练策略单列。旧v1.1 PDF归档在versions/v1.1。
 
 当前v1.2总报告157页、97张图片素材、22段视频。原始汇编工具仅适用于历史28阶段，重新生成章节会覆盖后续增补；现版请使用tools/build.sh直接编译。新增交付核对见BUILD_CHECK_V1_2.json。
+
+## English edition
+
+[Complete English PDF — 177 pages](english/build/main_en.pdf) · [LaTeX sources and build instructions](english/README.md). All chapters, appendices, tables and captions are translated. Original experiment figures and videos are shared with the Chinese edition.

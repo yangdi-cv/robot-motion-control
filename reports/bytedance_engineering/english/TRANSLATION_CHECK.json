@@ -1,0 +1,12 @@
+{
+  "source_records": 1473,
+  "translated_records": 1473,
+  "remaining": 0,
+  "unresolved_issues": 0,
+  "scope": "Complete Chinese v1.2 text, tables, captions, references and appendices; original embedded screenshot text retained.",
+  "invariant_checks": [
+    "Numeric tokens",
+    "LaTeX commands and syntax",
+    "Labels, citations, URLs and paths"
+  ]
+}

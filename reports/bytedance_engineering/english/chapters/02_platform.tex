@@ -1,0 +1,513 @@
+\chapter{Simulation Platform and Manipulator Trajectory Tracking}
+The communication bridge and robotic arm interface refer to the official Isaac Sim tutorial \cite{isaac}.
+
+
+First, connect the trajectory node with the physics simulation via real ROS2 messages, clearly defining timestamps, joint units, and control interfaces, then compare drive gains with reference velocities.
+
+\section{Runtime Environment and Isolation}
+
+\label{stage:s01}
+
+\subsection{Problems and Completed Content}\label{s01-detail-1}
+
+Based on the existing ROS2 Humble and MoveIt2/Panda workspace, an independent Isaac Sim 5.1.0 environment is added. Through the real ROS2 Bridge, joint targets are sent to the physically simulated Panda, and its state is received. A quintic polynomial trajectory is executed over the first three joints for 5 seconds, and the target, actual values, control commands, and errors are recorded. This report is derived from actual simulation and ROS messages, without using generated data to replace feedback. Commands were not sent to the SO101 real robot during this test.
+
+\subsection{Environment and Isolation}\label{s01-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3439}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6561}}@{}}
+\caption{Environment and Isolation: Setup and Results}\label{tab:s01-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+System & Ubuntu 22.04.5 LTS, kernel 6.8.0-138-generic \\
+GPU & NVIDIA GeForce RTX 4090, 24564 MiB \\
+NVIDIA Driver & 580.178.04 \\
+ROS & ROS2 Humble, system installation \path|/opt/ros/humble| \\
+External ROS node & System Python 3.10 \\
+Simulation & Isaac Sim 5.1.0.0, standalone Python 3.11.13 \\
+Simulation environment path & \path|/home/yd/Documents/VLA/.venvs/isaacsim51| \\
+ROS middleware & Fast DDS / rmw\_fastrtps\_cpp \\
+Communication isolation & ROS\_DOMAIN\_ID=51, localhost, dedicated topic prefix \\
+physics dt & 0.010 s \\
+\end{longtable}\endgroup
+
+Isaac clears the ROS Python path and uses its built-in Python 3.11 version from the Humble library; external control nodes are separately sourced from the system Humble. No system Python was replaced, nor were existing robotic arm or visual environments modified. Independent environment dependency checks passed; version locking records are in \path|setup_logs/requirements.lock.txt|, and installation process logs are in \path|setup_logs/isaac-install.log|.
+
+Screenshot of actual command output showing Ubuntu/GPU/software versions:
+
+\stagefigure{figures/ch02/s01_ubuntu_environment_48389fb1.png}{Screenshot of environment configuration}{fig:s01-detail-1}
+
+Isaac scene screenshot:
+
+\stagefigure{figures/ch02/s01_isaac_environment_85d70296.png}{Panda simulation environment}{fig:s01-detail-2}
+
+
+\paragraph{Stage Conclusion} Isaac runs independently in Python and the system ROS2, connected via a dedicated communication domain; no modifications were made to the system Python or the original training environment.
+
+\stagecode{s01}
+
+\FloatBarrier
+
+\section{Panda Model, Joints, and ROS2 Communication}
+
+\label{stage:s02}
+
+\subsection{Model, Joints, and Communication}\label{s02-detail-1}
+
+The NVIDIA FrankaPanda \texttt{franka.usd} is used. Its 7 revolute joints are panda\_joint1 through panda\_joint7, plus two gripper joints. Joint names were checked after loading the articulation, and limits were read from USD RevoluteJoint attributes:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3755}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3186}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3059}}@{}}
+\caption{Model, Joints, and Communication: Setup and Results}\label{tab:s02-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lower limit (degrees)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Upper Limit (degrees)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lower limit (degrees)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Upper Limit (degrees)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & -166.003 & 166.003 \\
+panda\_joint2 & -101.001 & 101.001 \\
+panda\_joint3 & -166.003 & 166.003 \\
+panda\_joint4 & -176.001 & -3.999 \\
+panda\_joint5 & -166.003 & 166.003 \\
+panda\_joint6 & -1.003 & 215.002 \\
+panda\_joint7 & -166.003 & 166.003 \\
+\end{longtable}\endgroup
+
+Initial 9D position is \path|[0, -0.785398, 0, -2.356194, 0, 1.570796, 0.785398, 0.04, 0.04]|; rotational joints use rad, gripper joints use m. In this trial, only the first three joints are modified, while the remaining arm joints remain unchanged. The standard end-effector frame is recorded as \path|/World/Panda/panda_hand|; this experiment performs joint-space validation, without computing end-effector pose error, and without separately verifying the complete ROS TF tree.
+
+The actual model path, joint limits, initial pose, and scene parameters are found in \path|runs/run_20261013_003/scene_metadata.json|. \path|runs/run_20261013_003/panda_scene.usda| saves the scene and OmniGraph; the robot assets still reference the official online USD, and reproduction requires access to the assets or existing cached versions.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  ROS2 Quintic Trajectory Node
+\item
+  /panda\_task1/joint\_command
+\item
+  Bridge Subscriber
+\item
+  Articulation Controller and PhysX
+\item
+  Bridge JointState Publisher
+\item
+  /panda\_task1/joint\_states
+\end{enumerate}
+
+OmniGraph also publishes the simulation clock on \path|/clock|. The control node computes the reference from feedback simulation timestamps and sends a position target every 10ms feedback cycle. These are position commands; trajectory velocity and acceleration are not conflated with another control mode. The command topic has 1 control publisher and 1 Bridge subscriber; the state topic has 1 Bridge publisher and 1 recording subscriber. Original endpoints and QoS are recorded in \path|runs/run_20261013_003/ros_graph.txt|.
+
+
+\paragraph{Stage Conclusion} Joint names, limits, and initial states are derived from the actual loaded model; initial validation is performed in joint space, without additional claims regarding end-effector pose or full coordinate tree acceptance.
+
+\stagecode{s02}
+
+\FloatBarrier
+
+\section{Fifth-Order Trajectory and Default Drive Baseline}
+
+\label{stage:s03}
+
+\subsection{Fifth-order Trajectory and Recording Method}\label{s03-detail-1}
+
+Let $u=t/T$, $T=5\,\mathrm{s}$, and use quintic interpolation:
+\begin{equation}
+q(t)=q_0+(q_f-q_0)(10u^3-15u^4+6u^5).
+\end{equation}
+where $q_0$ and $q_f$ are the joint angles at the start and end points, respectively. Velocity and acceleration are obtained by analytically differentiating this expression, with both endpoints set to zero.
+
+Starting and ending velocities, accelerations are all zero, and the boundary conditions have been verified numerically. Settings:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3685}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3157}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3157}}@{}}
+\caption{Quintic Trajectories and Recording Methods: Setup and Results}\label{tab:s03-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Initial target (rad)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final target (rad)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Initial target (rad)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final target (rad)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & 0 & 0.4 \\
+panda\_joint2 & -0.785398 & -0.5 \\
+panda\_joint3 & 0 & -0.3 \\
+\end{longtable}\endgroup
+
+Record 501 samples, including endpoints at t=0 and t=5. Each record saves simulation time, trajectory-relative time, host receive/publish monotonic time, 7-dimensional reference/actual positions, analytical reference velocity, and position error. The actual sent target is identical to the reference position.
+
+Error is defined as \path|e(t_state)=q_reference(t_state)-q_actual(t_state)|, without shifting the reference or compensating lag to reduce it. Maximum error is \texttt{max(\textbar{}e\textbar{})}, and RMSE is \texttt{sqrt(mean(e²))}. Position reflects both drive response and the communication/sampling chain; their individual delays were not independently identified.
+
+\subsection{Results}\label{s03-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1819}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1691}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1634}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1558}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1740}}@{}}
+\caption{Results: Settings and Outcomes}\label{tab:s03-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum error (rad)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum error degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final error (rad)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Joint
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum error (rad)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum error degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+RMSE degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final error (rad)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+panda\_joint1 & 0.034990 & 0.022361 & 2.0048 & 1.2812 & 0.001800 \\
+panda\_joint2 & 0.023757 & 0.014928 & 1.3612 & 0.8553 & -0.000300 \\
+panda\_joint3 & 0.025935 & 0.016486 & 1.4859 & 0.9446 & -0.000400 \\
+\end{longtable}\endgroup
+
+Time and Frequency:
+
+\begin{itemize}
+\tightlist
+\item
+  Actual recorded simulation duration: 5.000000 s.
+\item
+  Median sampling period in simulation: 10.000000 ms; maximum: 10.000000 ms.
+\item
+  Corresponding host receive window: 5.041746 s; average feedback frequency: 99.172 Hz.
+\item
+  Median inter-host reception interval: 9.912 ms, P95: 12.662 ms.
+\item
+  The real-time factor of this window: 0.9917.
+\end{itemize}
+
+Therefore, 10ms/100Hz refers to the simulation time baseline; actual host scheduling has jitter, and we do not claim strict hard real-time 100Hz.
+
+\stagefigure{figures/ch02/s03_trajectory_tracking_f6e7c8ea.png}{Target and Actual Trajectories}{fig:s03-detail-1}
+
+\stagefigure{figures/ch02/s03_tracking_error_9c4ff88b.png}{Tracking Error}{fig:s03-detail-2}
+
+The reference curve is generally aligned with the actual curve and reaches the set target, but exhibits noticeable lag during motion phases, with a maximum error of approximately 1.36–2.00 degrees. The endpoint error is significantly smaller than the peak error in the middle. Currently, this serves as the baseline for the default drive and position target chain, without gain tuning, force control, or velocity feedforward comparisons; thus, it cannot be claimed to represent optimal accuracy or real hardware performance.
+
+
+\paragraph{Stage Conclusion} The 5-second trajectory ultimately reaches the target, with a peak error of approximately 1.36 to 2.00 degrees in between, providing a baseline for subsequent parameter tuning.
+
+
+
+% BEGIN SIM_VISUALS s03
+\subsection{Trajectory Motion in Realistic Scenarios}
+The following figure is extracted from the original Isaac recording at fixed video timestamps, with sidebars and resource panels cropped out, retaining only the robot viewport. Video time does not equal the relative time of the quintic trajectories; the image illustrates the actual model and pose changes, with tracking accuracy still evaluated based on the previous timestamps and joint records.
+
+\motionfigure{figures/ch02/panda_trajectory_viewport_sequence.png}{Four moments from a recorded screen capture of the Isaac Panda's actual trajectory; cropping removes only the sidebar interface, with timestamps corresponding to video playback moments.}{fig:motion-panda_trajectory_viewport_sequence}
+% END SIM_VISUALS s03
+\stagecode{s03}
+
+\stagevideo{videos/ch02/panda_joint_trajectory.mp4}
+
+\FloatBarrier
+
+\section{Drive Gain, Reference Velocity, and Amplitude Verification}
+
+\label{stage:s04}
+
+\subsection{Drive Gain and Velocity Feedforward}\label{s04-detail-1}
+
+Physical period: 10 ms. Use the original 5-second quintic trajectory with zero endpoint velocity and acceleration, primarily analyzing the first three joints. Drive gains set Kp at 1x, 2x, and 4x the default value; Kd scaled synchronously at 1x, √2x, and 2x. Compare with and without sending reference velocity. Each of the six configurations tested in both positive and negative directions, repeated twice, totaling 24 phases. Each phase: 2 seconds hold → 5 seconds motion → 1 second hold. Reset simulation joints between phases; statistics exclude reset instants.
+
+The velocity feedforward here treats the trajectory's parsed velocity as the velocity target for joint actuation, sent together with the position target; it is not the inverse-dynamics-based torque feedforward. The default gains for the first seven joints are approximately Kp = 22918.31 and Kd = 4583.66, while the selected settings are approximately 91673.25 and 9167.33, which are the current gains read from the Isaac control interface. These values are only applicable for this Panda simulation and cannot be directly transferred to SO101.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2245}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1939}}@{}}
+\caption{Drive Gain and Velocity Feedforward: Setup and Results}\label{tab:s04-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kp multiplier / Kd multiplier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reference velocity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fitting lag / ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Kp multiplier / Kd multiplier
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reference velocity
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fitting lag / ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1 / 1.000 & None & 0.960 & 1.835 & 214.3 \\
+1 / 1.000 & Yes & 0.095 & 0.194 & 20.3 \\
+2 / 1.414 & None & 0.702 & 1.344 & 156.3 \\
+2 / 1.414 & Yes & 0.092 & 0.178 & 20.2 \\
+4 / 2.000 & None & 0.517 & 0.992 & 115.2 \\
+4 / 2.000 & Yes & 0.091 & 0.178 & 20.2 \\
+\end{longtable}\endgroup
+
+Increasing the gains alone helps, but less than adding reference velocity. Parameters are selected using the mean motion RMSE of the first three joints, subject to worst-case overshoot no greater than 0.5° and hold-phase standard deviation no greater than 0.1°. The selected setting is Kp\(\times\)4, Kd\(\times\)2, with reference velocity.
+
+The fitting lag is the time difference obtained by comparing the reference trajectory shifted in time with the actual position, with a search range of −100 to 400 ms and a step size of 1 ms; it describes the overall tracking performance and is not the ROS message transmission delay. The jitter near zero for the segment is also affected by the simulation sleep mechanism and should not be interpreted as real motor noise.
+
+\stagefigure{figures/ch02/s04_tracking_error_34a7c300.png}{Tracking error of the first three joints}{fig:s04-detail-1}
+
+The relevant code is located at \path|scripts/isaac_scene.py|, \path|scripts/controller.py|, \path|scripts/run_control.py|, \path|scripts/trajectory.py|, and \path|scripts/analyze_control.py|; the configuration is in \path|config/control_suite.json|.
+
+\subsection{Validation with Different Motion Amplitudes}\label{s04-detail-2}
+
+After parameter selection, additional trajectories with displacements scaled by 0.6 and 1.2 times the original, performed in both forward and reverse directions, each repeated twice, are used. The default setting, together with the selected parameters, comprises 16 stages; no parameter adjustments are made during validation.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1991}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2092}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2078}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1913}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1925}}@{}}
+\caption{Validation with Different Motion Amplitudes: Setup and Results}\label{tab:s04-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fitting lag / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Overshoot / °
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Fitting lag / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Overshoot / °
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Default & 0.864 & 2.201 & 214.3 & 0.081 \\
+Gain tuning + reference velocity & 0.082 & 0.212 & 20.0 & 0.036 \\
+\end{longtable}\endgroup
+
+Significant improvement is still observed across different amplitudes, indicating that the results are not solely derived from a single original trajectory. However, the scene, load, and robotic arm model remain unchanged; repeated testing does not represent independent real-world conditions. Tests under varying loads, collisions, friction disturbances, or real motor bandwidth have not yet been conducted.
+
+The relevant code is located at \path|scripts/analyze_control.py|; the validation configuration is in \path|config/control_validation.json|, and joint-by-joint data is in \path|runs/control_validation/joint_metrics.csv|.
+
+\subsection{Supplementary Experiment on Panda Outer-loop Frequency}\label{s04-detail-3}
+
+To further distinguish between publication frequency and actual tracking performance, the Panda physics timestep is fixed at 5ms, while Bridge publishes simulation time states at 200Hz; external nodes process and send position/velocity targets at 50Hz, 100Hz, and 200Hz respectively. Default and tuned settings are each tested in both forward and reverse directions, repeated twice, totaling 24 phases. Frequency thresholds use simulation time; actual runtime frequencies on the host are separately measured.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2028}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}@{}}
+\caption{Outer-loop frequency compensation experiment for Panda: Setup and Results}\label{tab:s04-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz (simulation time)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average host frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz (simulation time)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average host frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & Default & 0.971 & 1.830 & 38.37 \\
+50 & Tuning + Reference Velocity & 0.080 & 0.154 & 38.07 \\
+100 & Default & 0.948 & 1.788 & 76.61 \\
+100 & Tuning + Reference Velocity & 0.057 & 0.111 & 76.58 \\
+200 & Default & 0.937 & 1.768 & 153.50 \\
+200 & Tuning + Reference Velocity & 0.047 & 0.090 & 153.31 \\
+\end{longtable}\endgroup
+
+Although the first round achieved the target simulation time, the actual host frequency was approximately 38, 77, and 153 Hz, failing to meet real-time requirements. Subsequently, under the same physical timestep and task configuration, frame-by-frame rendering was disabled, and timing was switched to absolute time-based scheduling, allowing completion of the same 24 phases:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2028}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}@{}}
+\caption{Outer-loop frequency compensation experiment for Panda: Setup and Results}\label{tab:s04-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz (simulation time)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average host frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz (simulation time)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average Motion RMSE / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum Absolute Error / °
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average host frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & Default & 0.971 & 1.830 & 50.00 \\
+50 & Tuning + Reference Velocity & 0.080 & 0.154 & 50.01 \\
+100 & Default & 0.948 & 1.788 & 100.03 \\
+100 & Tuning + Reference Velocity & 0.057 & 0.111 & 100.03 \\
+200 & Default & 0.937 & 1.768 & 200.00 \\
+200 & Tuning + Reference Velocity & 0.047 & 0.090 & 200.00 \\
+\end{longtable}\endgroup
+
+After disabling unnecessary rendering and adjusting the timer, the host frequency approaches the target, indicating that the operating mode affects the actual meaning of the feedback frequency. Both implementations are adjusted together; currently, the individual gains of each are not quantified, nor is it inferred that the Jetson can achieve the same performance.
+
+\stagefigure{figures/ch02/s04_panda_frequency_norender_b1d39b52.png}{Comparison of joint outer-loop without frame-by-frame rendering}{fig:s04-detail-2}
+
+\stagefigure{figures/ch02/s04_panda_frequency_f2e821dd.png}{Comparison of joint outer-loop frequencies}{fig:s04-detail-3}
+
+In this set of tests, the physical timestep is fixed, so comparisons within the group primarily reflect the influence of outer-loop update frequency and actuation settings. It is separately statistically analyzed from the previous tuning experiment with a 10ms physical timestep. IMU replay is not used for Panda joint control; joint feedback still comes from JointState; no claim is made that IMU attitude fusion or state estimation closed-loop has been completed.
+
+The relevant code is located at \path|scripts/controller.py| and \path|scripts/analyze_control_frequency.py|; the configurations are in \path|config/control_frequency.json| and \path|config/control_frequency_norender.json|.
+
+
+\paragraph{Stage Conclusion} The average motion error from independent amplitude validation decreased from 0.864 degrees to 0.082 degrees. The reference velocity gain is evident, but it is neither feedforward inverse dynamics torque nor hardware performance.
+
+\stagecode{s04}
+
+\FloatBarrier

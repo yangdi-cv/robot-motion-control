@@ -1,0 +1,171 @@
+\chapter{Official Reinforcement Learning Walking Baseline and Reproduction Verification}
+\section{Abstract}\label{ux6458ux8981}
+
+In this round, we re-examined the existing quasi-static control prototype and the official reinforcement learning walking baseline from Unitree. The official pretrained policy was not modified or retrained; newly added were observation interface verification, 12 different speed conditions, contact measurement, state logging, and video re-review.
+
+The 12 conditions ran for a total of 245 seconds of simulation, with 122500 physics steps and 12250 policy calls. All reached their specified duration without triggering the fall or non-foot ground-contact termination criteria. These are functional checks from the same initial state, not a success rate estimated from 12 randomized trials.
+
+There are three main findings. First, the official policy alternates foot lifts with load-bearing contacts; it does not directly drag the floating base. Second, with a 0.5m/s forward command, the robot moves 9.23m forward and −1.41m laterally over 20 seconds, with a −15.63-degree heading change. Tracking forward speed does not imply accurate straight-line motion. Third, after a zero command, net body motion slows but the feet keep stepping, so the preset instantaneous-speed bounds are not maintained for a continuous 1-second interval. Dynamic stepping is reproduced, while heading retention and the transition to standing remain unresolved.
+
+\motionfigure{figures/ch09/all_cases_camera_overview.png}{Keyframes from 12 simulation scenarios. Each frame is captured at the middle of its respective episode and is not from the same world position.}{fig:rl-all_cases_camera_overview}
+
+\section{Positioning of the Two Control Paradigms}\label{ux4e24ux6761ux63a7ux5236ux8defux7ebfux7684ux5b9aux4f4d}
+
+The existing WBC (whole-body control) controller uses a 29-motor model with dynamics constraints, torque control, and a slow quasistatic reference. It supports analysis of load transfer, contact, and constraint implementation. The roughly 7-second phase duration is a reference-trajectory setting: slow video alone does not establish a controller defect, but natural dynamic walking has not been demonstrated either.
+
+The RL policy reviewed in this round originates from the official unitree\_rl\_gym provided by Unitree, using the G1 model with 12 motors. We reproduced the official pretrained policy and its deployment loop without training a new policy. The models, tasks, and reference speeds for the two approaches differ; the video can explain the perceptual differences but cannot serve as a ranking of algorithm performance under identical conditions.
+
+Reference video: \path|wbc_vs_official_rl_first20s.mp4|. Both sides play at original speed; the left side shows only the first 20 seconds of the original 29-second WBC video, while the right side shows the official policy moving forward at 0.5 m/s. The full WBC video remains preserved in the original experiment directory.
+
+\section{Upstream and Interface Verification}\label{ux4e0aux6e38ux4e0eux63a5ux53e3ux6838ux5bf9}
+
+Upstream repository: https://github.com/unitreerobotics/unitree\_rl\_gym
+, licensed under BSD-3-Clause. Fixed commit is \path|276801e46c5d433564f24658bac64f254b7d2d4b|.
+
+The policy file is \path|deploy/pre_train/g1/motion.pt|, with SHA256 \path|cf668f75b90d1abf73d2b87612a6e76bccc61ff7e083b63582d3f6aaa3c1759d|. The model contains recurrent neural network states; therefore, the policy is reloaded for each scenario to avoid interference from the previous round's hidden state; no additional warm-up inference is performed.
+
+Physical timestep is 0.002 seconds, i.e., 500 Hz; the policy is called every 10 physical timesteps, i.e., 50 Hz. The 47-dimensional observation includes angular velocity, gravity projection, velocity command, joint positions and velocities, previous action, and gait phase. Actions are scaled by 0.25 and added to default joint angles, then motor torques are generated using the official proportional and derivative control parameters. The floating base has no externally applied driving force.
+
+5 interface tests passed: the observation vector under random input matches the official code snippet; torque calculation is consistent; gravity projection and coordinate transformation are consistent; reloading the policy's hidden state allows resetting; the new and old cycle states are consistent over 500 consecutive physical steps, with an allowed error of 1e−12.
+
+Saved states are independently recomputed kinematically. Across 31 sampled states per condition, maximum position difference is 0 and body-frame velocity differences are at floating-point roundoff level. No extra forward-dynamics or kinematics call is inserted into the live control loop during recording, avoiding changes to contact-solver timing.
+
+\section{Operating Conditions and Evaluation Criteria}\label{ux5de5ux51b5ux4e0eux5224ux5b9aux53e3ux5f84}
+
+Fixed 12 scenarios: zero command, forward at 0.2, 0.5, and 0.8 m/s, backward at 0.2 m/s, lateral translation at 0.2 m/s, lateral turning at 0.5 rad/s, forward while turning, walking then returning to zero, and multi-command switching. The first 11 scenarios each last 20 seconds, and the last one lasts 25 seconds.
+
+The protocol and source code snapshot are saved before execution in \path|PROTOCOL.json| and \path|source/|. The first 3 seconds after each command change are not counted in the steady-state velocity error. The root-mean-square velocity error thresholds are 0.15 m/s per axis for linear velocity and 0.20 rad/s for angular velocity. These thresholds are relatively loose and are only used for the current functional check.
+
+Safety termination conditions include: base height below 0.4 meters; tilt exceeding 60 degrees for 0.1 seconds; non-foot ground contact force exceeding 20 Newtons for 0.1 seconds; state values being non-finite. Meeting these conditions does not equate to robustness certification.
+
+The stopping criteria are determined prior to execution: instantaneous planar velocity does not exceed 0.10 m/s, and absolute angular velocity does not exceed 0.15 rad/s, continuously maintained for 1 second. The zeroing test retains this criterion, without changing the standard due to test failure.
+
+\section{Velocity and Direction Results}\label{ux901fux5ea6ux4e0eux65b9ux5411ux7ed3ux679c}
+
+The velocity errors in the table correspond sequentially to the forward/backward, left/right, and yaw motion of the body frame; displacement refers to the floating-base position in world coordinates. Base position and whole-body center of mass are recorded separately and should not be confused.
+
+{\def\LTcaptype{table} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2667}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operating Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+World X/Y Displacement (m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Velocity error (m/s, m/s, rad/s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Heading Change (degrees)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Zero command & 0.240 / -0.397 & 0.018 / 0.077 / 0.038 & -10.6 \\
+Forward 0.2 & 3.916 / -0.725 & 0.019 / 0.075 / 0.051 & -11.2 \\
+Forward 0.5 & 9.228 / -1.409 & 0.035 / 0.066 / 0.086 & -15.6 \\
+Forward 0.8 & 14.532 / -2.617 & 0.052 / 0.061 / 0.135 & -19.6 \\
+Rearward 0.2 & -3.395 / -0.186 & 0.030 / 0.070 / 0.041 & -5.1 \\
+Left shift 0.2 & 0.628 / 2.609 & 0.030 / 0.102 / 0.037 & -5.0 \\
+Right shift 0.2 & -0.139 / -3.662 & 0.014 / 0.079 / 0.040 & -10.4 \\
+Left turn 0.5 & 0.134 / 0.052 & 0.016 / 0.079 / 0.081 & 534.6 \\
+Right turn 0.5 & -0.059 / -0.190 & 0.057 / 0.070 / 0.057 & -553.3 \\
+Move forward and turn & -1.772 / 1.185 & 0.036 / 0.069 / 0.107 & 293.1 \\
+Zero after walking & 4.400 / -0.574 & 0.029 / 0.071 / 0.068 & -10.6 \\
+Multi-command switching & 2.782 / 0.569 & 0.025 / 0.079 / 0.059 & 124.4 \\
+\end{longtable}
+}
+
+All 12 scenarios meet the aforementioned relatively wide velocity error threshold. More closely examining, for the leftward command of 0.2 m/s, the steady-state mean is approximately 0.133 m/s, indicating under-tracking; for rightward movement, it is about −0.185 m/s, showing asymmetry between left and right. One cannot mask these differences by claiming "all passed."
+
+\motionfigure{figures/ch09/world_paths.png}{World coordinate trajectories. The target paths differ between turning and straight-line scenarios.}{fig:rl-world_paths}
+
+\motionfigure{figures/ch09/tracking_rmse.png}{Body-frame velocity tracking error.}{fig:rl-tracking_rmse}
+
+The result of advancing at 0.5 m/s accurately reproduced the previously recorded 9.23 m forward displacement and −1.41 m lateral displacement. The mean steady-state forward velocity was approximately 0.476 m/s, but the heading gradually changed from −3.49° at the 3rd second to −15.63° at the end.
+
+Post-hoc kinematic decomposition shows that in the world Y-direction displacement, the projection of forward body motion contributes approximately −1.442 meters, the projection of lateral body motion contributes approximately +0.041 meters, and the remainder contributes approximately −0.007 meters. This indicates that lateral displacement is primarily related to rotation about the motion direction; this is merely a geometric decomposition and does not identify the internal causes of heading drift in the policy.
+
+\motionfigure{figures/ch09/forward_drift.png}{Directional drift when forward speed increases.}{fig:rl-forward_drift}
+
+\section{Zeroing is not equivalent to standing still}\label{ux5f52ux96f6ux5e76ux4e0dux7b49ux4e8eux7ad9ux5b9a}
+
+In the walking-and-zeroing scenario, the command is set to zero at the 12th second. Afterward, over the next 8 seconds, the base still moves approximately 0.207 meters and −0.184 meters, and 20 touchdown-recontact events are recorded following foot lifts. In the separate zero-command round, after the 3rd second, 42 similar events are also observed, indicating that the policy maintains the stepping cycle.
+
+Zeroing during walking and multi-command zeroing did not meet the preset instantaneous stop condition. To distinguish body oscillation from continuous forward motion, an after-the-fact diagnostic was added: compute velocity using net displacement over a 1-second window. Walking zeroing reached the net velocity threshold approximately 1.10 seconds after initiation, with the final window showing about 0.016 m/s. This indicates that average translational motion has noticeably slowed, but cannot be interpreted as complete stop. After-the-fact metrics are reported separately from the original acceptance criteria.
+
+\motionfigure{figures/ch09/walk_stop.png}{State records of walking, zeroing, and continuous stepping.}{fig:rl-walk_stop}
+
+Corresponding video: \path|cases/walk_stop/rollout_20fps.mp4|, pay special attention after 12 seconds. Zero command video: \path|cases/zero/rollout_20fps.mp4|.
+
+\section{Distinction between Contact and "Floating"}\label{ux63a5ux89e6ux4e0eux6f02ux6d6eux7684ux533aux5206}
+
+In this round, the base was not directly dragged using position constraints. Contact measurements originated from the foot contact points in MuJoCo and the force solver. During steady-state, there were no intervals where both feet simultaneously fell below the 10 N contact threshold; the double support phase accounted for approximately 3\% to 11\%. The maximum heel-off ground height was approximately 2.7 to 4.6 cm. Actual alternation of supporting feet occurred, rather than the entire robot hovering and translating in mid-air.
+
+The tangential velocity at the contact point is weighted by load capacity, with root mean square values of approximately 0.054, 0.099, and 0.159 m/s at forward speeds of 0.2, 0.5, and 0.8 m/s, respectively. This metric serves as a proxy for contact motion, indicating that foot motion increases with higher speed, but it cannot be directly equated to actual slippage distance on real hardware. Simulation contact compliance, spherical foot geometry, and solver errors all influence this metric.
+
+Among the 12 scenarios, the maximum base tilt is approximately 4 to 6 degrees. The video appears relatively stable and consistent with not triggering fall conditions, but a single flat-ground, ideal-state input is still insufficient to demonstrate real-world deployment stability.
+
+\section{Files and Reproduction}\label{ux6587ux4ef6ux4e0eux590dux73b0}
+
+The relevant code is located at \path|experiments/unitree_g1_rl_baseline/validation/|:
+
+\begin{itemize}
+\tightlist
+\item
+  \path|core.py|: official observation, control, and contact measurement;
+\item
+  \path|protocol.py|: Commands and pre-determined thresholds;
+\item
+  \path|run_study.py|: Execute, dropping the disk in chunks every 1 second; write results upon completion of the scenario;
+\item
+  \path|analyze.py|: statistics on velocity, posture, contact, and stopping;
+\item
+  \path|verify.py|: Independent recomputation for saving state;
+\item
+  \path|diagnostics.py|: Added direction and net velocity diagnostics after official run;
+\item
+  \path|render.py|: Reads the saved state to generate a video without re-running the policy.
+\end{itemize}
+
+The interface test is located at \path|tests/test_official_interface.py|. The results directory for this round is \path|studies/command_validation_v1/|. New experiments must use a new tag and must not overwrite the records of this round.
+
+\begin{Verbatim}[breaklines=true,fontsize=\small]
+cd /home/yd/Documents/VLA
+PY=.venvs/openpi-libero/bin/python
+$PY experiments/unitree_g1_rl_baseline/tests/test_official_interface.py
+$PY experiments/unitree_g1_rl_baseline/validation/run_study.py --help
+\end{Verbatim}
+
+When executing model tasks, set memory limits using a systemd user service, for example: MemoryHigh=3G, MemoryMax=4G, OOMPolicy=stop; the policy runs on a single CPU thread, with rendering handled separately via EGL. Runtime includes state compression and saving and is not considered pure policy inference performance.
+
+For each scenario, retain the following: \path|part_*.npz| containing physical state chunks, \path|policy_calls.npz| containing observations and actions, \path|result.json|, \path|metrics.json|, \path|video.json|, 5 keyframes, and a 20 fps video. \path|VERIFICATION.json| records kinematic and temporal verification, and \path|POSTHOC_DIAGNOSTICS.json| records post-hoc diagnostics. All videos are reconstructed from original states and are not accelerated.
+
+\section{Conclusions and Future Scope}\label{ux7ed3ux8bbaux4e0eux540eux7eedux8303ux56f4}
+
+The current round has completed the interface verification and multi-command validation of the official dynamic walking baseline. Compared to only checking "not falling over within 20 seconds," it now separately describes forward speed, directional error, foot-ground contact, and stopping behavior.
+
+The most worthwhile next step is to treat walking and standing as independent modes and validate the transition at zeroing; secondly, maintaining direction. Any modifications should be implemented as new control schemes, compared against the current fixed policy, and not be considered the official baseline simply because the current results have been altered. The original WBC approach should continue to focus on refining dynamic references, contact events, and footstep planning, rather than merely speeding up playback or shortening trajectories to improve visual appeal.
+
+No training was conducted in this round, no hardware testing was performed, and no experiments on terrain or disturbance robustness were carried out. Each scenario was run only once from the same initial state. These results are not yet sufficient to claim independent development of a natural walking algorithm or industrial-level stability validation.
+
+
+\section{Video Directory of This Phase}
+\stagevideo{videos/ch09/g1_rl_backward_02.mp4}
+\stagevideo{videos/ch09/g1_rl_forward_02.mp4}
+\stagevideo{videos/ch09/g1_rl_forward_05.mp4}
+\stagevideo{videos/ch09/g1_rl_forward_08.mp4}
+\stagevideo{videos/ch09/g1_rl_forward_turn.mp4}
+\stagevideo{videos/ch09/g1_rl_left_02.mp4}
+\stagevideo{videos/ch09/g1_rl_mixed_commands.mp4}
+\stagevideo{videos/ch09/g1_rl_right_02.mp4}
+\stagevideo{videos/ch09/g1_rl_walk_stop.mp4}
+\stagevideo{videos/ch09/g1_rl_yaw_left_05.mp4}
+\stagevideo{videos/ch09/g1_rl_yaw_right_05.mp4}
+\stagevideo{videos/ch09/g1_rl_zero.mp4}
+\stagevideo{videos/ch09/g1_wbc_vs_official_rl.mp4}
+
+\noindent The code for this stage is located at \path|experiments/unitree_g1_rl_baseline/validation/|, and the interface testing is in \path|experiments/unitree_g1_rl_baseline/tests/test_official_interface.py|.

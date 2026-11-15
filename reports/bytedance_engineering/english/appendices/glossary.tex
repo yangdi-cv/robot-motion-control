@@ -1,0 +1,37 @@
+\chapter{Terminology and Abbreviations}
+\begin{longtable}{p{.20\linewidth}p{.70\linewidth}}
+\toprule Name & Meaning in this report \\\midrule\endhead
+ROS2 & The second generation of the Robot Operating System, providing node communication, messages, time, and other interfaces.\\
+Bridge & Communication Bridge, connecting joint states in simulation with external ROS2 commands.\\
+QoS / DDS & Quality-of-service settings and the data distribution communication mechanism; they affect reliability, queues, and transport.\\
+PhysX / MuJoCo & Physics engines for rigid-body dynamics, collision detection, and contact resolution.\\
+IMU & Inertial Measurement Unit, commonly outputs information such as three-axis acceleration, three-axis angular velocity, etc.\\
+EMA & Exponential Moving Average, using only recursive filtering with current and historical data.\\
+Butterworth & Butterworth filter, with a flat passband frequency response; this project adopts a causal implementation.\\
+Allan deviation & observing signal fluctuations at different averaging times; a single curve does not equate to complete device calibration.\\
+Group delay & the time delay characteristic of different frequency components of a signal after passing through a filter.\\
+Data age & the time elapsed between the source timestamp of the measurement and when the controller reads it.\\
+RMSE & Root Mean Square Error; must simultaneously specify reference, window, and physical units.\\
+PD / PID & Proportional and derivative feedback; PID also includes integral feedback.\\
+Admittance control & motion correction generated based on force error; this project primarily studies the normal response in the plane.\\
+Inverse kinematics & computing joint references from end-effector position and orientation; differential inverse solution uses the Jacobian to compute continuous increments. \\
+Jacobian & the local linear relationship mapping joint velocities to end-effector or task space velocities. \\
+LIPM & Linear Inverted Pendulum model, simplifying the robot into a point mass at constant height supported by ground contact points. \\
+CoM & Center of Mass, this report also focuses on position, velocity, and acceleration targets.\\
+CoP & Pressure Center, calculated from actual ground contact forces and moments.\\
+ZMP & Zero Moment Point; under approximations such as constant height and zero change in center-of-mass angular momentum, correspond to CoP.\\
+DCM & Divergent component of motion: a combination of CoM position and velocity used to analyze unstable motion.\\
+LQR & Linear Quadratic Regulator, computes feedback gains based on state error and input cost.\\
+QP / WBC & Quadratic Programming / Whole-Body Control, coordinating task objectives with dynamics, contact, and actuator constraints.\\
+Contact wrench & combination of three-dimensional force and torque; must specify reference point, coordinate system, and component order.\\
+Floating base & The base moves freely in space, typically without direct actuation, and must be stabilized through joints and contact. \\
+Double support & phase where both feet share the load; planned allocation and actual contact forces are recorded separately. \\
+Quasistatic & motion is relatively slow, focusing on gradual center-of-mass transfer and support transitions; does not represent dynamic, high-speed gait. \\
+OSQP / Clarabel & Numerical optimization solvers used in this project, rather than two different robot models.\\
+SO(3) & Mathematical representation of three-dimensional rotation; used for attitude error and spatial tasks.\\
+P50 / P95 / P99 & 50th, 95th, 99th percentiles, describing the distribution and tail, with sample size noted.\\
+UDP / RTT & User Datagram Protocol / Round-Trip Time; polling latency on the same machine is not equivalent to pure network latency.\\
+JSON / CSV / NPZ & Structured text, tables, and compressed array files used for configuration and result storage.\\
+SHA256 & File content summary, used to verify whether source code, models, assets, and outputs have changed.\\
+VLA / Action Block & Vision-Language Action Model / Multi-step Action Output; This report's interface experiment uses analytical trajectories and does not run VLA.\\
+\bottomrule\end{longtable}

@@ -1,5 +1,7 @@
 # Robot Motion Control
 
+[English engineering report (177 pages)](reports/bytedance_engineering/english/build/main_en.pdf) · [中文版报告（157页）](reports/bytedance_engineering/build/main_zh.pdf)
+
 <!-- BEGIN INLINE DEMOS -->
 
 ### G1三维准静态四步行走

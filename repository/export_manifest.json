@@ -7,15 +7,15 @@
   },
   {
     "path": "PROJECT_LOG.md",
-    "bytes": 174190,
-    "sha256": "d5b901d8e710c261b498c9c0a7fb0a856ddf0d8e343f0d6298e906a634084331",
+    "bytes": 174950,
+    "sha256": "c8963f3a03e8f530805bd9ce7725d58108168579a3ba55d5c099949212bbfef2",
     "original_sha256": "73e0c4a5b405e239d6e3900cd421e095ebbcde70d8621b1262a581b23eee1280",
     "changed_for_export": false
   },
   {
     "path": "README.md",
-    "bytes": 5540,
-    "sha256": "2216f1bbe4e64aff418c3782075beb919d8338dbc24e826105b19c089e8c92b6",
+    "bytes": 5721,
+    "sha256": "61cc9404ee30e87bd04faf76f94c312fef7eeeb6a5e7ab4217954167c8e6ff52",
     "added_for_repository": true
   },
   {
@@ -26,8 +26,8 @@
   },
   {
     "path": "docs/CODE_MAP.md",
-    "bytes": 3630,
-    "sha256": "d6e23f1c35bfad3fb6c62a53ed321546d68216718b0305e5384f2ac9093d56e3",
+    "bytes": 3906,
+    "sha256": "9626aa720228d22072623947dce186c0ab6c27751f56b62b949896d1c0050c0e",
     "added_for_repository": true
   },
   {
@@ -4238,8 +4238,8 @@
   },
   {
     "path": "reports/bytedance_engineering/README.md",
-    "bytes": 4518,
-    "sha256": "dbbe9180ae627c9c57fe7cfcec91e5c9fdd66eafe60c7b873b5f3c7efb90c473",
+    "bytes": 4803,
+    "sha256": "2cb8c3f1ec3b7e3f17703ff6dd6610662009edfc7ca32808d81eba7de1324983",
     "original_sha256": "a96027e9a3dc11c17a41ab308df166635ddb19a5eea7ff7fb5c92cf5cbfcad1c",
     "changed_for_export": false
   },
@@ -4597,6 +4597,156 @@
     "added_for_repository": true,
     "bytes": 330,
     "sha256": "0cd7ab3a6a0199fdca2a3432489c539db58c60b62245fbf8e379d49f2b1cd29e"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/BUILD_DIAGNOSTICS.json",
+    "added_for_repository": true,
+    "bytes": 213,
+    "sha256": "3b5666ab789ba0b9a5ae5a55f648d23290f98fd2ab46d82a7d8d5ca5ea06682f"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/README.md",
+    "added_for_repository": true,
+    "bytes": 1509,
+    "sha256": "eb72354d2e9157e1fb379de8a064b189e551bc7ebe4d31f1959778a2ec042008"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/TRANSLATION_CHECK.json",
+    "added_for_repository": true,
+    "bytes": 357,
+    "sha256": "9b14165044765fedc11510ece61fa99828e8fbdcf679937a34f7a582c33c7077"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/VALIDATION.json",
+    "added_for_repository": true,
+    "bytes": 4421,
+    "sha256": "1313d65447c6b815bd45f3065e9420fbf0ca85f66f1af4b01ea0c2116c90c593"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/appendices/code_map.tex",
+    "added_for_repository": true,
+    "bytes": 10021,
+    "sha256": "89596bc1212d99eb476db5092342d9fe46ec8401b6f4328ea5de5397dabe77d2"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/appendices/glossary.tex",
+    "added_for_repository": true,
+    "bytes": 4238,
+    "sha256": "fda21135bf072e1fbcb7d1285a67b28404f1dd8e54be588acda4218fd5381b88"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/appendices/media_index.tex",
+    "added_for_repository": true,
+    "bytes": 6765,
+    "sha256": "983a7029e0781da9371a4b8fc5a97a30ead6b5078b81bb664bebd94f085e7f8f"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/appendices/reproduction.tex",
+    "added_for_repository": true,
+    "bytes": 258,
+    "sha256": "7950e44cfab28005d7da8ccb85f48b132c3cb3ae6fc38173b7c0d86d9f1e7887"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/build.sh",
+    "added_for_repository": true,
+    "bytes": 638,
+    "sha256": "cdbadfbfcfd5a52e1e418b82a7f72ab9fcb2473cd60a9636edc8d42dc24c1f66"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/build/main_en.pdf",
+    "added_for_repository": true,
+    "bytes": 22981457,
+    "sha256": "9a5eb8263191264604a4c41607e9176383cb3ce760cceac1cb9ad15b952791c0"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/00_abstract.tex",
+    "added_for_repository": true,
+    "bytes": 3651,
+    "sha256": "6053546a571f34e44658ec799e011da32516d39753dc1e813d3c628dfc5ec266"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/01_overview.tex",
+    "added_for_repository": true,
+    "bytes": 9390,
+    "sha256": "b0b686f771c18934464fa2b6d02339c4a792f6cd362449b50029175656fa6833"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/02_platform.tex",
+    "added_for_repository": true,
+    "bytes": 27400,
+    "sha256": "a9b53cd33724b6656912d0506ae61cb15ac39d08d6376b40c257cdcd31b95914"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/03_feedback.tex",
+    "added_for_repository": true,
+    "bytes": 38882,
+    "sha256": "70356d610c6a7922fdea145ca3a7f3469c6d856f0031c4c816481ec390bc953b"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/04_contact.tex",
+    "added_for_repository": true,
+    "bytes": 41767,
+    "sha256": "41269b816d749b386920acfd0b23f41537d79fb81a539190d1d39ceb6f18db5c"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/05_optimization.tex",
+    "added_for_repository": true,
+    "bytes": 46903,
+    "sha256": "510cb886d3440d22cb9225425ed73f3257e108b5bcd4a236ea6d6b70e3fb9166"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/06_lipm.tex",
+    "added_for_repository": true,
+    "bytes": 54824,
+    "sha256": "53c1970aca206063e2ffe3405cc8aa5314c6c4b33ed9e2468d4fa91bda79ae0b"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/07_biped.tex",
+    "added_for_repository": true,
+    "bytes": 38550,
+    "sha256": "2104e8a2fe8a8100dda58b100744b997ff480613aef6bf33cf945d9af7f48b93"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/08_humanoid.tex",
+    "added_for_repository": true,
+    "bytes": 35721,
+    "sha256": "af21634c370e7a9ff15c42b882b7d9c9177da3b89d8871241fb620737955a4ad"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/09_conclusions.tex",
+    "added_for_repository": true,
+    "bytes": 8547,
+    "sha256": "0c8c83293317ec22e5a38de5de386ce727b60aa1e152500217a17057b67391cb"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/chapters/09_rl_baseline.tex",
+    "added_for_repository": true,
+    "bytes": 17045,
+    "sha256": "aa9faac37fab5e3681c9af9d3cf2fb81e4843b91d1ecc076ffccaa20b402a9a8"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/main_en.tex",
+    "added_for_repository": true,
+    "bytes": 1121,
+    "sha256": "624d2f5b90d19bc56d0d6e0d5da277f1ecdfd4e2b8e56ad878a12822c9d9558e"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/preamble.tex",
+    "added_for_repository": true,
+    "bytes": 1752,
+    "sha256": "3d0c214f1f700f5b9d172bf6b1a25e38dffc456789838502843f8f3f1bb5f4e3"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/references.tex",
+    "added_for_repository": true,
+    "bytes": 1919,
+    "sha256": "00cdf4b4524fda414682dbc7c3fa53c720600f9d2bfaa984320ea99a5dfc102c"
+  },
+  {
+    "path": "reports/bytedance_engineering/english/validate.py",
+    "added_for_repository": true,
+    "bytes": 3127,
+    "sha256": "f7d9dd4e5c4e965ad568b65f3672e64357fc01b612327813a06382869c31b070"
   },
   {
     "path": "reports/bytedance_engineering/expansion_stats.json",

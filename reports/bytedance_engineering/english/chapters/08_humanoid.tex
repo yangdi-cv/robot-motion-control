@@ -1,0 +1,524 @@
+\chapter{Whole-Body Control of a Three-Dimensional Humanoid}
+The G1 model originates from Menagerie \cite{menagerie}, and the Clarabel solver adheres to the official QP interface \cite{clarabel}.
+
+
+Remove planar constraints and validate lateral CoM transfer, single-foot loading, and quasistatic alternating steps on the full floating-base G1. Retain strong-disturbance failures and the tail of the computation-time distribution.
+
+\section{G1 Floating Base, Standing, and Double Support with Single Foot}
+
+\label{stage:s25}
+
+\subsection{From Plane to three-dimensional: Model and Control Interface}\label{s25-detail-1}
+
+\subsubsection{Model Selection and Retained Content}\label{s25-detail-2}
+
+First, compare the existing planar biped, H1, and G1 descriptions, and select G1, which features hip three-axis, knee, and ankle pitch/roll joints, to facilitate direct verification of lateral balance. The model is from the MuJoCo Menagerie fixed submission, and the G1 directory uses the BSD-3-Clause license. Source files, meshes, licenses, and SHA256 checksums are all preserved, without reliance on temporary download links.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3207}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6793}}@{}}
+\caption{Model Selection and Retained Content: Settings and Results}\label{tab:s25-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+The setup of this stage
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+The setup of this stage
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Model mass & 33.341142 kg, from the model, not the measured hardware mass \\
+Generalized position/velocity dimensions & nq=36, nv=35, including base quaternion \\
+Motor & 29 joints, gear=1; the first 6 base degrees of freedom are motorless \\
+Base & Free translation, roll, pitch, and yaw, without welding or planar constraints \\
+Leg torque limits & per-side hip 88/139/88, knee 139, ankle 50/50 N·m, taken from original description \\
+Physics integration & 1ms, implicitfast; elliptic friction cone \\
+Control update & 50, 100, 200 Hz, state directly from simulator \\
+Initial state & Knee flexion from the original standing posture; initial positioning is performed only before simulation starts \\
+\end{longtable}\endgroup
+
+The original model's position actuators cannot directly receive torques. In this stage, they are explicitly replaced with motors, while retaining the original force range as the control and actual force upper limit; verification confirms that the actuator bias is 0, ctrl equals the joint torque, and the base generalized driving force is 0. A foot sole site is added, solely for computing reference points and contact wrenches.
+
+The model's mechanical parameters are verified item by item against the original description, including mass, inertia, links, joint limits, and collision geometry. For the derived model, contact cones, integration, and solver settings are additionally fixed; friction coefficients in experiments are explicitly set to avoid foot priority overriding ground configuration. The original upstream files remain unmodified.
+
+\subsubsection{Three-Dimensional Whole-Body Inverse Dynamics}\label{s25-detail-3}
+
+Continuing with the hierarchical task decomposition of CoM, torso, swing leg, and posture, extend the cost functions to include spatial Jacobian, SO(3) pose error, and 6D wrench for each supporting foot. The QP variables include 35-dimensional generalized accelerations, 29-dimensional motor torques, and contact wrenches. The mass matrix, bias, constraint forces, and kinematics are computed by MuJoCo, without manually rewriting rigid-body dynamics.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+M(q) qdd + bias = S^T τ + Σ J_i^T λ_i + passive
+λ_i = [Fx, Fy, Fz, Mx, My, Mz], expressed in world coordinates about the foot-sole site
+Constraints: non-negative normal forces, friction cone approximation, foot torque limits, joint position/velocity and motor torque bounds
+Objective: Center of Mass, trunk/pelvis posture, leg swing, joint angles, load distribution, and ground CoP
+\end{Verbatim}
+
+The outer loop of CoM follows \path|a_cmd=a_ff+80(c_ref-c)+18(v_ref-v)|. Both lateral and forward directions are simultaneously involved, with the contact cone constrained in the current foot coordinate frame; there is no plane assumption that directly fixes left-right motion to 0. Base orientation is stabilized via joint torques and is a control objective, not mechanically locked.
+
+QP only outputs motor torques to data.ctrl. Predicted contact wrenches are used for solving and recording purposes but are not directly applied to the simulator. The external force array is used only for explicit push perturbation protocols; ground reaction forces are independently computed by MuJoCo. The actual ground CoP is recalculated from contact forces and torques, separate from the QP-predicted values.
+
+The relevant code is located at \path|scripts/model.py|, \path|scripts/controller.py|, and \path|scripts/qp.py|.
+
+\subsection{Standing, Center of Mass Transfer, and Single-Leg Stance}\label{s25-detail-4}
+
+\subsubsection{Standing and Lateral Transfer}\label{s25-detail-5}
+
+Standing tests covering 50/100/200 Hz, as well as no disturbance, ±40 N front/back, ±40 N left/right, and 60 N lateral push disturbances in one direction, totaling 18 conditions, all completed. The push disturbances lasted 0.1 s. Lateral center-of-mass shifts were performed via a smooth quintic reference of approximately 6 cm followed by return, additionally with 0/±20 N lateral push disturbances, totaling 6 conditions, all completed.
+
+The additional two standing tests with initial yaw offsets of ±0.3 rad have passed, used to verify the world-to-foot coordinate transformation; yaw degree of freedom is not locked. Here, the verification is for standing in different orientations, not for turning or walking.
+
+\subsubsection{Both Sides Perform Actual Single-Leg Stance}\label{s25-detail-6}
+
+First, shift the CoM toward the supporting foot, then unload and lift the other foot, maintain balance, and finally land back on the ground to return to double-foot support. Supports both left and right foot modes, with 100/200 Hz and 0/±10 N lateral disturbance conditions; all 12 conditions passed.
+
+In the unperturbed left-right mode, the actual maximum height of the swing foot is approximately 4.23 cm, with a target height of 5 cm. Acceptance criteria require: the swing foot to be higher than 3 cm, its actual normal force to be below 5 N, the stance foot to bear more than 80\% of the model's weight, and this condition to be sustained for at least 0.5 seconds. Under reference conditions, these criteria are continuously satisfied for approximately 1.4 seconds within the selected hold window, followed by actual foot touchdown and re-establishment of double-footed support. Do not judge single-foot stance solely based on the visual position of the foot.
+
+\stagefigure{figures/ch08/s25_single_support_448676c3.png}{Bilateral single-support phase: actual lift-off height versus true normal force.}{fig:s25-detail-1}
+
+During development, it was found that maintaining double support until the center of mass completely crosses over would lead to conflicts between unloading the foot, joint limits, and the requirement for rigid contact. In this phase, the timing coordination between unloading and lifting the foot is adjusted, and a small amount of roll is allowed for the airborne foot; joint limits, real contact, and motor torque limits remain active.
+
+The relevant code is located in \path|scripts/run.py| (Reference, simulate), and \path|scripts/metrics.py|.
+
+
+\paragraph{Stage Conclusion} The real three-dimensional floating base, equipped with 29 constrained motors, successfully transfers the center of mass and supports single-foot loading on both sides, without using external supports to constrain lateral degrees of freedom.
+
+
+
+% BEGIN SIM_VISUALS s25
+\subsection{Bilateral Single-Foot Support Process from Two Perspectives}
+The following frames are reconstructed from saved joint positions and velocities without executing any controller or advancing the physics integration. Each figure simultaneously lists the foot height and normal force from the original log; initial and final states are double support, while intermediate frames show actual single-foot loading. The contact solver values during reconstruction are not used to replace the forces from the original log.
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view0.png}{G1 left foot single support phase: initial double support at 0.500s. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_single_support_side0_saved_view0}
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view1.png}{G1 left foot single support phase: single foot stance, 2.800 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_single_support_side0_saved_view1}
+
+\motionfigure{figures/ch08/g1_single_support_side0_saved_view2.png}{G1 left foot single support phase: after foot touchdown, double support phase, at 6.800 seconds. Reconstructed from saved state; foot height and normal force in the figure are taken from historical logs.}{fig:motion-g1_single_support_side0_saved_view2}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view0.png}{G1 right foot single support phase: initial double support at 0.500s. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_single_support_side1_saved_view0}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view1.png}{G1 right foot single support phase: single foot stance, 2.800 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_single_support_side1_saved_view1}
+
+\motionfigure{figures/ch08/g1_single_support_side1_saved_view2.png}{G1 right foot single support phase: after foot touchdown, double support phase, at 6.800 seconds. Reconstructed from saved state; foot height and normal force in the figure are taken from historical logs.}{fig:motion-g1_single_support_side1_saved_view2}
+% END SIM_VISUALS s25
+\stagecode{s25}
+
+\FloatBarrier
+
+\section{Three-Dimensional Quasistatic Alternating Walking}
+
+\label{stage:s26}
+
+\subsection{Three-dimensional Quasistatic Alternating Walking}\label{s26-detail-1}
+
+\subsubsection{From Single Step to Continuous Alternation}\label{s26-detail-2}
+
+During single-step forward movement, simultaneously covering left and right swing foot targets of 6 cm and 10 cm, 4 conditions are completed. Continuous walking arranges lateral center-of-mass transfer, unloading, swing foot, touchdown, and return-to-center alternately between left and right. Each cycle lasts approximately 7 seconds, with a relatively long swing foot phase, aiming to first verify feasibility rather than pursue speed.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\caption{From Single Step to Continuous Alternation: Setup and Results}\label{tab:s26-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control Rate (Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Steps
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target step length (m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lateral Thrust (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured load-bearing capacity verification
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM forward displacement (m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Duration (s)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control Rate (Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Steps
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target step length (m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lateral Thrust (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured load-bearing capacity verification
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM forward displacement (m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Duration (s)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+100 & 4 & 0.04 & 0.0 & 4/4 & 0.1398 & 29 \\
+100 & 4 & 0.06 & 0.0 & 4/4 & 0.2098 & 29 \\
+200 & 4 & 0.04 & 0.0 & 4/4 & 0.1399 & 29 \\
+200 & 4 & 0.06 & 0.0 & 4/4 & 0.2098 & 29 \\
+100 & 4 & 0.06 & 10 & 4/4 & 0.2098 & 29 \\
+100 & 6 & 0.06 & 0.0 & 6/6 & 0.3298 & 43 \\
+\end{longtable}\endgroup
+
+Forward displacement is measured as the actual CoM change. Under the four-step 6 cm condition, it is approximately 0.210 m; under the six-step condition, it is approximately 0.330 m. The total target step length of the feet cannot be directly treated as the body's forward displacement. Under the perturbed four-step condition, the thrust occurs near the second single-support phase, with a magnitude of 10 N and duration of 0.1 s.
+
+\stagefigure{figures/ch08/s26_walking_contacts_4e4971b9.png}{Actual foot sole forward translation, lift-off, and left-right weight transfer.}{fig:s26-detail-1}
+
+\stagefigure{figures/ch08/s26_com_top_c8a80097.png}{Top-down view of the actual CoM trajectory and foot positions, showing lateral transfer.}{fig:s26-detail-2}
+
+\subsubsection{Load-bearing Confirmation and Completion Criteria}\label{s26-detail-3}
+
+Each step must include a phase where the swing foot is actually off the ground and the stance foot bears the primary weight; after touchdown and before the next foot lift, the correct foot must be located within 1.5 cm of the target position, with absolute foot height less than 8 mm, and maintain a normal force exceeding 10 N for at least 50 ms. The final state must also restore full double-foot support, with constraints on CoM tracking, terminal error, and body tilt. Simply running to the end or not falling over is insufficient to count as completion.
+
+The current support set still switches according to the nominal timeline; actual loads are used for validation and diagnosis, without implementing online step timing reorganization triggered by touchdown. The measured loading confirmation is not the "first touchdown time," and the two are not mixed.
+
+The relevant code is located in \path|scripts/run.py| for Reference and \path|scripts/metrics.py| for evaluate.
+
+
+\paragraph{Stage Conclusion} In four steps, it advances approximately 0.210 meters in 29 seconds; in six steps, it advances approximately 0.330 meters in 43 seconds, equating to roughly 7 seconds per step, which falls under quasistatic rather than dynamic high-speed walking.
+
+
+
+% BEGIN SIM_VISUALS s26
+\subsection{Two-View Keyframes of Three-Dimensional Walking}
+Inserting dual-view recordings from the original four-step sequence—front-oblique and front-facing—allows observation of lateral center-of-mass transfer and alternating foot-off. The "elapsed gait cycle" in the figure represents nominal time progression; actual completion is still determined based on the saved foot positions and weight-bearing confirmation.
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_018.png}{Original dual-view footage of G1 performing a four-step quasistatic walk, simulation time 0.90 seconds; original state annotations preserved.}{fig:motion-g1_walk_dual_camera_018}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_060.png}{Original dual-view footage of G1 performing a four-step quasistatic walk, simulation time 3.00 seconds; original state annotations preserved.}{fig:motion-g1_walk_dual_camera_060}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_180.png}{Original dual-view footage of G1 performing a four-step quasistatic walk, simulation time 9.00 seconds; original state annotations preserved.}{fig:motion-g1_walk_dual_camera_180}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_340.png}{Original dual-view footage of G1 performing a four-step quasistatic walk, simulation time 17.00 seconds; original state annotations preserved.}{fig:motion-g1_walk_dual_camera_340}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_560.png}{Original dual-view footage of G1 performing a four-step quasistatic walk, simulation time 28.00 seconds; original state annotations preserved.}{fig:motion-g1_walk_dual_camera_560}
+% END SIM_VISUALS s26
+\stagecode{s26}
+
+\stagevideo{videos/ch08/g1_quasistatic_four_steps.mp4}
+
+\FloatBarrier
+
+\section{QP Solver Comparison and Timing Tail}
+
+\label{stage:s27}
+
+\subsection{QP Backend Comparison and Runtime}\label{s27-detail-1}
+
+\subsubsection{Same Problem, Without Changing the Model or Control Objective}\label{s27-detail-2}
+
+In the preliminary study, OSQP could complete certain motions but encountered iteration limits and numerical sensitivity during continuous walking. After reviewing maintenance and licensing, Apache-2.0 licensed Clarabel 0.11.1 was introduced. Both backends receive the same H, g, A, l, u: OSQP uses bilateral constraints, while Clarabel converts them into equality zero-cone and inequality non-negative cone constraints, without requiring a separate controller.
+
+Residuals are verified by physical quantities, distinguishing between N, N·m, m/s², and rad/s²; motor upper limits are checked item by item separately. Once formal parameters are frozen, tolerance values will not be adjusted due to individual failures.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3388}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3306}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3306}}@{}}
+\caption{Same problem, without changing the model or control objective: Settings and Results}\label{tab:s27-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Official backend comparison
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Single-leg support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four-step walking
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Official backend comparison
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Single-leg support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four-step walking
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Clarabel & Completed & Completed \\
+OSQP & Completed & Residual limit exceeded termination \\
+\end{longtable}\endgroup
+
+The OSQP four-step check triggered a numerical residual of approximately 0.05026 N·m for a foot-ground torque inequality, slightly exceeding the preset allowable value of 0.05 N·m, but no robot fall was observed. This cannot be used to conclude that OSQP necessarily exhibits poorer physical stability, nor should the critical numerical threshold be interpreted as a significant gap in algorithmic capability.
+
+7 states are sampled from the same successful trajectory, and identical QPs are reconstructed and re-solved; both backends return successful solutions, with Clarabel exhibiting smaller constraint residuals. These discrete points do not encompass all issues of the alternative trajectory and cannot replace full-round testing. The original matrix comparison results are in backend\_probe.json.
+
+\subsubsection{Record full call time instead of only taking the average}\label{s27-detail-3}
+
+The following is a whole-body control call under the same 8s, 100Hz single-foot support condition, including target/constraint construction and QP, excluding communication or full physical simulation loop:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1642}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1789}}@{}}
+\caption{Record full call time rather than just average: Settings and Results}\label{tab:s27-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Backend
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P50(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P95(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P99(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Exceeds the 10ms reference budget
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Backend
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P50(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P95(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+P99(ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Exceeds the 10ms reference budget
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+osqp & 1.66 & 10.25 & 11.96 & 61.40 & 41/800 \\
+clarabel & 1.98 & 2.49 & 2.55 & 2.97 & 0/800 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch08/s27_backend_timing_315955bc.png}{Cumulative distribution of call times under single-support condition.}{fig:s27-detail-1}
+
+In the 61,000 updates across 50 Clarabel conditions, no instance was recorded where the WBC function exceeded its respective control cycle budget. The four-step reference condition P95 is approximately 2.44 ms. The median OSQP runtime is shorter, but this condition exhibits longer tail times. This result comes from offline execution under a three-process batch condition on this machine, excluding end-to-end latency from sensing, communication, and scheduling, and is not a hard real-time guarantee.
+
+The relevant code is located at \path|scripts/qp.py|, \path|scripts/backend_probe.py|, and \path|scripts/analyze.py|.
+
+
+\paragraph{Stage Conclusion} Clarabel has shorter tail times in the measured control calls; this is not a hard real-time guarantee encompassing sensing, communication, and scheduling.
+
+\stagecode{s27}
+
+\FloatBarrier
+
+\section{Freezing Conditions, Strong Disturbances, and Save Verification}
+
+\label{stage:s28}
+
+\subsection{Results and Failure Boundaries under Freezing Conditions}\label{s28-detail-1}
+
+\subsubsection{Formal Conditions}\label{s28-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5000}}@{}}
+\caption{Official Conditions: Setup and Results}\label{tab:s28-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Pass / Group Condition
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Pass / Group Condition
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Standing & 18/18 \\
+Center of Mass Transfer & 6/6 \\
+Single Support & 12/12 \\
+Single-step forward & 4/4 \\
+Alternating Walk & 6/6 \\
+Low Friction & 2/2 \\
+Initial orientation & 2/2 \\
+Solver Comparison & 3/4 \\
+\end{longtable}\endgroup
+
+Each group shares some overlapping configurations; after deduplication, there are 52 unique ones, rather than summing the tables. Deduplication simultaneously handles identical integer/float values and ignores thrust-free time steps that lack physical meaning. Clarabel conditions are 50/50, OSQP is 1/2; testing uses a pre-defined condition grid, not actual deployment success probability.
+
+\subsubsection{Controller Freezing under Strong Disturbances}\label{s28-detail-3}
+
+Under the same original controller, solution accuracy, and criteria, 8 additional strong disturbances are introduced, with results as follows: standing push disturbance applied at 2.7s, single-foot disturbance at 3.0s, and walking disturbance at 10.0s, each lasting 0.1s.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1867}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2532}}@{}}
+\caption{Controller frozen under strong disturbance: Setup and results}\label{tab:s28-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Scene
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lateral Force (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Runtime (s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reason
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Scene
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Lateral Force (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Runtime (s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Reason
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Single support & -50 & Terminate & 4.04 & Joint torque prediction or bounds conflict \\
+Single-leg support & -30 & Passed & 8.00 & Completed \\
+Single support & 30 & Termination & 4.90 & QP deemed infeasible \\
+Single support & 50 & Termination & 3.49 & QP deemed infeasible \\
+Standing & 150 & Passed & 6.00 & Completed \\
+Standing & 250 & Termination & 3.05 & Joint torque bounds conflict or prediction violation \\
+Four-step walking & -40 & Termination & 10.71 & Joint torque prediction or bounds conflict \\
+Four-step walking & 40 & Termination & 11.39 & Joint torque prediction or bounds conflict \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch08/s28_push_boundary_c69c7887.png}{Lateral push disturbance during standing (40/150/250N); trajectory termination is drawn only up to the actual stopping time.}{fig:s28-detail-1}
+
+The 150N standing condition is passed, and the test terminates at 250N; these two points cannot determine an exact disturbance rejection threshold. The disturbance rejection range for single-leg stance and walking is significantly smaller than that for double support, and the positive and negative directions are not fully symmetric. Fixed-step walking, limited support range, and joint limits will constrain recovery, so the thrust passed in the standing test cannot be directly transferred as walking disturbance rejection capability.
+
+When independently reconstructing contacts, self-contact between right hip—right wrist (~7.8 N) and trunk—left shoulder (~92.3 N) was observed near two failure points. The simulator preserves these real collisions, but the current QP only models foot-ground contact; they represent model discrepancies to be addressed subsequently and cannot be solely attributed as the sole cause of failure based on these samples alone.
+
+Strong disturbances 2/8 and official 51/52 are reported separately to avoid misleading interpretations of success rates. The failures from this batch were not removed from the results through subsequent hyperparameter tuning.
+
+\subsection{Independent Verification and Save Mechanism}\label{s28-detail-4}
+
+Re-read the saved state without relying solely on the runner's success. Verify quaternion and joint integration, foot/CoM forward kinematics, actual contact wrenches, spatial Jacobian virtual work, motor torque channels, all physical acceptance criteria, and source code/resource hashes.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5906}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4094}}@{}}
+\caption{Independent Verification and Save Mechanism: Settings and Results}\label{tab:s28-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Verification Items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Verification Items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Formal Record / Strong Disturbance Record & 52 / 8 \\
+Formal record of load verification & 46 \\
+Quaternion and joint integral maximum residual & 0.00e+00 \\
+Foot position / CoM recalculated residual (m) & 0.00e+00 / 0.00e+00 \\
+foot-ground contact virtual work residual & 1.14e-13 \\
+Maximum difference in independent contact reconstruction & 2.38e-08 \\
+Interface/Physical Quantity Unit Check & 9 Passed \\
+Video fully decoded & 580/580 frames \\
+\end{longtable}\endgroup
+
+Integral, actuator bounds, block consistency, and task criteria are fully preserved across trajectories; contact and kinematics are independently reconstructed, sampling uniformly 12 time instants per run. For strong disturbance contact validation, only identical foot-ground contacts are compared; additional self-contact is separately recorded to avoid misjudging program errors by subtracting generalized forces across different contact sets.
+
+Save a complete trajectory block every second, atomically updating the running state; if interrupted midway, the last complete block is retained, but direct resumption of the simulator is not supported. All blocks are consistent item-by-item with the final complete array.
+
+The dual-camera video is from an actual physical replay using the same configuration, not driven by reference trajectories. The recorded qpos, qvel, ctrl, CoM, foot positions, and actual contact forces match the official run element-wise with a maximum difference of 0. The video consists of 580 frames (29 seconds) and does not add an additional independent experiment.
+
+The relevant code is located in \path|scripts/tests.py|, \path|scripts/verify.py|, \path|scripts/storage.py|, and \path|scripts/record.py|.
+
+\subsection{Current Scope and Future Work}\label{s28-detail-5}
+
+This stage has progressed from a constrained planar model to a realistic three-dimensional floating-base system with 29 constrained actuators, actual single-leg loading, and alternating walking, and has identified constraint and self-contact boundaries under strong disturbances. It cannot yet be called an enterprise-deployable humanoid controller:
+
+\begin{itemize}
+\tightlist
+\item
+  The state is directly obtained from the simulator and has not yet been processed using IMU or encoder-based state estimation to account for errors.
+\item
+  The gait is slow and quasi-static, taking approximately 7 seconds per step, without completing dynamic walking or online optimization of foot placement or touchdown timing.
+\item
+  Contact switching follows nominal timing without handling early/late touchdown or terrain variations.
+\item
+  Only foot-ground contact is modeled, without incorporating self-collision avoidance and additional contact constraints.
+\item
+  Using ideal motors with limited torque, without real current loops, drive bandwidth, and communication links.
+\item
+  No physical robot, hardware-in-the-loop, or hard real-time validation has been performed.
+\end{itemize}
+
+Subsequently, prioritize integrating touchdown events, state estimation, and self-collision constraints into the same closed loop before discussing speed improvement. Rather than further expanding the condition number under the same ideal scenario, it is better to first complete these interfaces.
+
+
+\paragraph{Stage Conclusion} Out of 52 conditions, 51 passed successfully; among the remaining eight under strong disturbances, only two passed; state estimation, touchdown timing, self-collision handling, and real actuator implementation still require completion.
+
+
+
+% BEGIN SIM_VISUALS s28
+\subsection{Posture Completion and Termination under Strong Disturbances}
+The following are reconstructed frames from the saved state of the frozen controller test. The 150 N standing condition was completed; the 250 N standing and 40 N lateral walking conditions were prematurely terminated due to constraint conflicts. The images only render up to the saved moment, without allowing the model to continue falling after termination, nor automatically labeling constraint conflicts as falling.
+
+\motionfigure{figures/ch08/g1_stress_150n_saved_view2.png}{G1 under 150N standing disturbance: final saved state at 5.999 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_stress_150n_saved_view2}
+
+\motionfigure{figures/ch08/g1_stress_250n_saved_view2.png}{G1 under 250N standing disturbance: final saved state at 3.049 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_stress_250n_saved_view2}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view0.png}{G1 40N lateral walking disturbance: before perturbation, 9.800 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_walk_stress_40n_saved_view0}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view1.png}{G1 40N lateral walking disturbance: after push perturbation at 10.200 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_walk_stress_40n_saved_view1}
+
+\motionfigure{figures/ch08/g1_walk_stress_40n_saved_view2.png}{G1 40N lateral walking disturbance: final saved state at 11.389 seconds. Reconstructed from saved state; foot height and normal force below are taken from historical logs.}{fig:motion-g1_walk_stress_40n_saved_view2}
+% END SIM_VISUALS s28
+\stagecode{s28}
+
+\FloatBarrier

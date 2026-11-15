@@ -1,0 +1,57 @@
+\chapter{Project Objectives and Technical Approach}
+\section{From Command Execution to Constrained Physical Motion}
+Receiving a target position by the robot does not guarantee that the motion can be executed on time, accurately, and stably. Measurement sampling, transmission, actuator response, contact changes, and dynamic constraints will collectively influence execution. This project starts from a fixed-base manipulator, first establishing a link capable of recording targets and feedback, then studying motion involving external forces and support switching.
+
+The robotic arm and biped are not the same control problem, but they share several core components: reference generation, state feedback, constrained execution, and independent validation. Quintic trajectories are used to connect motion phases, filtering and prediction are employed to handle measurement lag, contact control coordinates motion and force, and floating-base control must stabilize the body indirectly through ground reaction forces. Future extensions will progressively validate these interfaces, rather than stitching multiple demonstrations into a single algorithm.
+\section{Advisor Tasks and Autonomous Expansion}
+The original monthly plan included the simulation platform, IMU state feedback, compliant control of the robotic arm, and stability walking analysis based on the inverted pendulum. The main text is organized according to technical relationships, without treating chapter numbers as weekly milestones. The inverted pendulum phase was conducted in alignment with the overall direction of the monthly plan; missing detailed task sheets are not presumed to have been individually accepted. Three-dimensional humanoid control constitutes an autonomous extension built upon the aforementioned foundations.
+\begin{longtable}{p{.19\linewidth}p{.35\linewidth}p{.35\linewidth}}
+\toprule Planned Topic & Work Conducted & Report Location \\\midrule\endhead
+Platform and Trajectory & ROS2 Bridging, Model Limits, Quintic Trajectories, Measured Error and Gain Comparison & Chapter 2\\
+State Feedback & Virtual and Public IMU, Physical Data Acquisition, Causal Filtering, Publish Frequency and Data Age & Chapter 3\\
+Compliant Control & Normal Admittance, Contact Impacts, Continuous Inverse Solution, Gravity and Hand Collisions, Execution Interface & Chapters 4, 5\\
+Stability Analysis of Walking & Inverted Pendulum, Restricted Foot Placement, Frequency, Noise, Push Perturbation, and Delay Prediction & Chapter 6\\
+Autonomous Extension & Planar Multi-Joint Continuous Walking, Unified Contact Interface, G1 three-dimensional Whole-Body Control & Chapters 7 and 8\\
+\bottomrule\caption{Correspondence between task themes and technical chapters}\end{longtable}
+
+In response to the advisor's suggestions regarding gravity, hand collisions, constant-force windows, and network interfaces, the subsequent analysis retained the uncorrected failure cases, rigid and compliant material properties, physical timesteps, and real-machine UDP comparisons. Regarding the earlier inverted pendulum and MuJoCo standing validation issues, a closed-loop implementation with actual leg dynamics and joint torque control was subsequently established. The main text preserves both early conclusions and later corrections, without retroactively rewriting later results into earlier experiments.
+\section{Model Hierarchy and Its Boundaries}
+\begin{longtable}{p{.18\linewidth}p{.24\linewidth}p{.24\linewidth}p{.23\linewidth}}
+\toprule Level & State and Action & Physical Conditions & Problems That Can Be Addressed \\\midrule\endhead
+Panda trajectory & ROS2 joint feedback; position/speed targets & Isaac physics-driven, fixed base & command linkage and trajectory response\\
+Panda contact & end-effector force and joint states; torque & probe or hand contact; grouped gravity settings & normal compliance and impact \\
+Linear Inverted Pendulum & Center of Mass Position and Velocity; Ground Contact Points & Constant-Height Point Mass, Limited Support Region & Model Internal Equilibrium and Foot Placement \\
+Limited-footprint standing & Rigid body posture, real ground contact & Ankle joint and limited foot sole & Standing disturbance recovery\\
+Planar biped & 9 velocity degrees of freedom, six motor torques & Three base degrees of freedom; physical leg inertia & Continuous sagittal-plane walking\\
+Three-dimensional G1 & 35 velocity degrees of freedom, 29 motor torques & Full six-degree-of-freedom floating base & Lateral balance and quasistatic walking\\
+\bottomrule\caption{Verification hierarchy from simplified model to three-dimensional dynamics}\end{longtable}
+
+The landing positions of the simplified model can be switched instantaneously, whereas physical legs require finite time and acceleration. The load ratio in the planner is a feasible allocation; actual ground reaction forces are computed by the simulator. Only when the two systems are interfaced within the same dynamic system and feedback is verified can they form a complete physical closed loop.
+\section{Measurement, Time, and Statistical Metrics}
+\subsection{Four Frequencies Cannot Be Mixed}
+The physical integration frequency, control update frequency, sensor sampling frequency, and message publishing frequency are recorded separately. A 25 Hz sensor can be repeatedly read by a 200 Hz publisher, but it does not generate eight times the new data. Meeting 100 Hz in simulation time does not equate to meeting 100 Hz on the host machine; rendering load and process scheduling must be measured separately.
+\subsection{Original and Processed Signals Measured Separately}
+Contact forces are distinguished into four categories: original 1 ms values, 10 ms bin-averaged values, controller-filtered values, and target values. Smoothing the signal to reduce error does not replace the original impact. Trajectory error is calculated as the reference value minus the actual value at the same state moment; fitting lag is provided separately and does not involve shifting the reference to reduce original error.
+\subsection{Condition number is not equal to deployment success probability}
+Most results in this report stem from a pre-defined parameter grid, including repeated configurations, deterministic reruns, and intentionally induced failures. Duplicate configurations across groups are deduplicated; video re-recordings do not increase sample counts. Success rates across different models, periods, and objectives are not aggregated into an overall success rate; failure trajectories only count data up to the point of true termination, without direct comparison to full trajectories via average error.
+\section{Use of Environment and Open-Source Implementation}
+Isaac Sim runs independently from the system ROS2; MuJoCo 2.3.7 is used for early contact and planar models, while the three-dimensional G1 uses an independent MuJoCo 3.2.3 environment. The specific versions, dependencies, and commands for each stage are provided in the main text and appendix.
+
+The robot description is sourced from the official Panda resources or the MuJoCo Menagerie; rigid-body dynamics are computed by the simulator, and quadratic programming is performed using OSQP or Clarabel. This project implements control objectives, contact constraints, timing, experiments, and validation, without reimplementing the underlying physics engine or numerical solvers. TSID, PlaCo, and publicly available LIPM controllers are used as design references, with specific adoption ranges detailed in the respective sections.
+\section{Relationship with Learning Strategies and Real-World Deployment}
+The action block window, timestamp, saturation, and timeout tests were designed for the execution interface of future learning strategies, but at that time actions were generated from parsed trajectories, without running visual-language action models. The G1 controller was also not a downloaded learned gait policy, but rather a control implementation based on dynamics and task constraints.
+
+Hardware recordings are limited to the IMU and Jetson explicitly marked in Chapter 3. Other controls use simulated states or artificially generated delayed noise. Currently, there is no enterprise equipment for proxy testing, full state estimation, real motor bandwidth, or hard real-time verification; this report does not substitute simulation results for these items.
+
+
+% BEGIN SIM_VISUAL_OVERVIEW
+\section{Main Simulation Scenarios and Reading Order}
+The following three figures first illustrate the experimental subject. Subsequent chapters simultaneously present camera footage and quantitative records; model schematics, physical recordings, and reconstructed saved states are respectively labeled.
+
+\motionfigure{figures/ch05/panda_gravity_comparison_full_frame.png}{Panda fixed-base contact: comparison of actual relative motion between gripper and plane.}{fig:overview-panda}
+
+\motionfigure{figures/ch07/planar_twenty_steps_full_frame.png}{Camera frame from twenty-step walking with synchronized CoM and contact records; the nominal elapsed interval shown is not a substitute for measured touchdown criteria.}{fig:motion-planar_twenty_steps_full_frame}
+
+\motionfigure{figures/ch08/g1_walk_dual_camera_180.png}{G1 three-dimensional floating-base: lateral center-of-mass shift shown from oblique front and direct front views.}{fig:overview-g1}
+
+% END SIM_VISUAL_OVERVIEW

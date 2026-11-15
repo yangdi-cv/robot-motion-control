@@ -1,0 +1,555 @@
+\chapter{Planar Biped Continuous Walking}
+Hierarchical task formulation and contact inverse dynamics are referenced from PlaCo \cite{placo} and TSID \cite{tsid}, without copying their entire control stack.
+
+
+Integrate the planned reference, actual leg swing, contact, and limited motor torque into a single physical system. Compare the unified center-of-mass and zero-moment-point interface, while recording the trade-off between error and completion rate.
+
+\section{Torque-driven Planar Biped and Eight-Step Validation}
+
+\label{stage:s21}
+
+\subsection{Joint Torque-Driven Planar Biped}\label{s21-detail-1}
+
+\subsubsection{Model and Control Interface}\label{s21-detail-2}
+
+A new 27.2 kg planar biped is constructed, including trunk, left and right thighs, shanks, and feet. The base has three degrees of freedom—forward/backward, vertical, and planar pitch—but lacks actuators. Each side has three motors: hip, knee, and ankle. Each leg segment is 0.4 m long, and the foot sole is approximately 0.20 \(\times\) 0.09 m. Lateral, roll, and yaw motions are constrained by the model, and collisions for the trunk and links are simplified.
+
+Inverse kinematics is only used to generate the initial standing posture. Afterward, the controller reads the physical state, constructs a whole-body inverse dynamics QP, and solves for joint accelerations, motor torques, and predicted contact wrenches. The simulator only receives the six motor torques; the QP-predicted contact forces are not directly applied to the model, and the base position and joint trajectories are not overwritten frame-by-frame. Actual foot contact is resolved by MuJoCo. Relevant code is located in models/biped.xml and scripts/biped.py.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+M(q) qdd + bias(q, qd) = S^T τ + J(q)^T λ + passive
+Constraints: torque bounds, joint position and predicted velocity, support foot acceleration, friction and foot torque limits
+Objective: Center of mass, trunk pitch, leg swing trajectory, and small attitude regularization term
+\end{Verbatim}
+
+Using OSQP 1.0.4, fixed numerical tolerance and adaptive rho update interval. Nominal control at 100 Hz, physical integration at 1 ms. Motor torque limits are 80, 80, and 30 N·m per side; predicted joint velocity bounds are 8 rad/s, with actual values exceeding 10 rad/s causing termination. Contact constraints include non-negative normal force, \textbar Fx\textbar{}\(\leq\)\(\mu\)Fz, and \textbar My\textbar{}\(\leq\)0.09Fz, plus additional constraints limiting the foot-end velocity at the next control step.
+
+\stagefigure{figures/ch07/s21_step_sequence_6db95e66.png}{Real camera frames at 0.5, 2.7, and 5.4 seconds from the same dynamic run.}{fig:s21-detail-1}
+
+\subsubsection{Standard Walking and Push Perturbation}\label{s21-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5254}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4746}}@{}}
+\caption{Standard Walking and Perturbation: Setup and Results}\label{tab:s21-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Standard Conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Standard Conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Steps and stride length & 8 steps \(\times\) 0.12m \\
+stance phase / double support & 0.6s / 0.12s \\
+Measured touchdown & 8/8 \\
+Forward displacement & 0.937028m \\
+Maximum trunk pitch & 0.0863° \\
+Maximum joint velocity & 2.6206 rad/s \\
+Maximum terminal foot position error & 0.791mm \\
+\end{longtable}\endgroup
+
+At touchdown, the following conditions must be met: near the planned time, the horizontal position error of the correct foot must be less than 2.5 cm, the absolute value of foot sole height must be less than 8 mm, and the measured normal force must exceed 10 N for at least 15 ms. Additionally, the walk must complete fully, advance at least 10 cm less than the planned distance, have a terminal foot position error less than 4 cm, and must not trigger any controller or posture protection. Simply remaining upright does not count as a completed walk.
+
+\stagefigure{figures/ch07/s21_measured_steps_d93b29e0.png}{Actual foot trajectories with ground contact, used to verify swing foot and eight touchdown events.}{fig:s21-detail-2}
+
+\subsubsection{Conditional Scanning and Failure Boundaries}\label{s21-detail-4}
+
+Scan step lengths of 0.08/0.12/0.16 m, control rates of 50/100/200 Hz, horizontal thrust of 0/20/40 N, friction coefficients of 0.2/0.4/0.8, torque ratios of 0.5/0.75/1, different double-support durations, and 0.5 ms integration step. Disturbance is applied for 0.1 s, starting from 2.70 s. Each group modifies only the corresponding experimental factor; after deduplication of repeated configurations, 51 groups are formed, including 4 standing-check groups.
+
+\stagefigure{figures/ch07/s21_biped_constraints_edf641d4.png}{Dynamics constraints comparison; all conditions and results are saved in \texttt{biped\_results.json}.}{fig:s21-detail-3}
+
+Out of 51 trials, 50 passed. The only failed case was under step length 0.12m, frequency 100Hz, double support phase 0.12s, friction 0.8, torque halved, and subjected to a 40N push disturbance, terminating at 4.191s due to trunk pose or height exceeding bounds. The robot advanced approximately 1.083m before losing stability; advancing further does not equate to task completion. With full torque under the same disturbance, the robot completed eight steps.
+
+\stagefigure{figures/ch07/s21_biped_keyframe_1ca131fc.png}{Full torque versus half torque comparison. The right side retains the real final frame after termination and does not continue simulation.}{fig:s21-detail-4}
+
+In this stage, only hard constraints on velocity and torque magnitude are set, without implementing motor torque rate-of-change or actuator bandwidth models. Under standard operation, the maximum torque change between adjacent control commands after 0.5s is approximately 51.5 N·m, which may still be unfriendly to real actuators. The QP computation time is recorded offline on this machine and does not represent a hard real-time guarantee.
+
+\subsection{Independent Verification and Implementation Corrections}\label{s21-detail-5}
+
+The verifier re-reads the saved trajectory instead of merely relying on the runner's success flag. The feedback and planning layer recalculates adjacent states using independent discrete dynamics formulas; the dynamics layer recomputes foot positions and center of mass from joint states and checks the actual applied torques, joint integrals, and touchdown records. Relevant code is located in scripts/verify.py and scripts/tests.py.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4751}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5249}}@{}}
+\caption{Independent Verification and Implementation Correction: Settings and Results}\label{tab:s21-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Check items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Check items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Unit and Regression Checks & 11 Passed \\
+Causal feedback layer & no future measurements; accepted source timestamps are monotonic; expiration termination meets threshold \\
+Maximum residual of feedback layer dynamics & 2.89e-15 \\
+Planning Layer Dynamics Maximum Residual & 8.88e-16 \\
+Planning layer foot placement & successful trajectory with continuous extrema avoiding ground penetration, velocity bounds satisfied, foot switch without instantaneous teleportation \\
+Dynamic base and joints & 3 underactuated degrees of freedom, 6 motors; no joint state reset observed \\
+Maximum residual of dynamic forward kinematics & 0.00e+00m \\
+Joint integral maximum residual & 1.11e-16 \\
+Successfully ran QP dynamics with maximum residual & 2.84e-04 \\
+\end{longtable}\endgroup
+
+Two issues affecting the results were corrected in the implementation. First, after MuJoCo integration, some kinematic caches may still correspond to the previous state; directly computing the Jacobian difference would amplify Jdot error. Now, kinematics are synchronized first, then control inputs are computed, and central difference regression is added. Second, slight negative heights may arise from online footstep re-planning, which are now rejected via continuous extremum screening rather than clipped for display. The final batch was rerun after these corrections, ensuring early debugging results are not mixed into the official statistics.
+
+Each formal batch saves the configuration, source code hash, and source code snapshot; during verification, the current files are checked against the snapshot for consistency. Screen recordings are independent reruns under the same configuration and do not increase the number of experiments. Source code packages retain the configuration and aggregated results, while raw arrays are stored locally in the runs/ directory.
+
+
+\paragraph{Stage Conclusion} 51 unique dynamic conditions passed through 50; standard eight-step forward motion achieved approximately 0.937 meters, but full feedback timing experiments have not yet been unified.
+
+
+
+% BEGIN SIM_VISUALS s21
+\subsection{Comparison of Actual Leg Swing and Instability}
+Keep the original side-by-side comparison of full torque and half-torque. On the right, after failure, the robot remains frozen at the last saved posture without continuing motion; "still showing the robot" does not mean that the condition successfully completed walking.
+
+\motionfigure{figures/ch07/planar_biped_failure_camera_sequence.png}{Actual camera view comparison between full torque and half torque; the latter freezes at the last frame after termination and cannot be used to represent effective running duration.}{fig:motion-planar_biped_failure_camera_sequence}
+% END SIM_VISUALS s21
+\stagecode{s21}
+
+\stagevideo{videos/ch07/planar_biped_torque_comparison.mp4}
+
+\FloatBarrier
+
+\section{Unified Interface from Center of Mass and Zero Moment Point to Joint Torques}
+
+\label{stage:s22}
+
+\subsection{Feedback-related Issues and Scope of This Phase}\label{s22-detail-1}
+
+The earlier lipm\_balance validated LIPM gait analysis and MuJoCo standing recovery separately; together they did not demonstrate walking in the physics simulator. The later lipm\_extension added a floating base, physical swing-leg dynamics, and eight measured touchdowns in simulation, but the three experimental levels were still not fully connected.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2364}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3073}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4563}}@{}}
+\caption{Feedback Corresponding Issues and Scope of This Phase: Setup and Results}\label{tab:s22-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Issues in Feedback
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Existing foundation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage adds
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Issues in Feedback
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Existing foundation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage adds
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Only perform standing recovery & subsequent versions already include six-motor eight-step walking & same model extended to 20 steps, with added push disturbance, and save complete actual camera recording footage \\
+Instantaneous foot swap & existing leg with inertia and continuous footstep reference & retain actual dynamics and landing check, add planned load and measured contact verification \\
+Decoupling of ZMP and ankle torque & Existing inverse dynamics QP for center-of-mass task & Explicitly incorporating ZMP and contact torque balance into the same QP, recording predicted versus actual CoP \\
+Double support phase needs refinement & existing bipedal contact and load target & C2 load transfer, synchronized reference ZMP, return to two-foot stance at end state, scan different transition durations \\
+Different frequencies and delays & previously tested only at the simplified LIPM layer & directly comparing 50/100/200 Hz versus 20/40/80 ms CoM delay within the multi-joint torque closed-loop \\
+\end{longtable}\endgroup
+
+All new work is conducted in simulation. The same 27.2kg sagittal-plane model with 9 degrees of freedom is retained: three unactuated base degrees of freedom and three motors on each leg. Lateral motion, roll, and yaw are constrained. No physical IMU, Jetson, or hardware testing is used. Earlier directories, reports, and results remain unchanged.
+
+\subsection{Unified Interface from ZMP to Six-Joint Torques}\label{s22-detail-2}
+
+\subsubsection{First unify the physical quantities, then discuss the gains}\label{s22-detail-3}
+
+ZMP is the position on the ground, in meters; ankle motor torques are in N·m and cannot be directly numerically matched, nor should the gains for different tasks be forced to be identical.
+
+New interface is:
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+Reference CoM position/velocity/acceleration for gait
+        ↓ Same horizontal center-of-mass feedback gain
+center-of-mass acceleration target a_cmd
+        ↓ Constant height, approximate zero center-of-mass angular momentum change
+ZMP target p_cmd
+        ↓ Enter whole-body inverse dynamics QP alongside CoM task
+six motor torques τ
+        ↓ MuJoCo independently solves realistic foot-ground contact
+Actual contact forces, pressure centers, and robot motion
+\end{Verbatim}
+
+The outer-loop acceleration is computed only once: \path|a_cmd = a_ff + 80(c_ref-c_obs) + 18(v_ref-v_obs)|. Both the CoM task and ZMP target use this result to avoid using different horizontal feedback gains in the two control layers. The tracking gains for trunk pitch and foot swing remain set according to their respective tasks.
+
+For vertical acceleration a\_z, use \path|p_cmd = c_x - c_z*a_x/(g+a_z)|; project the command onto the current support-foot range if it falls outside. Each foot wrench is referenced to its foot-sole site and expressed in world coordinates as {[}Fx,Fz,My{]}. The combined ground center of pressure is:
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+p = Σ(x_i Fz_i - z_i Fx_i - My_i) / ΣFz_i
+Σ[(x_i-p_cmd) Fz_i - z_i Fx_i - My_i] ≈ 0
+\end{Verbatim}
+
+In the formula, My denotes the foot-ground contact torque, not the ankle joint motor torque. Joint torques are determined by the full dynamic constraints: \path|M qdd + bias = S^Tτ + J^Tλ + passive|. Since the floating base has no motors, the QP must achieve the desired acceleration through contact forces from the supporting foot; the computed contact forces are not directly applied to the simulator.
+
+\subsubsection{Using Soft Targets to Preserve Differences in Multi-Joint Dynamics}\label{s22-detail-4}
+
+The actual multi-joint model does not strictly satisfy constant center-of-mass height and zero angular momentum change. ZMP balance is thus incorporated as a soft target while retaining constraints such as joint limits, torque limits, friction, foot torque, and support foot acceleration. The final motion is driven by MuJoCo without directly rewriting qpos according to the reference.
+
+The newly added "Only CoM task" baseline shares the same model, gait, double-support phase, gains, and contact kernels with the "CoM + ZMP mapping" setup, differing only in whether ZMP torque balance is explicitly optimized. This is an ablation study within the same version, not directly combining performance results from different configurations in the previous report.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2641}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3804}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3555}}@{}}
+\caption{Soft targets preserving differences in multi-joint dynamics: Setup and Results}\label{tab:s22-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control frequency (Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual CoP RMSE: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM RMSE: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control frequency (Hz)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual CoP RMSE: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM RMSE: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 23.86 \(\rightarrow\) 13.51 & 0.64 \(\rightarrow\) 1.37 \\
+100 & 19.41 \(\rightarrow\) 6.06 & 0.28 \(\rightarrow\) 1.26 \\
+200 & 18.52 \(\rightarrow\) 3.61 & 0.15 \(\rightarrow\) 1.21 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch07/s22_mapping_f57b4e97.png}{Error between pressure center and center of mass under identical disturbance-free conditions.}{fig:s22-detail-1}
+
+At 100 Hz, the center of pressure error decreases by approximately 68.8\%, but the center of mass position error increases from 0.28 mm to 1.26 mm. Therefore, here we can confirm that the mapping is more explicit and center of pressure target tracking is more accurate; it cannot be generalized as all balance metrics are better. The QP-predicted CoP is also separately saved and should not be used to replace actual contact measurements.
+
+The actual CoP is sampled before each new torque application, describing the real contact at that moment; the QP prediction corresponds to the current new command. Their timing and physical meaning differ. Pressure center error statistics start from 0.5s; failed runs only contain data up to termination, and comparisons simultaneously report whether the run completed to avoid treating shorter trajectories terminated early as better performance.
+
+The relevant code is in WBC.solve in \path|scripts/biped.py| and contact\_wrenches, resultant\_cop in \path|scripts/feedback.py|.
+
+
+\paragraph{Stage Conclusion} Uniform horizontal acceleration targets improve actual pressure center tracking while increasing center-of-mass error, not improving all metrics simultaneously.
+
+\stagecode{s22}
+
+\FloatBarrier
+
+\section{Continuous Leg Swing, Double Support, and Twenty-Step Walking}
+
+\label{stage:s23}
+
+\subsection{Physical Execution of Leg Swing and Double Support}\label{s23-detail-1}
+
+\subsubsection{Leg Swing is Not Animation or Position-Forced Driven}\label{s23-detail-2}
+
+Using a hip-knee-ankle model with 0.4m segments, realistic foot-ground collision, and limited motor torque. Inverse kinematics is only used to generate the initial standing posture; thereafter, foot swing is achieved using a fifth-order polynomial horizontal trajectory and a C2 lift-off curve, with target forces converted into torques via QP. Nominal step length: 0.12m, step time: 0.6s, lift-off height: 6cm; physical integration step: 1ms.
+
+Each touchdown must satisfy correct foot placement near the target position, foot sole height within the allowed range, and actual normal force exceeding 10N for at least 15ms continuously. Complete success also requires running to the end, completing all touchdowns, and satisfying forward displacement and final foot position error constraints.
+
+Both sets of 20-step conditions completed 20/20 successful foot placements in 14 seconds. Under no disturbance and 40N push disturbance, the forward displacement was approximately 2.323 m in both cases; this is continuous walking in a planar model, not three-dimensional humanoid walking, nor is success defined solely by "not falling over."
+
+\stagefigure{figures/ch07/s23_twenty_steps_11830081.png}{Actual foot positions, lift heights, and ground normal forces over 20 consecutive steps.}{fig:s23-detail-1}
+
+\subsubsection{Transition of Double Support Load and ZMP Together}\label{s23-detail-3}
+
+The planned load is transferred with the quintic smoothing function \texttt{\footnotesize s(u)=10u³-15u⁴+6u⁵}; its first and second derivatives are 0 at the endpoints. The reference ZMP shifts from the old support-foot center to the new one using the same load ratio. After the final step, load gradually returns to half on each foot instead of remaining on one foot. Planned load is a QP objective, while actual load is produced by the contact solver; both are logged.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2399}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2399}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2484}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2719}}@{}}
+\caption{Transition of Double Support Load and ZMP: Setup and Results}\label{tab:s23-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Double support duration (s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured footstrike under 40N condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum adjacent torque change (N·m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Left foot double support period proportional mean absolute error (percentage points)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Double support duration (s)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured footstrike under 40N condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum adjacent torque change (N·m)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Left foot double support period proportional mean absolute error (percentage points)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.0 & 8/8 & 42.92 & - \\
+0.06 & 8/8 & 9.99 & 14.25 \\
+0.12 & 8/8 & 5.96 & 7.00 \\
+0.2 & 8/8 & 5.75 & 4.95 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch07/s23_double_support_7b86abbd.png}{Planned versus actual left foot load ratio near the same support transition.}{fig:s23-detail-2}
+
+In this group, walking eight steps is possible even without double support, but adjacent torque jumps reach 42.92 N·m; they drop to 5.96 N·m during the 0.12s double support phase. Longer transitions result in smoother load tracking, but reduce the available swing-leg time; thus, it cannot be concluded that longer transitions are always better. The zero double-support case lacks an effective continuous transition interval and is therefore not reported in terms of average load ratio error.
+
+\subsubsection{Contact Verification and Torque Rate of Change}\label{s23-detail-4}
+
+The support set still follows a nominal schedule, but a foot scheduled to bear load must produce actual normal force. If it remains below 5N for more than 40ms, the run terminates rather than continuing to assume support. Unloading feet with a planned load below 5\% are exempt. This checks the support assumption; it does not yet reschedule steps online using touchdown events.
+
+Additionally, in the QP, constraints are imposed on adjacent control torques: \path!|τ_k - τ_(k-1)| ≤ rate/hz!. Activated 0.4s after startup and load-bearing, tested at 600 and 1500 N·m/s under 12 conditions including 50/100/200 Hz and 0/40 N push disturbances, all passed successfully. The actual commanded torques are verified one by one to satisfy the bounds. Here, the constraint limits the slope of the control command, without establishing a real motor current loop or bandwidth model.
+
+\stagefigure{figures/ch07/s23_slew_16fc2548.png}{Actual commanded rate of change under different control frequencies.}{fig:s23-detail-3}
+
+The relevant code is located in \path|scripts/biped.py|, specifically in Plan.loads, Plan.feet, WBC.solve, and simulate.
+
+
+\paragraph{Stage Conclusion} Both groups completed twenty steps with actual foot contacts and advanced approximately 2.323 meters; nominal support phases were verified against measured contact events, with no reordering of touchdown events yet implemented.
+
+
+
+% BEGIN SIM_VISUALS s23
+\subsection{Continuous footage of twenty actual steps}
+The following figure comes from saved recordings of a run with twenty measured touchdowns in simulation, including a run with a 40N push lasting 0.1 seconds. The camera follows the robot, so apparent ground motion cannot directly estimate forward distance; distance and touchdown count follow the saved states and contact records.
+
+\motionfigure{figures/ch07/planar_twenty_steps_full_frame.png}{Camera frame from twenty-step walking with synchronized CoM and contact records; the nominal elapsed interval shown is not a substitute for measured touchdown criteria.}{fig:motion-planar_twenty_steps_full_frame}
+
+\motionfigure{figures/ch07/planar_twenty_steps_camera_sequence_1.png}{Camera view of the first part of the actual dynamic recording of twenty steps; text bar has been cropped to preserve the robot and footpad.}{fig:motion-planar_twenty_steps_camera_sequence_1}
+
+\motionfigure{figures/ch07/planar_twenty_steps_camera_sequence_2.png}{Camera view from the latter part of a recorded simulation of twenty dynamic steps; text panel has been cropped to preserve the robot and foot sole.}{fig:motion-planar_twenty_steps_camera_sequence_2}
+% END SIM_VISUALS s23
+\stagecode{s23}
+
+\stagevideo{videos/ch07/planar_biped_twenty_steps.mp4}
+
+\FloatBarrier
+
+\section{Frequency, Delay, and Dynamics Verification}
+
+\label{stage:s24}
+
+\subsection{Frequency, Perturbation, and Delay Comparison}\label{s24-detail-1}
+
+\subsubsection{Frequency and Bidirectional Perturbation within the Same Physical Model}\label{s24-detail-2}
+
+50/100/200 Hz control, 0/+40/-40 N horizontal disturbance, two mappings, totaling 18 conditions; disturbance occurs between 2.70–2.80 s. All 9 CoM-only conditions were completed; 8 of the 9 explicit-mapping conditions were completed; the failed condition was the 50 Hz backward push, terminated due to lack of confirmed actual contact despite planned support. More accurate CoP target tracking did not result in higher condition pass rates.
+
+The recovery from a 100Hz push disturbance is as follows. Recovery is defined as the CoM position error being less than 1 cm, velocity error less than 0.05 m/s, and trunk pitch less than 0.03 rad, and this condition must be sustained for at least 0.3 s. This is relative motion reference tracking recovery, not static standing recovery; the sampling resolution is 10 ms. If the system remains within the threshold continuously from the moment the push disturbance ends, it is recorded as 0.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2550}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3954}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3496}}@{}}
+\caption{Frequency and bidirectional push perturbation within the same physical model: Setup and Results}\label{tab:s24-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Thrust (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum CoM error after the push: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time: baseline \(\rightarrow\) mapped controller (s)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Thrust (N)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum CoM error after the push: baseline \(\rightarrow\) mapped controller (mm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time: baseline \(\rightarrow\) mapped controller (s)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+40 & 6.96 \(\rightarrow\) 5.72 & 0.02 \(\rightarrow\) 0.01 \\
+-40 & 10.58 \(\rightarrow\) 14.11 & 0.15 \(\rightarrow\) 0.37 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch07/s24_cop_com_c33be67c.png}{Actual CoP and CoM error under 40N forward push disturbance, orange indicates force application interval.}{fig:s24-detail-1}
+
+Forward push disturbance recovery is close, while backward push disturbance recovery is slower under the new mapping. This suggests that, under the current weights, there remains a trade-off between the pressure center task and the center of mass and leg swing; in this stage, we no longer attempt to "eliminate" failure cases by continuously tuning weights.
+
+\subsubsection{Delay applied only to a specific feedback loop}\label{s24-detail-3}
+
+The simulated sensor generates timestamped horizontal CoM position and velocity at 100Hz, adding Gaussian noise of 1mm and 0.01m/s respectively. Measurements reach the outer loop after fixed delays of 20/40/80ms. The controller cannot access measurements before arrival. Holding the last received measurement is compared with constant-velocity prediction. Each combination uses 3 fixed noise seeds, paired between the two methods. Initialization supplies only one noisy pre-start observation.
+
+Joint encoders, model state for QP, vertical CoM, and contact measurements remain ideal; only the horizontal CoM outer-loop exhibits delay. This cannot be interpreted as the robot completing walking under delay in all sensors.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1828}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1828}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1828}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1828}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2687}}@{}}
+\caption{Delay is applied only to one explicit feedback loop: Setup and Results}\label{tab:s24-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Fixed Delay (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maintain Measurement: Completed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Constant velocity prediction: completed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Both methods jointly complete the logarithm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM RMSE when both methods complete: hold \(\rightarrow\) prediction (mm)
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Fixed Delay (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maintain Measurement: Completed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Constant velocity prediction: completed
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Both methods jointly complete the logarithm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoM RMSE when both methods complete: hold \(\rightarrow\) prediction (mm)
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+20 & 9/9 & 9/9 & 9 & 5.19 \(\rightarrow\) 1.88 \\
+40 & 9/9 & 8/9 & 8 & 9.71 \(\rightarrow\) 2.64 \\
+80 & 2/9 & 3/9 & 2 & 37.13 \(\rightarrow\) 9.21 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch07/s24_delay_3b2aa9af.png}{Number of completions under delay conditions, 3 noise seeds per bin.}{fig:s24-detail-2}
+
+At 20ms, both methods achieved 9/9 success; constant velocity prediction reduced CoM error in successfully completed samples. At 40ms, measured performance remained 9/9, while predicted performance dropped to 8/9; although predicted average tracking was more accurate, it did not imply greater reliability. At 80ms, success rates dropped to 2/9 and 3/9 respectively; simple extrapolation cannot account for longer delays and contact transitions. Error comparisons are only made on successfully completed pairs, without mixing short trajectories that prematurely terminated.
+
+All 9 failures occurred before 2.70s due to delays, noise, or self-induced contact switching issues, and cannot be collectively termed "failure under 40N push."
+
+The relevant code is in the CoMChannel in \path|scripts/feedback.py| and the fixed condition matrix in \path|scripts/suite.py|.
+
+\subsection{Runtime Verification and Failure Boundaries}\label{s24-detail-4}
+
+\subsubsection{Conditional Counting}\label{s24-detail-5}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5013}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4987}}@{}}
+\caption{Conditional Counting: Setup and Results}\label{tab:s24-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of completed conditions within the group
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of completed conditions within the group
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+mapping & 17/18 \\
+feedback & 40/54 \\
+support & 8/8 \\
+slew & 12/12 \\
+integration & 2/2 \\
+long\_walk & 2/2 \\
+\end{longtable}\endgroup
+
+After deduplication, there are 94 shared configurations across groups; the rows of the above table cannot be directly summed. Under the noise-free condition, samples were not increased by repeating with different seeds; only under the delay noise condition were 3 seeds used. The conditions are actively selected experimental grids, not actual deployment success rates obtained through sampling.
+
+79 completed, 15 incomplete: 12 terminated due to planned contact forces not being confirmed as actually contacted, 1 failed due to torque value constraints not satisfied, 1 QP infeasible, 1 due to conflicting acceleration or torque bounds. All retained, not only successful cases.
+
+During development, issues arose where upper and lower bound conflicts caused OSQP initialization to throw exceptions and interrupt the entire batch. Currently, constraint bounds are being checked first, and solver exceptions are recorded as termination results under this condition; the 94 official runs were re-executed after the fix, while the old development logs were saved separately without being merged into the count.
+
+\subsubsection{Independent Trajectory Verification}\label{s24-detail-6}
+
+Re-read the 94 successful runs' qpos, qvel, actual control commands, and contact records, rather than relying solely on the runner's success flag. The check includes source code snapshots, joint integrals, foot sole forward kinematics, actual contact wrenches' coordinates/signs, generalized contact forces, recalculation of pressure centers, and all touchdown criteria.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6056}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3944}}@{}}
+\caption{Independent Trajectory Verification: Setup and Results}\label{tab:s24-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Verification Items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum residual or result
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Verification Items
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum residual or result
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Run Log Verification and Source Code Snapshot Check & 94 Sets \\
+All measured touchdown in records & 690 \\
+Joint Integral Residual & 2.22e-16 \\
+Foot sole forward kinematics residual (m) & 0.00e+00 \\
+Contact virtual work / generalized constraint force residual & 1.71e-13 \\
+Recomputed contact wrench residual & 8.38e-12 \\
+Recalculated ground CoP residual (m) & 4.18e-15 \\
+Acceleration-to-original ZMP mapping residual & 0.00e+00 \\
+Interface and Physical Quantity Unit Check & 7 Passed \\
+\end{longtable}\endgroup
+
+Contact wrench and kinematics re-calculation use 12/8 evenly sampled time instants per run; joint integration, torque rate, and touchdown checks cover the full saved trajectory. The physical units of error vary depending on the checked item and should not be compared across different items. The 20-step video consists of 280 frames over 14.0 seconds, decoded frame-by-frame without missing frames; the recorded runs and official perturbation conditions exhibit element-wise identical trajectories; no additional independent test runs are added.
+
+The relevant code is located at \path|scripts/tests.py|, \path|scripts/verify.py|, and \path|scripts/record.py|.
+
+
+\paragraph{Stage Conclusion} Out of 94 deduplicated conditions, 79 passed; with an 80ms delay, most failed, and constant velocity prediction cannot resolve all contact switching issues.
+
+\stagecode{s24}
+
+\FloatBarrier

@@ -1,0 +1,964 @@
+\chapter{Inverted Pendulum Planning and Balance Recovery}
+The control hierarchy references the publicly available LIPM controller \cite{lipm}, with the local model and constraints independently defined.
+
+
+The simplified model facilitates analysis of the support region, foot placement, and delay but neglects the full swing-leg dynamics. This chapter first verifies model-based recovery, then uses finite-footprint contact and constrained gait to illustrate the boundaries.
+
+\section{Inverted Pendulum Model, Gait, and Controllers}
+
+\label{stage:s17}
+
+\subsection{Research Questions and Scope of Work}\label{s17-detail-1}
+
+In the previous stage, the focus was primarily on robotic arm trajectory tracking, feedback frequency, and end-effector contact. In this stage, the system shifts to inherently unstable dynamics: whether the body can maintain balance during a stepping gait, whether balance can be restored by relying on the current stance foot or the next foot touchdown after disturbance, and whether the control remains effective when state feedback becomes outdated.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2485}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3939}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3576}}@{}}
+\caption{Research Questions and Scope of Work: Setup and Results}\label{tab:s17-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Monthly Plan Direction
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage implements
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Result Boundaries
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Monthly Plan Direction
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage implements
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Result Boundaries
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Simplified dynamics & Two-dimensional LIPM, constant height, exact zero-order-hold propagation & Not full human-body or articulated biped dynamics \\
+Gait cycle and foot placement planning & 12-segment support, 11 foot switches, CoM and DCM references; Constrained foot placement adjustment & instantaneous transition between supports, without modeling double support and swing leg inertia \\
+Balance Control & PD, LQR, and Footstep/Prediction Ablation & Input is the CoP within the support surface, not directly representing joint torques \\
+Measurement noise and disturbances & State-estimation white noise, bias, fixed-duration pushes, and model-height error & Not measurements from a physical IMU \\
+Frequency and Feedback Delay & 50/100/200 Hz; 0/20/40/80/120 ms & Simulation time settings, not guaranteed real-time on host machine \\
+Contact validation further verified & MuJoCo free-ankle, foot, and lumped-mass standing & Only validated standing, not implemented whole-body dynamic walking \\
+\end{longtable}\endgroup
+
+The implementation draws upon Caron's LIPM controller, the MIT-licensed Python gait project, and the author's derivation of capture points; respective maintenance status, licensing, and dependencies are individually verified, adopting a hierarchical control and reproducible comparison approach without copying the entire robot control code. Specific links and trade-offs are detailed in RESEARCH.md.
+
+\subsection{Model, Gait, and Input Constraints}\label{s17-detail-2}
+
+The center-of-mass position c and velocity v include both forward x and lateral y components, with constant CoM height h. The input p is the ground center of pressure (CoP); without changes in centroidal angular momentum, it coincides with the ZMP in this model. With an external force F acting on the CoM:
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+c_ddot = (g/h)*(c-p) + F/m
+omega = sqrt(g/h)
+xi = c + v/omega
+xi_dot = omega*(xi-p) + F/(m*omega)
+\end{Verbatim}
+
+The nominal gait first specifies the center of alternating stance feet, then computes the DCM boundary backward from the terminal stance. The stabilizing component η = c − v/ω is advanced forward, and the center of mass position and velocity are recovered from ξ and η. This approach satisfies discrete dynamics while avoiding numerical drift caused by long-term forward integration of unstable references. The endpoint does not continue moving forward but stops near the last stance foot.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3099}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6901}}@{}}
+\caption{Model, Gait, and Input Constraints: Setup and Results}\label{tab:s17-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Parameters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Parameters
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Gravity / Nominal Height / Mass & 9.81 m/s² / 0.8 m / 30 kg \\
+Gait & 12 support phases, 11 stance transitions; phase duration 0.6s; forward foot placement spacing 0.18m, lateral foot spacing 0.14m \\
+Duration and forward distance & 7.2s gait phase + 2s terminal phase, totaling 9.2s; nominal forward progress of 1.98m \\
+Foot sole dimensions with CoP & half-length 0.10m, half-width 0.05m; 5mm safety margin retained at edges \\
+Footfall range & Forward offset from current foot: 0.04–0.34 m; Alternating lateral spacing: 0.10–0.24 m \\
+Target adjustment & adjustment performed in the last 0.15s before each foot switch; change in each axis target \(\leq\) 0.8 m/s; single correction clipped to ±0.10 m / ±0.06 m \\
+Feasibility check & support distance \(\leq\) 0.35m, horizontal velocity \(\leq\) 2.5m/s, cumulative route translation \(\leq\) 0.35m, ground reaction force satisfies friction constraints \\
+Step length & Main model at 1ms; numerical verification at 0.5ms \\
+\end{longtable}\endgroup
+
+The horizontal ground reaction force is m(g/h)(c−p), which is the term checked against friction constraints. An external push applied at the CoM is not directly counted as ground friction demand. The rate limit on foot-placement targets constrains only the planner output; it does not guarantee feasible physical swing-leg speed, inertia, or inverse kinematics.
+
+If input exceeds boundaries, project it onto the current foot-safe region; if the body state goes outside the feasible region, immediately terminate. Model failure indicates that the assumptions and constraints are no longer valid and cannot be directly interpreted as the real robot having fallen. Relevant code is in scripts/core.py, and parameters and criteria are in configs/protocol.json.
+
+\subsection{Controller and Causal Delay Prediction}\label{s17-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2198}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2623}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2196}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2983}}@{}}
+\caption{Controller and Causal Delay Prediction: Setup and Results}\label{tab:s17-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoP Feedback
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Next footstep touchdown
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Delayed processing
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+CoP Feedback
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Next footstep touchdown
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Delayed processing
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & Position and velocity error feedback & Fixed & Using delayed measurement \\
+LQR & Continuous Algebraic Riccati Equation for gain calculation & Fixed & Using delayed measurements \\
+LQR + Footstep Adjustment & Same as LQR & DCM Adjustment Based on Predicted Touchdown Time & Using Delayed Measurement \\
+LQR + Delay Prediction & Same as LQR & Fixed & Advance historical states to the current time step using already issued inputs \\
+LQR + Prediction + Footstep Adjustment & Same as LQR & Constrained Adjustment & First predict current state, then feedback and plan \\
+\end{longtable}\endgroup
+
+The LQR error state is {[}c−c\_ref, v−v\_ref{]}, input is the CoP offset relative to the nominal support center, Q=diag(20,2), R=1. The code implements u=−K·e, with K approximately {[}-5.5826, -1.7060{]}; its sign is determined by the input matrix. The nominal continuous closed-loop poles are -3.165 and -17.755. The PD controller is tuned with a natural frequency of 3 rad/s and damping ratio of 0.9. All five methods use the same foot sole and foot placement range constraints.
+
+Foot placement adjustment does not immediately move the foot to the current capture point, but rather predicts the DCM at touchdown within the remaining swing time and clips the position and adjustment rate of the next foot placement target. After support transition, the reference trajectory shifts with the actual foot placement; the center-of-mass state itself is not reset. The report simultaneously provides the error relative to the adjusted trajectory and the deviation relative to the original trajectory, avoiding the misinterpretation that the modified reference represents an exact return to the original target.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+x_hat(now) = A(delay)*x_measured(past)
+             + sum(A^j * B * already_sent_CoP)
+next_landing = feasible_projection(planned_landing + predicted_DCM_error)
+\end{Verbatim}
+
+The predictor only uses past measurements and already sent inputs corresponding to the timestamp, without reading the true current state, future measurements, or future thrust. It cannot anticipate disturbances that have not yet been observed by feedback, and model inaccuracies and noise will also affect the prediction. Relevant code is in scripts/core.py, in predictor and Controller; mathematical and causality checks are in scripts/tests.py.
+
+
+\paragraph{Stage Conclusion} LIPM simplifies the robot to a point mass at constant height, with support input being ground positions; PD and LQR should be compared under identical constraints and recovery criteria.
+
+\stagecode{s17}
+
+\FloatBarrier
+
+\section{Disturbance Recovery, Footstep Adjustment, and Delay Prediction}
+
+\label{stage:s18}
+
+\subsection{Comparison Design and Evaluation Method}\label{s18-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2676}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2523}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4800}}@{}}
+\caption{Comparison of Design and Evaluation Methods: Setup and Results}\label{tab:s18-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of configurations (including overlaps between groups)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Objective
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Group
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of configurations (including overlaps between groups)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Objective
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Main Grid & 675 & 5 methods \(\times\) 3 frequencies \(\times\) 5 delays \(\times\) 3 push perturbations \(\times\) 3 noise seeds \\
+Push Recovery Boundary & 360 & 100Hz, 4 delay, 0/3/6/9/12/15 N·s; independent seeds 20--22 \\
+Model and Measurement Deviation & 160 & Height 0.72/0.88m, fore-aft/lateral push disturbances, friction, noise, and bias \\
+Disturbance application timing verification & 180 & Disturbance applied in early/medium/late stance phase; independent seeds 40--42 \\
+Gait Cycle Validation & 60 & Support phase duration 0.5/0.7s, check applicability across gait phases \\
+Numerical Check & 10 & Comparison of 1ms and 0.5ms under noise-free conditions \\
+Mechanism Demonstration & 20 & No feedback and ablation controls; partially overlaps with other groups \\
+\end{longtable}\endgroup
+
+After deduplication based on configuration, there are a total of 1458 groups, with an accumulated simulated time advanced of approximately 9667.7 seconds; failed groups are counted by their actual termination time without padding the trailing stationary segments. Main grid seeds are 0--2, with independent validation using different seeds; control gains were not re-tuned based on validation results. The combinations do not represent a probability distribution of real-world operating conditions, so the pass rate of all groups mixed together cannot be regarded as a general success rate.
+
+Push disturbances typically begin at 2.70s and last 0.10s. Impulses of 6 N·s and 12 N·s correspond to rectangular horizontal forces of 60 N and 120 N, respectively; in the independent groups, the direction and start time are also varied. Default measurement noise is 1 mm for position and 0.01 m/s for velocity, sampled from the same 1 kHz seed time series and extracted at control moments to ensure frequency-matched pairing. The noise is not from a physical IMU model.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.2978}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.7022}}@{}}
+\caption{Comparison of Design and Evaluation Methods: Setup and Results}\label{tab:s18-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Metrics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Definition
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Metrics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Definition
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Through & complete the entire duration; deviation from the original route at the endpoint \(\leq\) 0.35m; position RMSE \(\leq\) 0.02m and velocity error RMSE \(\leq\) 0.08m/s in the last 0.5s; no premature termination due to infeasible region \\
+Recovery time & After the push ends, the first continuous 0.5s with position error\textless0.02m and velocity error\textless0.08m/s at every point; reported only for groups completing the full test \\
+Position error & relative adjusted route calculation, simultaneously single-column original route deviation \\
+Sampling window & main control group both use 1ms state computation, separate from 50/100/200Hz control periods; half-step group listed individually \\
+Tested boundary & Incremental checks from 0N·s; the contiguous range passed by all 3 validation seeds, rather than isolated favorable results \\
+\end{longtable}\endgroup
+
+These thresholds are engineering comparison criteria for this project and not industrial standards. Each cell uses only 3 noise seeds, which is a small number; 3/3 means all three trials passed, but does not represent 100\% reliability in real-world environments. Relevant code is located in \path|scripts/suite.py| and scripts/analyze.py.
+
+\subsection{Main Results and Stability Boundaries}\label{s18-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2117}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}@{}}
+\caption{Main Results and Stability Boundaries: Setup and Results}\label{tab:s18-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6 N·s passed through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+12 N·s passed through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+6 N·s passed through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+12 N·s passed through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 3/3 & 0.572 & 0/3 & Not achieved \\
+LQR & 3/3 & 0.028 & 0/3 & Not achieved \\
+LQR + Footstep Adjustment & 3/3 & 0.028 & 3/3 & 0.390 \\
+LQR + Delay Prediction & 3/3 & 0.028 & 0/3 & Not Achieved \\
+LQR + Prediction + Footstep Adjustment & 3/3 & 0.028 & 3/3 & 0.390 \\
+\end{longtable}\endgroup
+
+Without delay, LQR recovers faster than the set PD for moderate push disturbances, but the gains cannot eliminate the upper limit of control authority provided by the footpad. For larger push disturbances, the fixed footstep controller fails; footstep adjustment regains feasibility by repositioning the support. Here, it is not proven that LQR is superior to PD under any parameter settings.
+
+\stagefigure{figures/ch06/s18_stepping_455e1724.png}{Control comparison under the same 12 N·s disturbance. Failed trajectory stops at real termination; shifted trajectory is redrawn separately and cannot be mixed with original trajectory error.}{fig:s18-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2117}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1971}}@{}}
+\caption{Main Results and Stability Boundaries: Setup and Results}\label{tab:s18-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 9 & 6 & Start not fully passed & Start not fully passed \\
+LQR & 9 & 6 & Start not fully passed & Start not fully passed \\
+LQR + Footstep Adjustment & 15* & 12 & Did not fully pass start & Did not fully pass start \\
+LQR + Delay Prediction & 9 & 9 & 6 & 6 \\
+LQR + Prediction + Footstep Adjustment & 15* & 12 & 12 & 12 \\
+\end{longtable}\endgroup
+
+The values in the table are in N·s, representing the upper end of the measured continuous full-pass interval; * indicates that the 15 N·s test upper limit was reached, and the true limit was not searched. A starting point not fully passed means that even the 0 N·s condition was not passed by all three seeds, so it cannot be recorded as tolerable for 0 N·s.
+
+\stagefigure{figures/ch06/s18_disturbance_boundary_6e46f392.png}{Disturbance boundaries for independent noise seeds. The method's advantages depend on feedback delay and control feasibility region; the boundary is not a universal constant.}{fig:s18-detail-2}
+
+\stagefigure{figures/ch06/s18_frequency_delay_642b1eb8.png}{12N·s main grid: three seeds per cell, color indicates pass rate; frequency and delay are set according to simulation time.}{fig:s18-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2075}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1981}}@{}}
+\caption{Main Results and Stability Boundaries: Setup and Results}\label{tab:s18-5}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+6 N·s, no delay
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency/Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Position RMSE/mm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time / s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+6 N·s, no delay
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Frequency/Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Position RMSE/mm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time / s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 50 & 3/3 & 6.80 & 0.595 \\
+PD & 100 & 3/3 & 6.54 & 0.572 \\
+PD & 200 & 3/3 & 6.55 & 0.577 \\
+LQR & 50 & 3/3 & 2.44 & 0.034 \\
+LQR & 100 & 3/3 & 2.13 & 0.028 \\
+LQR & 200 & 3/3 & 2.09 & 0.027 \\
+LQR + Prediction + Footstep Adjustment & 50 & 3/3 & 2.53 & 0.034 \\
+LQR + Prediction + Footstep Adjustment & 100 & 3/3 & 2.56 & 0.028 \\
+LQR + Prediction + Footstep Adjustment & 200 & 3/3 & 2.33 & 0.027 \\
+\end{longtable}\endgroup
+
+Under these moderate disturbance conditions, increasing the frequency typically yields only limited improvement; PD from 100 Hz to 200 Hz also did not further enhance performance. The three-frequency bins of the 12 N·s heatmap did not show significant changes, primarily due to boundaries such as input constraints and feedback data age—thus, it cannot be claimed that simply increasing to 200 Hz can overcome the 80 ms delay.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3182}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2218}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2218}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2383}}@{}}
+\caption{Main Results and Stability Boundaries: Setup and Results}\label{tab:s18-6}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+80ms, 12N·s conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deviation from original route at endpoint / m
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+80ms, 12N·s conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Recovery time / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Deviation from original route at endpoint / m
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+LQR + Footstep Adjustment & 0/3 & Not Achieved & Not Achieved \\
+LQR + Prediction + Footstep Adjustment & 3/3 & 0.684 & 0.099 \\
+\end{longtable}\endgroup
+
+Delayed prediction and footstep adjustment address different issues: prediction mitigates control lag caused by outdated states, while footstep adjustment expands the available support region; performing only one of them cannot guarantee robustness against large disturbances. Even with the combined approach, there remains approximately a 0.10m trajectory deviation, which cannot be described as exact adherence to the original path.
+
+In the fixed-foot, unsaturated linear analysis, the discrete spectral radius of 100Hz LQR is approximately 0.9688 at 0ms delay and 1.0198 at 80ms delay, which exceeds 1. This analysis can explain part of the delay-induced instability trend, but it does not include foot touchdown hybrid events, input saturation, or model noise, and thus cannot be directly used as a proof of stability for the entire gait system.
+
+\stagefigure{figures/ch06/s18_delay_analysis_39b0c131.png}{Left: Discrete spectral radius of a fixed-support linear system; Right: Ablation trajectory under 80ms delay.}{fig:s18-detail-4}
+
+\subsection{Independence Conditions and Numerical Checks}\label{s18-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2637}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2454}}@{}}
+\caption{Independent Conditions and Numerical Checks: Setup and Results}\label{tab:s18-7}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Model/Measurement Deviation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Moment of disturbance application
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Gait cycle variation
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Model/Measurement Deviation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Moment of disturbance application
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Gait cycle variation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 24/32 & 9/36 & 0/12 \\
+LQR & 26/32 & 9/36 & 0/12 \\
+LQR + Footstep Adjustment & 29/32 & 20/36 & 6/12 \\
+LQR + Delayed Prediction & 26/32 & 18/36 & 0/12 \\
+LQR + Prediction + Footstep Adjustment & 29/32 & 30/36 & 9/12 \\
+\end{longtable}\endgroup
+
+The combination method passed 30/36 validation tests at push moments and 9/12 tests during gait cycle transitions, indicating that success under default conditions cannot be generalized to all moments and velocities. Late pushes, varying gait timing, and limited foot touchdown ranges alter the feasible domain; state prediction also fails to compensate for the remaining swing time. All configurations and failure reasons are fully preserved in manifest.json and results.json.
+
+\stagefigure{figures/ch06/s18_heldout_641ae1f8.png}{Summary of fixed combinations for the held-out validation set; the proportions only describe these test conditions and cannot be interpreted as success rates under real task distributions.}{fig:s18-detail-5}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2264}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1934}}@{}}
+\caption{Independent Conditions and Numerical Checks: Setup and Results}\label{tab:s18-8}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+12 N·s, noise-free
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms endpoint trajectory error / m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms endpoint trajectory error / m
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+12 N·s, noise-free
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+1ms endpoint trajectory error / m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.5ms endpoint trajectory error / m
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & Failure & Failure & 0.371 & 0.370 \\
+LQR & Failure & Failure & 0.330 & 0.329 \\
+LQR + Footstep Adjustment & Pass & Pass & 0.100 & 0.100 \\
+LQR + Delayed Prediction & Failure & Failure & 0.330 & 0.329 \\
+LQR + Prediction + Footstep Adjustment & Pass & Pass & 0.100 & 0.100 \\
+\end{longtable}\endgroup
+
+Halving the physical step length does not alter the qualitative conclusions of this control method. LIPM employs exact zero-order hold propulsion; the focus of inspection lies in hybrid events, sampling, and constraint triggering, rather than merely verifying the integrator. The termination time of failure groups is influenced by the detection grid resolution; one should not compare RMSEs of failure trajectories of different lengths to determine which is better.
+
+
+\paragraph{Stage Conclusion} The conditions of 12 N·s and 80 ms can be recovered via a combined strategy, but with route deviation; prediction uses only received measurements and sent inputs.
+
+
+
+% BEGIN SIM_VISUALS s18
+\subsection{Motion Illustration of the Simplified Model}
+The figure illustrates the relationship between the LIPM reference, support point, and control results, belonging to mathematical model visualization. It does not include actual leg inertia or joint torques and cannot serve as a visualization of multijoint dynamic walking.
+
+\motionfigure{figures/ch06/lipm_reference_support_visualization.png}{State and support visualization of the Linear Inverted Pendulum model, not from a multi-joint physical camera view.}{fig:motion-lipm_reference_support_visualization}
+
+\stagevideo{videos/ch06/lipm_model_comparison.mp4}
+% END SIM_VISUALS s18
+\stagecode{s18}
+
+\FloatBarrier
+
+\section{Validation of Finite-Foot Nonlinear Standing}
+
+\label{stage:s19}
+
+\subsection{Verification of Nonlinear Contact with Finite Foot} \label{s19-detail-1}
+
+To examine the influence of contact beyond the simplified model, an additional finite footpad is constructed, allowing free translation, elevation, and rotation within the plane, connected to an ankle joint and a concentrated mass on a pendulum. The footpad is supported by MuJoCo contact forces, not fixed to the ground, and its pose is not reset after disturbances. This model can only move in the sagittal plane and cannot validate lateral balance or double-support transitions.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3144}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6856}}@{}}
+\caption{Finite-foot nonlinear contact verification: Setup and results}\label{tab:s19-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Engine & MuJoCo 2.3.7, gravity enabled, main physics timestep 1ms \\
+Mass and geometry & Foot 2kg, pendulum link 0.5kg, top mass 20kg; pendulum length 0.8m; foot 0.20\(\times\)0.11m \\
+Control input & Ankle torque ±25 Nm; state is world tilt angle and angular velocity \\
+Comparison & PD and LQR; 50/100/200Hz, 0/40/80/120ms, noise and friction variations \\
+Push & Apply 0/40/80/120N to the top of the model during 2.0---2.1s \\
+Pose target & every point in the last 0.5s \\
+Additional foot screening & Foot displacement \(\leq\)0.05m and rotation \(\leq\)5° throughout; terminate early if tilt exceeds 20° or height falls below its minimum \\
+\end{longtable}\endgroup
+
+Here, the LQR is recomputed using an approximate dynamic model of the ankle joint, with inputs in Nm; it does not directly transfer the CoP gains from LIPM nor does it involve transfer of the foot-strike adjuster. The initial world tilt angle is 0.02 rad, with noise of 0.002 rad for angle and 0.02 rad/s for angular velocity. The static normal resultant force is approximately 220.725 N, consistent with the total weight of 22.5 kg, confirming that the actual ground support is being read.
+
+The approximate ankle joint moment of inertia of the standing model is 13.016 kg·m², and the gravity linear term is approximately 158.922 N·m/rad. The feedback parameters recalculated for this model are:
+\begin{equation}
+K_{\mathrm{PD}}=[400,100],\qquad K_{\mathrm{LQR}}\approx[557.155,133.556].
+\end{equation}
+The control law is $\tau=-K_\theta\theta-K_\omega\dot\theta$. Both methods are subject to the same 25 N·m torque limit and limited footpad contact constraints.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{Finite-foot nonlinear contact verification: Setup and results}\label{tab:s19-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Thrust/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+After foot screening, pass
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum foot sole displacement /m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum world tilt angle / °
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Thrust/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+After foot screening, pass
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average recovery/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum foot sole displacement /m
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum world tilt angle / °
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 40 & 3/3 & 0.314 & 0.000 & 1.36 \\
+PD & 80 & 0/3 & Not achieved & 0.036 & 2.06 \\
+PD & 120 & 0/3 & Not achieved & 1.008 & 6.58 \\
+LQR & 40 & 3/3 & 0.085 & 0.000 & 1.15 \\
+LQR & 80 & 0/3 & Not achieved & 0.036 & 4.26 \\
+LQR & 120 & 0/3 & Not achieved & 1.849 & 20.09 \\
+\end{longtable}\endgroup
+
+Under 40N, both methods passed 3/3; LQR recovered more quickly on average. At 80N, trunk posture had a chance to recover, but foot sole flip exceeded the 5° threshold during this phase, thus strict foot screening resulted in 0/3. At 120N, noticeable movement or instability occurred. Increasing control gains and torques cannot infinitely enhance recovery capability, as foot sole contact itself becomes a limiting factor.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2000}}@{}}
+\caption{Finite-foot nonlinear contact verification: Setup and results}\label{tab:s19-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+40N, 100Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+40N, 100Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+40ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+80ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+120ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PD & 3/3 & 3/3 & 0/3 & 0/3 \\
+LQR & 3/3 & 0/3 & 0/3 & 0/3 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s19_physical_balance_94cd3215.png}{80N contact boundary test: World pose recovery does not imply no foot movement or flipping; support state must also be checked.}{fig:s19-detail-1}
+
+Among the total of 333 groups, only 172 groups passed the final posture condition, and after adding foot screening, this number dropped to 118 groups. The overall statistics include varying levels of difficulty and are not intended to claim control reliability. 5° and 5 cm are engineering screening thresholds at this stage and are not device certification standards.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5276}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4724}}@{}}
+\caption{Finite-foot nonlinear contact verification: Setup and results}\label{tab:s19-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Foot sole flip threshold / ° (motion limit remains at 5 cm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through group numbers
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Foot sole flip threshold / ° (motion limit remains at 5 cm)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Through group numbers
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+5 & 118 \\
+10 & 125 \\
+15 & 127 \\
+\end{longtable}\endgroup
+
+Changing foot thresholds changes the number of passing conditions. This sensitivity is retained rather than treating an arbitrary threshold as a general result. The model also lacks full legs, hip-knee coordination, and whole-body angular-momentum control; these standing results therefore do not demonstrate dynamic bipedal walking. Related code: scripts/physical.py and \path|scripts/physical_suite.py|; model: models/ankle.xml.
+
+
+\paragraph{Stage Conclusion} MuJoCo validation confirms footpad contact and stance recovery, but cannot be seamlessly concatenated with simplified model gaits to achieve completed multi-joint walking.
+
+
+
+% BEGIN SIM_VISUALS s19
+\subsection{Limited-footed standing and disturbance pushing scenario}
+The physical model in this stage includes only a finite foot sole, ankle joint, and an upper concentrated mass. The figure shows the standing response under PD and LQR control, separated from the subsequent planar biped continuous walking phase.
+
+\motionfigure{figures/ch06/finite_foot_standing_comparison.png}{Actual physical scene and corresponding posture recordings of the finite-foot nonlinear standing model; left PD, right LQR.}{fig:motion-finite_foot_standing_comparison}
+
+\motionfigure{figures/ch06/finite_foot_push_camera_sequence.png}{Frames showing finite-foot standing push disturbance before, after, and subsequent recovery; left column PD, right column LQR, time indicated by video timestamp.}{fig:motion-finite_foot_push_camera_sequence}
+
+\stagevideo{videos/ch06/finite_foot_standing_comparison.mp4}
+% END SIM_VISUALS s19
+\stagecode{s19}
+
+\FloatBarrier
+
+\section{Independent Measurement Clock and Constrained Leg Swing Planning}
+
+\label{stage:s20}
+
+\subsection{Fixed Sampling Rate and Feedback Timing}\label{s20-detail-1}
+
+\subsubsection{Measurement Generation, Transmission, and Usage}\label{s20-detail-2}
+
+Sensors generate noisy measurements with source timestamps according to independent sampling clocks, which are then delayed and jittered before reaching the controller. Frame drops occur during transmission, and out-of-order older frames are discarded. The controller only accepts measurements updated with new timestamps; in the absence of new frames, it reuses the previous measurement. Initially, only one noisy pre-startup measurement is provided, without falling back to read the current true state.
+
+The predictor starts from the received past measurements and propagates forward to the current time step based on the already issued CoP inputs; it does not read future disturbances or the current true state. Model propagation stops and the reason is recorded when data age exceeds the threshold. This only verifies the simulation termination logic and cannot replace safety stop verification for physical robots. Relevant code is located in scripts/network.py and scripts/engine.py.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4474}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5526}}@{}}
+\caption{Measurement Generation, Transmission, and Utilization: Setup and Results}\label{tab:s20-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Sensors / Controller & 25, 100, 200 Hz / 100, 200 Hz \\
+Base Delay / Jitter & 20, 80 ms / 0, 20 ms \\
+Independent frame drop probability & 0, 10\% \\
+Colored noise correlation time & 0.08s \\
+Bias standard deviation of random walk & Position: 0.005 m/√s; Velocity: 0.02 (m/s)/√s \\
+Combined partitioning & temporal sequences: 864 groups; noise: 216 groups; continuous interruption: 108 groups \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s20_sensor_rates_a4364da8.png}{Sensor frame reuse and data age; data age is statistically computed at the moment of actual control readout.}{fig:s20-detail-1}
+
+The 25 Hz sensor produces new measurements only every 40 ms. Under 100 Hz control, approximately 75\% of readings reuse old frames; under 200 Hz control, approximately 87.5\%. Increasing the control rate does not increase the information update rate; it only increases the number of times existing estimates are used. The P95 in the figure is affected by the control sampling phase and should not be interpreted as a change in transmission performance.
+
+\subsubsection{Noise and Dropout Results}\label{s20-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2715}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2428}}@{}}
+\caption{Noise and Dropout Results: Setup and Outcomes}\label{tab:s20-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+White noise
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colored noise
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colored + Drift
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Control Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+White noise
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colored noise
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Colored + Drift
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Footstep adjustment & 12/24 & 12/24 & 3/24 \\
+Only State Prediction & 12/24 & 12/24 & 3/24 \\
+Prediction + Footstep Adjustment & 24/24 & 24/24 & 6/24 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch06/s20_noise_traffic_f1bbbf23.png}{Pass-through rate under the same set of preset conditions; each bar represents a test grid and does not indicate probability estimation.}{fig:s20-detail-2}
+
+Admittance control passes 24/24 in both white noise and colored noise subsets, but drops to 6/24 when drift is introduced. State prediction cannot eliminate unknown biases; merely increasing control frequency does not resolve estimation drift. Future work requires incorporating bias estimation into the model or using additional observational constraints.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5470}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4530}}@{}}
+\caption{Noise and Dropout Results: Setup and Outcomes}\label{tab:s20-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Feedback Test Results
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Feedback Test Results
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Quantity
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+through & 692 \\
+Insufficient reachable range at touchdown & 399 \\
+Measurement expiration termination & 68 \\
+Terminal not recovered & 27 \\
+Cumulative route deviation too large & 2 \\
+\end{longtable}\endgroup
+
+For the 0.4s flow interruption, set data age thresholds of 0.15, 0.30, and 1s. Shorter thresholds can preemptively prevent the use of stale estimates over long durations; relaxing the threshold may preserve motion continuity but increases the time during which distorted predictions are used. In this phase, 68 instances terminated due to staleness, and all were verified to have measurement age exceeding the configured threshold at termination.
+
+\subsection{Double Support, Continuous Foot Swing, and Step Timing Adjustment}\label{s20-detail-4}
+
+\subsubsection{Constraints and Planning Methods}\label{s20-detail-5}
+
+This layer employs DCM feedback, comparing three strategies: fixed touchdown timing, position adjustment only, and joint adjustment of position and timing. All three strategies use the same new model and constraints, and are not directly interleaved with the previous LQR results without swing foot constraints. Nominal step length: 0.18 m, phase duration: 0.6 s, ten support phases and nine transitions, followed by a 2 s recovery period.
+
+During the double support phase, project the CoP onto the convex hull of the two-foot support area and construct non-negative load ratios within each foot such that the synthesized CoP matches the target. Here, the load refers to a feasible allocation in the simplified model, not the ground reaction forces measured by the contact solver. The relevant code is located in scripts/gait.py.
+
+Foot trajectory uses piecewise quintic polynomials, with online re-planning ensuring continuity of position, velocity, and acceleration. Velocity, acceleration, and lift-off height bounds are computed by evaluating the extreme values of polynomial derivatives, rejecting trajectories that exceed these bounds; this is not done by checking discrete sampled points nor by clipping ground-penetrating segments in animations. Relevant code is located in scripts/trajectory.py.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4381}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5619}}@{}}
+\caption{Constraints and Planning Methods: Setup and Results}\label{tab:s20-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Constraints
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Constraints
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Double support duration & 0 / 0.12 / 0.20s \\
+Step timing candidate & 0.45 to 0.75 s, interval 0.05 s \\
+Ankle swing speed & 1.2 / 1.8 / 2.4 m/s \\
+Ankle acceleration limit & 30 m/s² \\
+CoP commanded rate of change per axis & 5 m/s \\
+Time submission & submit at most once per phase, triggered when significant DCM error occurs \\
+\end{longtable}\endgroup
+
+Time selection should not continuously toggle between different periods; the current phase's foot placement position is still allowed to be updated, and the feasibility of the next phase's swing foot must be checked. If the initial plan itself is infeasible, it should be directly rejected, without using subsequent parameter tuning to mask the unsatisfied startup conditions.
+
+\subsubsection{Comparison Results and Costs}\label{s20-detail-6}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2941}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2353}}@{}}
+\caption{Comparison Results and Cost: Settings and Outcomes}\label{tab:s20-5}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Double Support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.12s double support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.20s double support
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Method
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Double Support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.12s double support
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+0.20s double support
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Fixed foot placement and timing & 0/3 & 0/3 & 3/3 \\
+Only adjusting foot placement & 0/3 & 3/3 & 0/3 \\
+Jointly adjust position and timing & 0/3 & 3/3 & 0/3 \\
+\end{longtable}\endgroup
+
+These are three paired seed comparisons with a 12N·s disturbance applied at 2.70s and a swing-foot speed bound of 1.8m/s. Without double support, all were rejected by the CoP-rate constraint. At 0.12s of double support, both position adjustment and spatiotemporal adjustment passed 3/3; at 0.20s, the fixed strategy passed while both adjustment strategies failed. Local adjustment and double-support duration are therefore coupled: longer double support or more optimization variables is not necessarily better.
+
+\stagefigure{figures/ch06/s20_support_timing_1d78e427.png}{Feasibility under double support phase comparison and foot velocity constraints.}{fig:s20-detail-3}
+
+At 0.12s double support, position adjustment alone runs on average 7.40s with terminal deviation from the original trajectory of approximately 0.0687m; spatiotemporal adjustment runs on average 7.45s with deviation of approximately 0.1273m. Both methods recover near the actual support phase, but the latter deviates more from the original trajectory. Recovery criterion does not equate to better trajectory tracking. The current limited candidate set and greedy objective do not guarantee global optimality.
+
+Among the 423 trials, 175 succeeded; 135 trials were terminated due to insufficient CoP variation rate, 95 due to inadequate foot placement reachability, and 18 due to infeasible initial swing foot placement. Longer double-support phases occupy swing foot time; multiple initial tasks at the 1.2 m/s speed boundary were rejected, indicating that task duration must be co-designed with execution capability.
+
+
+\paragraph{Stage Conclusion} The presence of colored noise and drift significantly reduces the pass rate; double support phase occupies swing foot time, and joint adjustment is not always superior under all conditions.
+
+\stagecode{s20}
+
+\FloatBarrier

@@ -1,0 +1,643 @@
+\chapter{End-Effector Contact and Admittance Control}
+The model and physics interface are respectively referenced from the MuJoCo Menagerie \cite{menagerie}, the MuJoCo API \cite{mujoco}, and the Isaac contact interface \cite{contact}.
+
+
+The tracking accuracy in free space does not determine contact performance. This chapter first studies normal compliance using MuJoCo, then verifies ordinary joint inner-loop, original impact, and finite-window stability in Isaac.
+
+\section{MuJoCo Normal Contact Model and Admittance Design}
+
+\label{stage:s09}
+
+\subsection{Model, Contact, and Execution Interface}\label{s09-detail-1}
+
+Panda is from the MuJoCo Menagerie by Google DeepMind, version fixed at \texttt{62ab00f2bc44}, retaining the original model inertia and joint structure, with decorative meshes removed. To study end-effector contact independently, a spherical probe with a radius of 15mm is added to the hand and placed in contact with a horizontal plane. Other robot geometries do not participate in collision, so self-collision or collisions of other arm parts with the table are not currently studied.
+
+Using an independent MuJoCo 2.3.7 / NumPy 1.26.4 environment, without modifying the original ACT environment. Physical timestep is 1ms. End-effector position and fixed orientation are converted into seven joint references via damped Jacobian inverse. Inner loop employs joint PD torque control with gravity and bias compensation. First four joints are limited to 87 Nm, last three to 12 Nm. Except for scene reset and state used in inverse kinematics, joint positions of the dynamic robot are not directly overwritten; no mocap welding or instantaneous end-effector teleportation is applied.
+
+Contact force is the normal component returned by mj\_contactForce. Only a single normal contact against a horizontal plane is considered here, rather than a physical six-axis force sensor. Contact-solver stiffness parameters are set to 2000/8000/20000; they cannot be interpreted directly as calibrated material stiffness in N/m.
+
+The relevant code is located at \path|scripts/contact_task.py|, and the model source and license are available at \path|assets/panda/SOURCE.json| and \path|assets/panda/LICENSE|.
+
+\subsection{Position Control and Admittance Control}\label{s09-detail-2}
+
+Hold for 0.5 seconds, then perform a quintic curve descent; position control continues to maintain a fixed reference. In admittance control, upon contact detection, adjust the normal position based on the difference between measured force and target force, with the target force ramping up to 10N over 0.5 seconds.
+
+The normal offset $x$ satisfies:
+\begin{equation}
+M\ddot{x}+B\dot{x}+Kx=F_{\mathrm{meas}}-F_{\mathrm{ref}}.
+\end{equation}
+The mass parameter is $M=2\,\mathrm{kg}$, and the damping parameter is $B=100\,\mathrm{N\,s/m}$. The positive direction follows the normal coordinate convention of this phase; the downward pressing coordinate in Isaac will be specified separately. The main scheme uses K=0, representing a mass-damping type force following; alternatively, K=200N/m is used for comparison to examine the influence of the virtual spring. The offset limits are −25 to 50 mm, and the offset velocity limits are 40 mm/s; all constraints are retained in the configuration.
+
+Contact forces and states are recorded at 1 kHz, with peak values statistically derived from full sampling to avoid missing instantaneous impacts due to lower-frequency logging. The stable segment is uniformly defined as the 5th to 8th seconds. All controls use the same model and similar reference and torque limits.
+
+\stagefigure{figures/ch04/s09_contact_force_20f4706d.png}{Contact Force and Position Correction}{fig:s09-detail-1}
+
+The relevant code is located at \path|scripts/contact_task.py| and \path|scripts/run_suite.py|, with parameters in \path|config/suite.json|.
+
+
+\paragraph{Stage Conclusion} Using real dynamics and limited joint torques, but only single normal probe contact; contact parameters are not calibrated material stiffness.
+
+\stagecode{s09}
+
+\FloatBarrier
+
+\section{Force Following, Noise, and First Contact}
+
+\label{stage:s10}
+
+\subsection{Stable Contact and Joint Tracking Results}\label{s10-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\caption{Stable contact and joint tracking results: setup and outcomes}\label{tab:s10-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Contact Parameter Set
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Control
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Average Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Force RMSE / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Standard Deviation of Stabilizing Force / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Contact Parameter Set
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Control
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Average Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Force RMSE / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Standard Deviation of Stabilizing Force / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+2000 & Position & 34.27 & 26.458 & 16.469 & 0.605 \\
+2000 & Admittance K0 & 25.05 & 9.987 & 0.014 & 0.004 \\
+2000 & Admittance K200 & 25.05 & 11.713 & 1.714 & 0.026 \\
+8000 & Position & 50.62 & 28.851 & 18.868 & 0.793 \\
+8000 & Admittance K0 & 50.62 & 9.987 & 0.013 & 0.003 \\
+8000 & Admittance K200 & 50.62 & 11.815 & 1.815 & 0.028 \\
+20000 & Position & 82.01 & 30.576 & 20.589 & 0.735 \\
+20000 & Admittance K0 & 82.01 & 9.989 & 0.012 & 0.003 \\
+20000 & Admittance K200 & 82.01 & 11.875 & 1.875 & 0.024 \\
+\end{longtable}\endgroup
+
+When K=0, the stable contact force can be maintained near 10N; after adding the virtual spring, maintaining the offset requires additional force, leaving a stable segment error of approximately 1.7–1.9N. This is a trade-off inherent to the current control formulation, and larger spring parameters are not necessarily better.
+
+Six additional runs saved the reference and actual positions of the seven joints. The figure below shows the full trajectory tracking error for the intermediate contact parameter setting, including external forces, and cannot be directly compared with the previous contact-free Isaac experiment errors.
+
+\stagefigure{figures/ch04/s10_joint_tracking_de8648da.png}{Seven-joint reference tracking}{fig:s10-detail-1}
+
+Disabling contact solving yields zero contact forces; enabling contact results in dynamic offsets, indicating that forces are not artificially generated from predefined curves or target positions.
+
+\stagefigure{figures/ch04/s10_admittance_contact_dcf28dbc.png}{End-effector contact view of Panda}{fig:s10-detail-2}
+
+The relevant code is located at \path|scripts/joint_check.py|; reference and actual joint recordings are stored at \path|runs/joint_check_v3/|. Demonstration videos are \path|videos/ch04/panda_position_contact.mp4| and \texttt{admittance.mp4}.
+
+\subsection{Noise, Frequency, and Delay}\label{s10-detail-2}
+
+Combinations of position and admittance control with three sets of contact parameters, 50/100/200 Hz outer-loop frequencies, and additional feedback delays of 0/20/60 ms, respectively. Admittance measurements are augmented with Gaussian noise of standard deviation 0.5 N at each update, using three random seeds, totaling 162 configurations. These are artificially introduced perturbations, not inherent sensor noise.
+
+The table below shows the average RMSE of stable segment forces over three contact parameter settings and three seeds:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2506}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2498}}@{}}
+\caption{Noise, Frequency, and Delay: Settings and Results}\label{tab:s10-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Additional delay 0ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+20ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+60ms / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Outer loop / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Additional delay 0ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+20ms / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+60ms / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 0.294 & 0.342 & 0.959 \\
+100 & 0.183 & 0.233 & 0.781 \\
+200 & 0.117 & 0.147 & 0.415 \\
+\end{longtable}\endgroup
+
+Increasing additional delay leads to higher error. Under the current settings, a higher update rate typically improves force tracking stability but does not guarantee a lower peak force at the first impact. The same standard deviation is injected at each update across all modes, and the continuous-time noise bandwidth is not strictly identical; therefore, all differences cannot be attributed solely to frequency.
+
+177 runs share a single posture and planar contact task, where some position-controlled baselines are insensitive to random seeds; these are not 177 independent scenarios and do not represent coverage of the full stability boundary.
+
+\subsection{Approach Velocity and First Impact}\label{s10-detail-3}
+
+Set the descent time to 1, 2, and 4 seconds, while keeping the final position and control parameters unchanged:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Approach Velocity and First Impact: Setup and Results}\label{tab:s10-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Approach time / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Control
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak Contact Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Force RMSE / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Approach time / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Control
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak Contact Force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Stable Force RMSE / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+1.0 & Position & 93.10 & 18.608 \\
+1.0 & Admittance & 93.10 & 0.012 \\
+2.0 & Position & 50.62 & 18.868 \\
+2.0 & Admittance & 50.62 & 0.013 \\
+4.0 & Position & 33.39 & 20.079 \\
+4.0 & Admittance & 24.72 & 0.016 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch04/s10_delay_approach_fcdb3c40.png}{Feedback Delay and Approach Time}{fig:s10-detail-3}
+
+Admittance must respond after detecting force and cannot undo the initial collision that has already occurred. The current results support designing approach velocity, contact detection, and post-contact compliance together, rather than merely adding a layer of admittance control around the original position control and assuming safety issues are resolved.
+
+
+\paragraph{Stage Conclusion} The stable force error can be significantly reduced, but the first impact still requires joint handling of near-velocity and phase switching.
+
+\stagecode{s10}
+
+\stagevideo{videos/ch04/panda_admittance_contact.mp4}
+
+\stagevideo{videos/ch04/panda_position_contact.mp4}
+
+\FloatBarrier
+
+\section{Isaac General PID and Contact Comparison}
+
+\label{stage:s11}
+
+\subsection{Scene and Parameters}\label{s11-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3095}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6905}}@{}}
+\caption{Scenarios and Parameters: Setup and Results}\label{tab:s11-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Item
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Configuration
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Software & Isaac Sim 5.1.0; independent Python 3.11 environment \\
+Physical and control cycle & Physics 1ms; Control 10ms, simulation time baseline \\
+Joint initial state / rad & {[}0, -0.785398, 0, -2.356194, 0, 1.570796, 0.785398{]} \\
+Quintic trajectory & first three joint increments {[}0.06, 0.04, -0.04{]} rad; duration 5s \\
+Probe and plane & A sphere of radius 25mm centered at the hand origin; a fixed 220\(\times\)220mm plane, 20mm thick \\
+Approach trajectory & Approach along the world -Z direction at 5 mm/s after 5 seconds, nominal maximum displacement 55 mm \\
+Force target and dominant admittance parameters & 5N; M=1kg, B=40N·s/m, no spring term \\
+Admittance saturation & displacement ±80mm, velocity ±30mm/s; additionally measured displacement ±30mm \\
+Standard PID parameters & seven-axis Kp={[}200, 200, 150, 150, 10, 8, 1{]}; Kd={[}10, 10, 8, 8, 0.3, 0.2, 0.02{]}; Ki={[}5, 5, 5, 5, 0.2, 0.2, 0.05{]}; integral ±0.2 rad·s \\
+Torque limits & first four joints 87 Nm, last three joints 12 Nm; gripper 5 N \\
+Force measurement & PhysX hand---plane contact matrix; input dt=0.001 converted to N \\
+Force signal & Save raw values at 1 kHz; 100 Hz control uses average of previous 10 samples \\
+\end{longtable}\endgroup
+
+Joint trajectories are completed within 0–5 seconds, after which the end-effector pose is fixed, and joint targets for motion along the plane normal are computed via Lula inverse kinematics. The initial states, nominal approach trajectories, collision geometries, inner-loop control, and torque limits are identical for both main conditions, differing only in that admittance control adds force-feedback displacement. The control period refers to 10 ms in simulation and does not guarantee real-time computation on the host machine.
+
+\stagefigure{figures/ch04/s11_scene_16a22a9e.png}{Panda spherical probe in contact with a fixed horizontal surface; the original gripper geometry does not participate in this stage of the experiment.}{fig:s11-detail-1}
+
+\subsection{Control Methods and Code}\label{s11-detail-2}
+
+The fifth-order interpolation s(u) = 10u³ − 15u⁴ + 6u⁵, where u = t/5. The output of the standard PID is directly used as joint torque, with the D term using measured angular velocity to avoid differential impact caused by target jumps. The seven-axis gains are configured according to inertia differences, and both main conditions are identical. Gravity is uniformly disabled to isolate the trajectory from contact behavior in this phase. Gain units are: Kp: Nm/rad, Kd: Nm·s/rad, Ki: Nm/(rad·s).
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+error = q_reference - q
+integral = clip(integral + error * 0.01, -0.2, 0.2)
+torque = kp * error - kd * dq + ki * integral
+torque = clip(torque, -torque_limit, torque_limit)
+\end{Verbatim}
+
+The positive direction of admittance coordinates is defined as pressing downward into the plane, and the upward reaction force from PhysX is taken as positive. The additional displacement downward is driven by the difference between the target force and the measured force; when the force is too large, the additional displacement is reduced. Therefore, in the world Z coordinate, the admittance displacement must be subtracted, and the sign cannot be directly copied.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+acc = (5.0 - measured_force - B * velocity) / M
+velocity = clip(velocity + acc * 0.01, -0.03, 0.03)
+offset = clip(offset + velocity * 0.01, -limit, limit)
+z_reference = z_nominal - offset
+\end{Verbatim}
+
+The relevant code is located at \path|scripts/run.py|. Analysis and figures are in scripts/analyze.py, and the run conditions are stored in each runs//metadata.json.
+
+\subsection{Main Comparison Results}\label{s11-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4058}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2971}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2971}}@{}}
+\caption{Main comparison results: settings and outcomes}\label{tab:s11-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Metrics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Position PID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Admittance M1/B40
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Metrics
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Position PID
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Admittance M1/B40
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+First three axes 5s RMSE / degrees & 0.0394 / 0.0265 / 0.0276 & 0.0394 / 0.0265 / 0.0276 \\
+1ms original force peak / N & 47.387 & 95.324 \\
+10ms average peak force / N & 21.032 & 14.754 \\
+Average force in last 2s / N & 19.745 & 5.007 \\
+Final 2s target force RMSE/N & 14.751 & 0.522 \\
+Normal Position Tracking RMSE/mm & 24.834 & 9.123 \\
+three-dimensional position tracking RMSE/mm & 24.878 & 9.129 \\
+Strictly stable contact time / s & Not achieved & Not achieved \\
+\end{longtable}\endgroup
+
+Strictly stable contact time is defined as: starting from the first instance when the average force per cycle exceeds 0.5N, until each 100Hz force sample within a continuous 0.5-second window falls within the range of 5±0.5N. If this condition is not met during the phase, leave the value blank (do not fill in 0), and do not substitute with an average force close to 5N. The normal position error is calculated relative to the actual end-effector position target sent; since admittance targets change with force feedback, this error alone cannot serve as a criterion for performance evaluation.
+
+\stagefigure{figures/ch04/s11_joints_229fc7a9.png}{Trajectory tracking of the first three joints over 5 seconds, angles in degrees.}{fig:s11-detail-2}
+
+\stagefigure{figures/ch04/s11_fz_6719572d.png}{Period-averaged contact force; original 1ms peak value is listed separately in the results table.}{fig:s11-detail-3}
+
+\stagefigure{figures/ch04/s11_z_372cc86f.png}{End-effector height variation; rigid plane prevents further descent of actual height.}{fig:s11-detail-4}
+
+Although mean force in the main condition was near 5N, the raw impact peak exceeded position control. During roughly 20ms before the cycle-mean force first exceeded 0.5N, height differences imply descent speeds of about 2.9mm/s for position control and 34.8mm/s for direct admittance. Measured force is 0 in free space, so constant-force admittance keeps adding downward displacement on top of the nominal approach velocity.
+
+\subsection{Parameter Comparison and Problem Analysis}\label{s11-detail-4}
+
+Compare contact switching and approach velocity under ordinary PID inner loop, keeping M=1/B=40. Three-dimensional position error is calculated from the actual end-effector XYZ and the sent XYZ target; the target varies under different control conditions, and position error must be evaluated together with contact force.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2846}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2385}}@{}}
+\caption{Parameter Comparison and Problem Analysis: Settings and Results}\label{tab:s11-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Normal PID conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average force / N in the last 2s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Normal PID conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average force / N in the last 2s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Position Control & 47.387 & 19.745 & 14.751 \\
+Direct admittance & 95.324 & 5.007 & 0.522 \\
+Enable after contact & 47.362 & 5.010 & 0.437 \\
+Enable after contact, 2.5 mm/s & 36.829 & 5.001 & 0.424 \\
+\end{longtable}\endgroup
+
+Contact detection occurs after the first collision, so the gate itself cannot preemptively eliminate the initial impact. Reducing approach velocity and contact yielding are two separate matters that require individual validation. Below, we retain the nine sets of results with compensation PID, where the inner loop computes acceleration as mass matrix multiplied by PID output, further compensated by Coriolis/Centrifugal terms; acceleration-based gains are Kp=100/s², Kd=20/s, Ki=5/s³. The two sets of gain parameters differ in parameterization and cannot be used alone to attribute superiority of the compensation algorithm; results are grouped separately with standard PID for comparison, without cross-group averaging of improvement ratios.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1905}}@{}}
+\caption{Parameter Comparison and Problem Analysis: Settings and Results}\label{tab:s11-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average in last 2s / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Strict stabilization time / s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Average in last 2s / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Strict stabilization time / s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Damping B20 & 158.002 & 4.998 & 0.477 & Not achieved \\
+Damping B80 & 158.002 & 5.004 & 0.479 & Not achieved \\
+Admittance enabled after contact & 27.242 & 5.013 & 0.427 & Not achieved \\
+Compensated PID M1/B40 & 158.002 & 5.006 & 0.507 & Not achieved \\
+Contact force gradually increases after 0.5s & 26.705 & 5.013 & 0.470 & Not reached \\
+Displacement saturation ±30mm & 158.002 & 5.702 & 0.851 & Not achieved \\
+Compensated PID repeated execution & 158.002 & 5.006 & 0.507 & Not achieved \\
+Approach velocity 2.5 mm/s & 102.957 & 5.000 & 0.453 & Not achieved \\
+Compensated PID position control & 43.211 & 19.233 & 14.238 & Not achieved \\
+\end{longtable}\endgroup
+
+Under slow conditions, maintain the same 55 mm maximum nominal approach displacement; run for 32 seconds, followed by another 20 seconds. For damping comparison, only modify B, keeping B=40 under baseline conditions; all items in this table use compensated PID inner loops. The displacement saturation comparison tests whether the controller generates steady-state force deviations due to inability to continue yielding. Repeated runs are used to check the determinism of this machine, not independent generalization samples from different initial states.
+
+The initial peak values for B=20, 40, 80 are identical because contact is already reached at the 30 mm/s admittance velocity limit before contact; although reducing the nominal approach velocity decreases impact, it does not eliminate the additional downward force. The admittance control activated after contact directly addresses this phase-switching issue. The 0.5-second target force ramp-up only brings minor further improvement and cannot be used to claim superiority over other methods or statistical significance. The force sequences from repeated runs under the main conditions are consistent, and the seven-axis measured trajectories in the first 5 seconds before both main conditions are also identical.
+
+\stagefigure{figures/ch04/s11_transition_0627ccb8.png}{Comparison of direct admittance control versus switching after contact: top plot shows cycle-averaged force, bottom plot shows raw force at 1ms resolution.}{fig:s11-detail-5}
+
+The main issues encountered in this phase include collision body traversal, time stepping, and force signal sampling. During debugging, it was found that steps with rendering advance a different number of physics steps compared to those without rendering; the old runs have been removed from formal statistics. Currently, we advance only 1ms of physics steps per iteration and render separately, gradually verifying the engine clock. Over a 20-second run, the accumulated clock difference is approximately 1 microsecond, originating from floating-point step length representation. First, USD instance collision bodies must be expanded before traversal; otherwise, standard traversal will miss original gripper collisions, resulting in contact behavior inconsistent with the design. Second, 100Hz single-point sampling will miss 1kHz peaks, so we retain both the raw peak values and the cyclically averaged force. Third, admittance output includes velocity and displacement saturation limits; achieving target average force does not guarantee fully rigid contact stability.
+
+Admittance control sacrifices position accuracy to regulate contact force. Position control tends to move inward toward the plane, continuously increasing reaction force; admittance yields, but discrete updates, rigid contact, inverse dynamics changes, and inner-loop joint control collectively influence fluctuations. This stage has not yet isolated each of these factors individually, so all fluctuations cannot be attributed to a single parameter.
+
+
+\paragraph{Stage Conclusion} The original 1 ms peak force and 10 ms average force must be treated separately; disabling gravity and simplifying collisions cannot be directly transferred to a full physical scenario.
+
+
+
+% BEGIN SIM_VISUALS s11
+\subsection{Contact Geometry and Posture Changes}
+Supplement the actual simulation keyframes saved in the original report. The figure shows an example of the compensation inner-loop, used to identify the spherical probe, the plane, and the contact position; the standard PID main results still adopt the corresponding curves and records from this section, without mixing different inner-loop visuals as comparisons under the same conditions.
+
+\motionfigure{figures/ch04/panda_contact_compensated_keyframes.png}{Saved keyframes of Isaac spherical probe contact; this is an example of compensation inner-loop, not replacing the condition marking of the standard PID master experiment.}{fig:motion-panda_contact_compensated_keyframes}
+% END SIM_VISUALS s11
+\stagecode{s11}
+
+\FloatBarrier
+
+\section{Constant Force Stability Diagnosis and Continuous Inverse Solution}
+
+\label{stage:s12}
+
+\subsection{Constant Force Stability Diagnosis and Improvement}\label{s12-detail-1}
+
+In this chapter, the original standard is retained: unfiltered contact forces are averaged over 10ms time bins, and within any continuous 0.5 seconds, each sample must fall within 5±0.5N. When the control period is changed to 5ms or 20ms, evaluation still uses the same 10ms bin. Exponential filtering is only applied within the control feedback and is not used to generate evaluation curves.
+
+\subsubsection{Reference Implementation and Adaptation Scope}\label{s12-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2441}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2921}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4638}}@{}}
+\caption{Reference Implementation and Adaptation Scope: Settings and Results}\label{tab:s12-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference Project
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+License and Recent Pushes
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+References and Limitations
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Reference Project
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+License and Recent Pushes
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+References and Limitations
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+libfranka & Apache-2.0; 2026-09-07 & Force-control examples assume initial contact and use smooth targets; they require physical Franka FCI hardware and cannot directly replace this simulation interface \\
+ros2\_controllers & Apache-2.0; 2026-10-19 & Force measurement, kinematics, and position inner-loop hierarchical control, supporting force filtering; the current Rolling interface is not directly installable into existing Humble environments \\
+FZI cartesian\_controllers & BSD-3-Clause; 2024-10-30 & Motion/Force/Compliance Combination and Forward Dynamics Design; Updated earlier, for design reference only \\
+\end{longtable}\endgroup
+
+\href{https://frankarobotics.github.io/libfranka/0.16.1/force_control_8cpp-example.html}{libfranka force-control example and initial-contact assumptions}
+
+\href{https://control.ros.org/rolling/doc/ros2_controllers/admittance_controller/doc/userdoc.html}{ROS 2 Admittance Controller: Kinematics and Filtering Interface}
+
+\href{https://github.com/fzi-forschungszentrum-informatik/cartesian_controllers}{FZI Cartesian Controllers}
+
+The licenses, repository commit IDs, and related issues have been verified. ros2\_controllers \#2670 concerns non-active state references being carried into the active phase, and libfranka \#241 involves timeout during real network switching; they serve as reminders that initialization switching and hardware dependencies must be independently checked and cannot be used to explain fluctuations in local PhysX. This phase only borrows the design and is implemented using the existing Isaac SDK without introducing new ROS2 or hardware libraries. A complete comparison is available in \path|OPEN_SOURCE_REVIEW.md|, with commit IDs and issue statuses listed in open\_source\_review.json.
+
+\subsubsection{Single-factor troubleshooting}\label{s12-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3246}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2251}}@{}}
+\caption{Single-factor troubleshooting: Settings and Results}\label{tab:s12-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Longest intra-band span / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meet the 0.5s standard
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Longest intra-band span / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Meet the 0.5s standard
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Contact gating baseline & 0.437 & 0.140 & No \\
+Freezing nominal downforce & 0.529 & 0.370 & No \\
+Freezing + Exponential Filtering & 0.528 & 0.310 & No \\
+Freeze + last force sampling & 0.891 & 0.100 & No \\
+Frozen +5ms control & 0.443 & 0.210 & No \\
+Frozen + 20ms control & 0.588 & 0.140 & No \\
+Freeze + previous command as inverse kinematics initial guess & 0.411 & 0.190 & No \\
+Previous initial guess +1\(\mu\)m tolerance (unstable) & 7.063 & 0.000 & No \\
+Inverse Dynamics, continued nominal push & 0.254 & 0.700 & Yes \\
+Inverse Dynamics, Frozen Nominal Downforce & 0.296 & 0.730 & Yes \\
+Inverse Dynamics + Freezing + Exponential Filtering & 0.244 & 0.980 & Yes \\
+Inverse dynamics + freezing + 5ms control & 0.242 & 0.970 & Yes \\
+\end{longtable}\endgroup
+
+Under nominal freezing, the downward pressure itself does not eliminate fluctuations; merely adding filtering or shortening the period also fails to meet the original inverse solution chain's standards. The default Lula inverse solution position tolerance is 1 mm, but the continuously changing joint states in practice affect each round's solution result. Using the previous command as an initial guess is not a sufficient condition; directly tightening the tolerance may instead switch to a different set of joint solutions far away.
+
+A maximum joint reference jump of approximately 223.9° occurred during pre-test under a 1\(\mu\)m tolerance, with an original peak force of about 460.8 N. This condition is classified as a failed control case and is not considered a viable solution. The current code now includes finite value checks and a per-cycle 0.05 rad reference jump protection.
+
+The regression test intercepted approximately 66.4° of the proposed discontinuity at 5.01 seconds and did not proceed further; the test was not marked as completed normally. It is stored separately from previous unprotected failure records.
+
+\stagefigure{figures/ch04/s12_stability_factors_7cdb51ba.png}{Freezing, filtering, and control cycle comparison; all computed from the original 1ms force data to obtain the same 10ms average, without using controller exponential filtering results.}{fig:s12-detail-1}
+
+\subsubsection{Continuous Differential Inverse Kinematics}\label{s12-detail-4}
+
+Using the Isaac joint Jacobian and Lula forward kinematics, perform damped least-squares incremental updates based on pose error between adjacent targets, avoiding re-selection of a full set of inverse solutions per iteration. Regularization coefficient is 0.01, with per-axis per-iteration increments capped at 0.003 rad, and joint limits are clipped according to the model. Admittance is maintained at M=1/B=40, while the joint inner loop remains a standard PID.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+pose_error = concatenate([target_position - FK_position(q_reference), rotation_error])
+dq = J.T @ solve(J @ J.T + 0.01**2 * I, pose_error)
+q_reference = clip(q_reference + clip(dq, -0.003, 0.003), lower, upper)
+\end{Verbatim}
+
+This Jacobian is derived from the current measured pose, and forward kinematics is computed at the last reference point, representing a local approximation; it does not guarantee applicability under large-scale trajectories or singular configurations. It adopts a continuous incremental design inherited from the mature control chain, implemented via the current SDK public interface, without copying external project source code.
+
+\stagefigure{figures/ch04/s12_stability_ik_40164769.png}{Comparison of original inverse kinematics, initial guess from previous command, and continuous differential inverse kinematics.}{fig:s12-detail-2}
+
+Select the combination of 10ms control, freezing nominal position after contact, continuous differential inverse solution, and α=0.2 exponential feedback. Apply a constant force of 5.011N for the last 2 seconds, achieving a force RMSE of 0.244N, with the longest continuous span within the band reaching 0.98 seconds, meeting the original 0.5-second standard. Under default geometry, 94.0\% of samples remain within the band in the last 2 seconds, yet boundary violations still occur.
+
+\subsubsection{Repeated Runs and High Perturbations}\label{s12-detail-5}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2125}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1969}}@{}}
+\caption{Repeated Runs and Height Perturbations: Setup and Results}\label{tab:s12-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Proportion within the band
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Longest bandwidth /s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Last 2s force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Proportion within the band
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Longest bandwidth /s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Selected combination & 21.751 & 0.244 & 94.0\% & 0.980 \\
+Repeated under same conditions & 21.751 & 0.244 & 94.0\% & 0.980 \\
+Plane raised by 1 mm & 25.682 & 0.302 & 89.0\% & 1.170 \\
+Plane lowered by 1 mm & 49.652 & 0.355 & 82.0\% & 1.060 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch04/s12_stability_validation_e8cd6d7d.png}{Selected combinations, same conditions repeated, and plane height ±1mm; green indicates 4.5–5.5N.}{fig:s12-detail-3}
+
+All four conditions had a continuous 0.5-second interval meeting the criteria. Repeated identical conditions check determinism and are not independent random samples. With the plane lowered by 1mm, about 18\% of cycle-mean forces still exceeded the band in the last 2 seconds, and the initial impact increased. Thus, the preset finite-window criterion was met, but uninterrupted compliance throughout contact was not achieved; this is not industrial constant-force performance.
+
+The relevant code is located in \path|scripts/analyze_stability.py|, \path|scripts/stability_*suite.sh|, and \path|scripts/run.py|. Stiffness, friction, gravity, full-gripper collisions, and real force sensor noise have not yet been systematically tested. The most important improvement at this stage is to jointly validate continuity and input chain integrity, rather than claiming all fluctuations have been resolved based solely on a single parameter adjustment.
+
+
+\paragraph{Stage Conclusion} The combined approach passes the continuous 0.5-second finite window criterion, but some force violations remain in the latter part of certain cycles; this is not a constant force throughout.
+
+\stagecode{s12}
+
+\FloatBarrier

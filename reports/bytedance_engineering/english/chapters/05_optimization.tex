@@ -1,0 +1,773 @@
+\chapter{Control Optimization under More Complete Physical Conditions}
+
+Revalidate the contact scheme after restoring gravity and hand collisions, while explicitly clarifying sensitivity to physical timestep. Analyze the action block execution interface independently, without treating parsed trajectories as learning strategies.
+
+\section{Restoring Gravity and Hand Collision}
+
+\label{stage:s13}
+
+\subsection{Changes Corresponding to Feedback}\label{s13-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2299}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4373}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3327}}@{}}
+\caption{Feedback-related modifications: Settings and Results}\label{tab:s13-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Previous question
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage processes
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evaluation Method
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Previous question
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+This stage processes
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Evaluation Method
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Zero-gravity condition & Enable gravity; add the PhysX gravity-compensation vector to joint PID; retain the uncompensated failure baseline & Errors for the first three joints over 5s and contact during startup \\
+Only a spherical probe & Restore collisions for panda\_hand and both fingers; sum the contact forces between all three rigid bodies and the plane & Check the scene, contact bodies, and resultant force \\
+Peak force is excessively large at contact instant & approaching deceleration, contact gating, freezing nominal position, smoothing force target, adjusting velocity limits & 1ms original peak, relative to first contact curve \\
+Sensitive to height variations & actual plane ±1/±5mm disturbances, reducer still uses nominal height & same peak and terminal bandwidth \\
+Material is overly idealized & separation of rigid and equivalent compliant materials; friction coefficient variation & not treating soft material results as improvements over rigid control \\
+Only satisfy short window & simultaneously calculate the rate within the last 2s force band, original force band rate, and RMSE & retain continuous 0.5s metrics, no longer relying solely on it to draw conclusions \\
+\end{longtable}\endgroup
+
+\subsection{Control and Contact Models}\label{s13-detail-2}
+
+Within the first 5 seconds, the first three axes complete a quintic trajectory with incremental values {[}0.06, 0.04, -0.04{]} rad. The standard PID gains are retained from the previous stage, with torque limits set at 87 Nm for the first four axes and 12 Nm for the last three axes, and gripper force limited to 5 N. Primary control period: 10 ms, physical simulation step: 1 ms; subsequent experiments will independently vary the control period, with numerical validation conducted at a physical step of 0.5 ms; evaluation remains performed using 10 ms bins.
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+tau = Kp*(q_ref-q) - Kd*dq + Ki*integral + g(q)
+M_adm * x_ddot + B_adm * x_dot = F_ref - F_feedback
+z_ref = z_frozen - x
+F_ref = 5 * (3*u**2 - 2*u**3),  u=clip((t-t_contact)/1s,0,1)
+\end{Verbatim}
+
+Gravity compensation uses the PhysX compensation vector returned by the local Isaac 5.1 joint interface, adding the positive value to the output torque. New logging saves the compensation torques for each joint and verifies that joint velocities remain unchanged before and after the call. The implicit gravity compensation assumption from the real Franka interface is not directly applied in the simulation.
+
+After contact occurs, freeze the nominal position based on the measured hand height and superimpose admittance displacement along the normal direction. Use a differential inverse kinematics regularization coefficient of 0.01, limit the reference increment per axis per iteration to 0.003 rad, and additionally set total inverse kinematics jump protection. Three contact rigid bodies share a plane filter, with force taken as the sum of the world Z-components. The gripper remains open and does not perform grasping actions; other link collisions have not yet been resolved.
+
+The reducer estimates the gap using the nominal plane height and initial collision body boundaries of the known scene. Approach velocity decreases as the gap reduces, with a lower bound of 0.3 mm/s. Height disturbances are not passed to the reducer. Since finger orientation alters the lowest point, this estimation is not an exact distance sensor; test results must account for the influence of geometric prior errors.
+
+The initial baseline used 16 position-solver iterations and 4 velocity iterations. The final unified setup used 4 position iterations and was tested under disturbances with that same configuration. Solver-iteration effects are discussed separately rather than attributed to the control algorithm. The spherical probe and stock gripper have different contact geometry, so their force-error difference cannot be attributed solely to the algorithm either. Compliant-contact parameters are equivalent stiffness and damping, without calibration against physical materials.
+
+The relevant code is located at \path|scripts/run.py|; the experiment entry points are \path|scripts/suite.py|, \path|scripts/validation_suite.py|, and \path|scripts/refine_suite.py|. For comparison with open-source designs, see \path|OPEN_SOURCE_REVIEW.md|, primarily referencing Franka's official force control examples and NVIDIA's stability and contact material documentation; no ROS controller dependencies were added.
+
+\subsection{Gravity and Geometry Comparison}\label{s13-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1783}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1348}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1348}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1348}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1348}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1348}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1477}}@{}}
+\caption{Gravity and Geometry Comparison: Setup and Results}\label{tab:s13-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Zero-gravity Probe & 17.84 & 5.009 & 0.232 & 94.0\% & 27.2\% & Not all passed \\
+With gravity · no compensation (failed) & 1958.00 & 4.996 & 0.219 & 97.5\% & 22.7\% & Not fully passed \\
+With gravity compensation · probe & 23.31 & 5.009 & 0.208 & 96.5\% & 29.3\% & Not all passed \\
+With gravity compensation · gripper & 20.88 & 5.009 & 0.032 & 100.0\% & 95.4\% & Not all passed \\
+\end{longtable}\endgroup
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3249}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.4296}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2456}}@{}}
+\caption{Gravity and Geometry Comparison: Setup and Results}\label{tab:s13-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Root Mean Square Error over 5 seconds for the first three axes, in degrees
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+First cycle contact/s
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Root Mean Square Error over 5 seconds for the first three axes, in degrees
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+First cycle contact/s
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Zero-gravity Probe & 0.0394 / 0.0266 / 0.0276 & 10.50 \\
+With gravity · no compensation (failure) & 0.0947 / 1.5800 / 0.1593 & 0.11 \\
+With gravity compensation · probe & 0.0394 / 0.0266 / 0.0274 & 10.50 \\
+With gravity compensation · gripper & 0.0394 / 0.0266 / 0.0274 & 10.21 \\
+\end{longtable}\endgroup
+
+Under the uncompensated condition, the system immediately collapses and contacts the plane during the initial trajectory phase, constituting a control failure. It cannot be deemed usable merely because the final average force approaches 5N. The large peak forces in this condition are solely intended to illustrate the consequences of missing gravity compensation and are not included in the percentage improvement metrics for normal contact scenarios. The first three-axis errors under the compensated condition remain within a small range.
+
+\stagefigure{figures/ch05/s13_gravity_f06ae4bc.png}{Comparison under the same probe condition: gravity off versus gravity on with compensation.}{fig:s13-detail-1}
+
+
+\paragraph{Stage Conclusion} Gravity compensation failure causes initial downward fall; after restoring hand and two-finger collisions and re-establishing the control baseline, collisions in other links have not yet been fully restored.
+
+\stagecode{s13}
+
+\FloatBarrier
+
+\section{Approaching Deceleration, Target Force Gradual Ramp-up, and Velocity Correction}
+
+\label{stage:s14}
+
+\subsection{Approach and Force Switch Optimization}\label{s14-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1859}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1367}}@{}}
+\caption{Approach and Force Switching Optimization: Settings and Results}\label{tab:s14-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+With gravity compensation · gripper & 20.88 & 5.009 & 0.032 & 100.0\% & 95.4\% & Not all passed \\
+Gripper + Target Force Gradual Increase & 17.22 & 5.009 & 0.033 & 100.0\% & 95.8\% & Not Fully Passed \\
+Approach deceleration initial test & 11.20 & 5.009 & 0.030 & 100.0\% & 97.0\% & Passed \\
+Unified Height Algorithm Re-test & 21.25 & 5.009 & 0.034 & 100.0\% & 94.9\% & Not Fully Passed \\
+Correction speed 3 mm/s & 16.87 & 5.009 & 0.027 & 100.0\% & 97.2\% & Not all passed \\
+Decelerate 15mm in advance & 26.61 & 5.007 & 0.032 & 100.0\% & 95.9\% & Not fully passed \\
+Deceleration + corrected velocity 3 mm/s & 15.91 & 5.007 & 0.034 & 100.0\% & 95.2\% & Not all passed \\
+Added normal damping 100 & 16.85 & 5.009 & 0.031 & 100.0\% & 94.8\% & Not all passed \\
+Additional normal damping 300 & 24.36 & 5.014 & 0.108 & 100.0\% & 59.2\% & Not all passed \\
+Damping 100 + corrected velocity 1 mm/s & 25.17 & 5.007 & 0.027 & 100.0\% & 95.9\% & Not all passed \\
+Unified Candidate · Correction 3mm/s & 11.11 & 5.007 & 0.018 & 100.0\% & 100.0\% & Passed \\
+Unified Candidate · Correction 30mm/s & 13.36 & 5.006 & 0.008 & 100.0\% & 100.0\% & Passed \\
+Final Solution & 11.11 & 5.007 & 0.018 & 100.0\% & 100.0\% & Passed \\
+\end{longtable}\endgroup
+
+Before initial contact, no contact force is available, so relying solely on contact gating cannot prevent collisions. The target force ramp-up avoids directly demanding 5N at the switching instant, while pre-deceleration reduces contact velocity prior to touchdown; these two strategies operate in different phases. Subsequently, limiting admittance correction velocity and expanding the deceleration range will be examined to determine whether they can reduce subsequent collisions after switching.
+
+Initial testing showed a low peak for gripper\_brake, but after modifying the nominal plane height calculation to no longer read disturbance values and adding runtime checks, the peak under default conditions increased again. The two conditions are not bit-for-bit reproductions; thus, the better initial values cannot be regarded as repeatable performance. Both sets of results are retained to demonstrate the sensitivity of rigid contact to minor differences. Final validation will be based on the new conditions under unified code.
+
+\stagefigure{figures/ch05/s14_approach_cb3b566a.png}{Comparison of approach and target force switching under the same rigid gripper scenario.}{fig:s14-detail-1}
+
+\stagefigure{figures/ch05/s14_refinement_0c4260a8.png}{Subsequent comparison of refined velocity and pre-deceleration range.}{fig:s14-detail-2}
+
+
+\paragraph{Stage Conclusion} The original unified scheme has a peak value of 11.11 N, with an average force of approximately 5.007 N in the final segment; single-factor and version variations are separately explained, and no better leading alternative is needed for re-measurement.
+
+
+
+% BEGIN SIM_VISUALS s14
+\subsection{Visualizations and Stages with Gravity and Contact}
+Frames from both sides are actual camera frames captured under the same scene. The camera view can illustrate the relative position between the gripper and the plane but cannot independently distinguish small force differences; therefore, we retain the synchronized force curves and provide additional images without curves showing the approach and contact phases below.
+
+\motionfigure{figures/ch05/panda_gravity_comparison_full_frame.png}{Position control and optimized admittance under identical gravity, geometry, and inner-loop: actual motion and synchronized ground reaction force curves.}{fig:motion-panda_gravity_comparison_full_frame}
+
+\motionfigure{figures/ch05/panda_contact_camera_pair_frame000.png}{Pure camera views under two control conditions, saved at frame 0 (approximately 0.001 seconds simulation time).}{fig:motion-panda_contact_camera_pair_frame000}
+
+\motionfigure{figures/ch05/panda_contact_camera_pair_frame140.png}{Pure camera views under two control conditions, frame number 140 (approximately 14.001 seconds simulation time).}{fig:motion-panda_contact_camera_pair_frame140}
+
+\motionfigure{figures/ch05/panda_contact_camera_pair_frame300.png}{Pure camera views under two control conditions, frame number 300 (approximately 30.001 seconds simulation time).}{fig:motion-panda_contact_camera_pair_frame300}
+% END SIM_VISUALS s14
+\stagecode{s14}
+\stagevideo{videos/ch05/panda_gravity_contact_comparison.mp4}
+
+\FloatBarrier
+
+\section{Disturbances, Contact Materials, and Numerical Sensitivity}
+
+\label{stage:s15}
+
+\subsection{Environment and Periodic Disturbances}\label{s15-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1861}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1356}}@{}}
+\caption{Environment and Periodic Disturbances: Setup and Results}\label{tab:s15-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Unified Candidate · Correction 1mm/s & 16.13 & 5.008 & 0.010 & 100.0\% & 100.0\% & Not fully passed \\
+Final · Friction 1.0 & 8.86 & 5.007 & 0.008 & 100.0\% & 100.0\% & Passed \\
+Final · Friction 0.1 & 10.08 & 5.008 & 0.054 & 100.0\% & 45.8\% & Passed \\
+Final · Physical timestep 0.5ms & 20.43 & 5.007 & 0.026 & 100.0\% & 93.4\% & Not all passed \\
+Final · Plane +1mm & 11.83 & 5.007 & 0.011 & 100.0\% & 100.0\% & Passed \\
+Final · Plane +5mm & 12.83 & 5.004 & 0.006 & 100.0\% & 100.0\% & Passed \\
+Final · Plane−1mm & 19.08 & 5.006 & 0.015 & 100.0\% & 100.0\% & Not fully passed \\
+Final · Plane −5mm & 11.64 & 5.008 & 0.010 & 100.0\% & 100.0\% & Passed \\
+Final · Repeat & 11.11 & 5.007 & 0.018 & 100.0\% & 100.0\% & Passed \\
+Final Solution & 11.11 & 5.007 & 0.018 & 100.0\% & 100.0\% & Passed \\
+Final · Compliance 50 kN/m & 5.16 & 5.007 & 0.013 & 100.0\% & 100.0\% & Passed \\
+Compliant · Physical Step 0.5ms & 5.11 & 5.007 & 0.014 & 100.0\% & 100.0\% & Passed \\
+Compliant · Plane + 5mm & 5.42 & 5.004 & 0.007 & 100.0\% & 100.0\% & Passed \\
+Compliant · Plane−5mm & 5.09 & 5.008 & 0.010 & 100.0\% & 100.0\% & Passed \\
+20ms control period & 21.78 & 5.009 & 0.032 & 100.0\% & 95.0\% & Not all passed \\
+5ms control period & 16.16 & 5.009 & 0.026 & 100.0\% & 97.2\% & Not all passed \\
+Default Setup · Friction 1.0 & 28.88 & 5.009 & 0.035 & 100.0\% & 94.5\% & Not fully passed \\
+Default scheme · Friction 0.1 & 12.30 & 5.012 & 0.090 & 100.0\% & 38.6\% & Passed \\
+Default Scheme · Plane + 1mm & 27.43 & 5.009 & 0.029 & 100.0\% & 96.0\% & Not fully passed \\
+Default Setup · Plane + 5mm & 24.75 & 5.009 & 0.033 & 100.0\% & 93.7\% & Not fully passed \\
+Default Scheme · Plane−1mm & 14.64 & 5.009 & 0.035 & 100.0\% & 96.5\% & Passed \\
+Default Scheme · Plane −5mm & 0.00 & 0.000 & 5.000 & 0.0\% & 0.0\% & Not Fully Passed \\
+Mass matrix compensation inner loop & 62.49 & 5.017 & 0.205 & 97.5\% & 28.4\% & Not all passed \\
+Unified Height Algorithm Re-test & 21.25 & 5.009 & 0.034 & 100.0\% & 94.9\% & Not Fully Passed \\
+Soft material 2kN/m & 5.32 & 5.007 & 0.011 & 100.0\% & 100.0\% & Passed \\
+Soft material 50 kN/m & 5.65 & 5.009 & 0.014 & 100.0\% & 100.0\% & Passed \\
+4 position solve iterations & 12.77 & 5.009 & 0.011 & 100.0\% & 100.0\% & Passed \\
+\end{longtable}\endgroup
+
+High disturbances are applied relative to the nominal plane under the same geometric conditions, without providing the controller with additional information about actual deviations. Friction variations only test the current normal contact condition and cannot prove stability under tangential wiping or sliding. The mass matrix compensation uses gain in acceleration form, differing in units and numerical scale from standard PID controllers; this group serves only as an optional inner loop and is not directly attributed to the superiority or inferiority of the compensation method. The 5/20ms results are for periodic sensitivity testing; the main experiments still use 10ms as the standard.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1680}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1387}}@{}}
+\caption{Environment and Periodic Disturbances: Setup and Results}\label{tab:s15-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Approach deceleration initial test & 11.20 & 5.009 & 0.030 & 100.0\% & 97.0\% & Passed \\
+Soft material 10kN/m & 6.40 & 5.009 & 0.013 & 100.0\% & 100.0\% & Passed \\
+Soft material 2kN/m & 5.32 & 5.007 & 0.011 & 100.0\% & 100.0\% & Passed \\
+Soft material 50 kN/m & 5.65 & 5.009 & 0.014 & 100.0\% & 100.0\% & Passed \\
+\end{longtable}\endgroup
+
+The peak and trailing fluctuations of compliant materials are smaller, indicating that the contact physics model significantly affects the results. Softening the environment does not equate to solving the rigid control problem; the final results under rigid and compliant conditions are provided separately.
+
+\stagefigure{figures/ch05/s15_material_4e8027ac.png}{Comparison of rigid and compliant materials; environment is altered here, and the improvement ratio of the cross-material algorithm is not calculated.}{fig:s15-detail-1}
+
+\stagefigure{figures/ch05/s15_validation_7338073d.png}{Height and friction disturbance under the default deceleration scheme.}{fig:s15-detail-2}
+
+\stagefigure{figures/ch05/s15_timestep_92c24626.png}{Numerical verification with halved time step; original peak and periodic force explained separately.}{fig:s15-detail-3}
+
+\stagefigure{figures/ch05/s15_final_validation_ebdf4225.png}{Independent condition validation of the unified correction scheme.}{fig:s15-detail-4}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1728}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1379}}@{}}
+\caption{Environment and Periodic Disturbances: Setup and Results}\label{tab:s15-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Final average force / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Force RMSE/N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Periodic bandwidth
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original In-Band Rate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Four inspections
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Final · Compliance 50 kN/m & 5.16 & 5.007 & 0.013 & 100.0\% & 100.0\% & Passed \\
+Compliant · Plane + 5mm & 5.42 & 5.004 & 0.007 & 100.0\% & 100.0\% & Passed \\
+Compliant · Plane−5mm & 5.09 & 5.008 & 0.010 & 100.0\% & 100.0\% & Passed \\
+\end{longtable}\endgroup
+
+Under the same final controller, additional tests were conducted with equivalent compliant contacts of 50 kN/m and 150 N·s/m, indicating that contact physics may be altered by adding a thin compliant layer at the end-effector. This result requires calibration with real materials and contact area before it can be transferred; it cannot serve as evidence that the rigid environment problem has been resolved.
+
+\subsubsection{Physical Step Length and Impulse Check}\label{s15-detail-2}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2409}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1853}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1853}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2032}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1853}}@{}}
+\caption{Physical Step Length and Impulse Check: Settings and Results}\label{tab:s15-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Physical step length / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum impulse per step / N·s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+10ms average peak force / N
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Physical step length / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original peak / N
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum impulse per step / N·s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+10ms average peak force / N
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Final Solution & 1.0 & 11.11 & 0.01111 & 5.143 \\
+Final · Physical timestep 0.5ms & 0.5 & 20.43 & 0.01022 & 5.085 \\
+Final · Compliance 50 kN/m & 1.0 & 5.16 & 0.00516 & 5.147 \\
+Compliant · Physical Step 0.5ms & 0.5 & 5.11 & 0.00255 & 5.084 \\
+\end{longtable}\endgroup
+
+Under rigid conditions, reducing the physical timestep from 1ms to 0.5ms caused the original peak force to increase from 11.11N to 20.43N, and the original in-band rate in the latter segment also decreased, indicating that the instantaneous peak has not yet converged numerically. Since contact force per step is derived from the solver’s impulse divided by the timestep, it is necessary to compare the impulse with the fixed bin-averaged force; thus, the discrete spikes cannot be directly interpreted as the upper bound of real sensor forces. Changing the timestep also alters the small initial error that triggers the pre-step, and this set of tests belongs to numerical sensitivity checks, not a rigorous proof of convergence for the continuous system.
+
+Under finite stiffness conditions, the original peak values at 1 ms and 0.5 ms were 5.16 N and 5.11 N, respectively, indicating that the step length is less sensitive within this phase range. Realistic transfer still requires calibration of contact stiffness, damping, contact area, and force sensor bandwidth.
+
+
+\subsection{Result Boundaries and Failure Analysis}\label{s15-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.5676}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.4324}}@{}}
+\caption{Result Boundaries and Failure Analysis: Setup and Results}\label{tab:s15-5}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Criteria for selection
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Criteria for selection
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Results
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Condition & final\_selected \\
+1ms original force peak & 11.112 N \\
+average force within the last 2s cycle & 100.0\% \\
+last 2s original force band adherence rate & 100.0\% \\
+last 2s original peak & 5.255 N \\
+Longest continuous period within band & 14.53 s \\
+\end{longtable}\endgroup
+
+The engineering criteria for this stage are: raw peak force\(\leq\)15N, fraction of cycle means within the force band over the final 2s\(\geq\)99\%, mean-force RMSE\(\leq\)0.25N, and individual 5s RMSE for each of the first three joints\(\leq\)0.1°. These are project comparison targets, not industrial standards or certification. A pass requires all four criteria; completion only means the simulation ended normally.
+
+Brief initial force impulses after contact may still exceed 5±0.5N. Variations in plane height, friction, solver, and contact geometry may amplify these impulses; the contact impulses from a rigid solver cannot be equated with actual six-dimensional force sensor outputs. Especially under low-friction conditions, even if the periodic average force meets specifications, the raw force may still frequently exceed limits. Longer-duration, multi-posture, multi-random-disturbance, and remote network and physical experiments still require further validation.
+
+New records distinguish between original total force, periodic average force, feedback EMA, and target force; thus enabling verification of whether the controller repeatedly contacts due to filtering delay. Repeated runs are used to check determinism and implementation differences, not to claim statistical significance.
+
+
+\paragraph{Stage Conclusion} After halving the step length with rigid contact, the peak force increased from 11.11 N to 20.43 N, and the instantaneous peak has not yet converged numerically; soft material cases are listed separately and not compared for algorithmic performance across materials.
+
+\stagecode{s15}
+
+\FloatBarrier
+
+\section{Action Block Execution, Delay, and Inter-Process Communication}
+
+\label{stage:s16}
+
+\subsection{Extension: Learning Policy Action Execution Interface}\label{s16-detail-1}
+
+The extended objective is to examine how the execution end processes action timestamps, discontinuities, and interruptions after the policy returns actions. Refer to LeRobot's decoupled prediction and execution design, including the action queue mechanism; this phase constitutes an independent deterministic interface test, without integration with ACT, SmolVLA, or WAM inference, and without implementing training-based RTC.
+
+\href{https://huggingface.co/docs/lerobot/async}{Reference: LeRobot asynchronous inference and action queues}
+
+All seven tests ran with Isaac Panda simulated dynamics and the same conventional PID inner loop. The first three joints followed a quintic reference lasting 5 seconds with triple amplitude; the fixed plane was lowered to exclude contact. The simulated policy generated 40 future actions every 200ms, at 10ms action intervals and a fixed delivery delay of 120ms. This separates execution-mechanism effects from model-prediction errors.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.3529}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 2\tabcolsep) * \real{0.6471}}@{}}
+\caption{Extension: Learned Policy Action Execution Interface: Settings and Results}\label{tab:s16-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Injection or execution method
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Injection or execution method
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+True value positioning & Directly send ideal reference at 100Hz \\
+delayed\_naive & Execute from step 0 when the action chunk arrives, ignoring its generation time \\
+delayed\_timestamp & Select the action using current time minus generation time, skipping the expired prefix \\
+jitter\_raw & ±0.04 rad deviation alternately superimposed on the first axis for each block \\
+jitter\_limited & Same deviation, command velocity limited to 0.35 rad/s, acceleration 1 rad/s² \\
+outage\_stale & 2--3 seconds without generating new blocks, continue consuming old blocks and remain at the last target \\
+outage\_hold & The same data-stream interruption; once source-data age exceeds 0.5 seconds, hold the measured pose read once at that point; retain velocity and acceleration limits on recovery \\
+\end{longtable}\endgroup
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2934}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2355}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2355}}@{}}
+\caption{Extension: Learned Policy Action Execution Interface: Settings and Results}\label{tab:s16-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Execution Conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured vs. Ideal RMSE / degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum commanded jerk / degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak torque/Nm
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Execution Conditions
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured vs. Ideal RMSE / degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Maximum commanded jerk / degree
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Peak torque/Nm
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+True Value Localization & 0.095 & 0.039 & 0.062 \\
+delayed\_naive & 0.330 & 0.039 & 0.062 \\
+delayed\_timestamp & 0.095 & 0.039 & 0.062 \\
+jitter\_raw & 1.145 & 4.622 & 17.795 \\
+jitter\_limited & 0.946 & 0.146 & 0.879 \\
+outage\_stale & 0.532 & 2.726 & 9.510 \\
+outage\_hold & 1.031 & 0.201 & 3.052 \\
+\end{longtable}\endgroup
+
+RMSE statistics are computed for the three axes relative to the ideal reference; jump and peak torque statistics are computed for all seven axes. All conditions use the same known trajectory without multiple random seed statistics. Command saturation is checked sample-by-sample, but this does not equate to actual joint velocity saturation or collision safety guarantees.
+
+\stagefigure{figures/ch05/s16_execution_delay_fa537d74.png}{Comparison of action selection under fixed 120ms delay, ignoring timestamps versus selecting actions according to timestamps.}{fig:s16-detail-1}
+
+Ignoring the time stamp, the actual trajectory RMSE is 0.330°; after aligning actions by time stamp, it becomes 0.095°. Here, the future actions originate from a known analytical reference, and time-stamp alignment can restore ideal execution. However, real VLA prediction errors, observation delays, and environmental changes cannot be eliminated by skipping the prefix.
+
+\stagefigure{figures/ch05/s16_execution_jitter_307c270b.png}{Under the same action block deviation, direct execution versus command-limited velocity and acceleration.}{fig:s16-detail-2}
+
+Limiting reduces the maximum commanded step change from 4.622° to 0.146°, and the peak torque from 17.795 Nm to 0.879 Nm. Smoothing alters the original motion timing; therefore, one should not only assess whether the motion appears smoother, but also verify the tracking error and task phase.
+
+\stagefigure{figures/ch05/s16_execution_outage_aac306ae.png}{The orange interval represents 2–3 seconds during which action blocks are not generated; includes delivery delay and timeout waiting.}{fig:s16-detail-3}
+
+Timeout holding and constrained recovery reduced the maximum command jump from 2.726° to 0.201°, while trajectory RMSE increased from 0.532° to 1.031°. This is the cost of deliberately pausing catch-up, rather than an improvement in every metric. The timeout was triggered 1 time. This hold mechanism has not yet been validated under gravity, contact loads, or on physical hardware.
+
+\subsubsection{Interface Replay with Action Window Coverage}\label{s16-detail-2}
+
+Additionally, perform 54 interface-level replays: with delays of 40/120/240 ms, block update periods of 100/200/400 ms, and action windows of 200/400/800 ms, respectively comparing timestamp-ignoring and timestamp-aware consumption. Here, only the action commands and window coverage are calculated, without re-running the robot dynamics, and not counted toward the number of physics simulations.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{Interface Replay with Action Window Coverage: Settings and Results}\label{tab:s16-3}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Delay/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Update period/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Window/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Window expiration time ratio
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Delay/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Update period/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Window/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Window expiration time ratio
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+40 & 200 & 400 & 0.0\% \\
+120 & 200 & 200 & 59.0\% \\
+120 & 200 & 400 & 0.0\% \\
+240 & 200 & 400 & 19.3\% \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch05/s16_stream_coverage_1c419e63.png}{When the action window is insufficient, even timely consumption will exhaust executable actions.}{fig:s16-detail-4}
+
+Under the fixed delay and no packet loss conditions of this model, the window must at least cover the interval between delivery delay and the next block update to continuously provide non-expired actions. In real systems, additional margins must be reserved for jitter and varying computation times. Expanding the window may reduce responsiveness and cannot be infinitely increased. The configured actuators replayed seven previously executed commands frame by frame, consistent with the original commands.
+
+The relevant code is located in \path|scripts/action_stream.py|, \path|scripts/analyze_execution.py|, and \path|scripts/sweep_stream.py|. The results are stored in \path|execution_results.json| and \path|stream_sweep.json|. In the next step, we will integrate time-stamped action blocks from the actual policy and retest under the same disturbances; at this stage, we do not claim that VLA is capable of completing the operational tasks.
+
+
+\subsection{UDP Cross-process Communication on This Machine}\label{s16-detail-3}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2037}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1959}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2052}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1993}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1959}}@{}}
+\caption{Native UDP inter-process communication: Setup and Results}\label{tab:s16-4}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operating Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of packets received
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Package polling latency P95/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Generate to read P95/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Keep the number of samples
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Operating Condition
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of packets received
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Package polling latency P95/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Generate to read P95/ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Keep the number of samples
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Normal & 80 & 10.07 & 10.21 & 1 \\
+Round-trip delay 40ms & 79 & 10.04 & 50.23 & 5 \\
+Sender stops transmission for 1s & 60 & 10.10 & 10.24 & 57 \\
+\end{longtable}\endgroup
+
+Sending and receiving run in separate processes, actually communicating via UDP over 127.0.0.1 to transmit future action blocks; sending at 20Hz, receiving target at 100Hz. Delays of 40ms and 1s of stop-sending are injected by the sender application. Actions are generated analytically from quintic trajectories, without running VLA, and without driving the physical simulation or real robot. The receiver retrieves actions by timestamp, holding the output if data age exceeds 0.5s.
+
+Packet reception latency includes 100Hz polling and OS scheduling and cannot be treated as pure network transmission latency or RTT. Monotonic clocks are shared within the same machine; clock synchronization, reordering, packet loss recovery, and hard real-time behavior across hosts have not been verified. Testing was completed under this stage's simulation load, only proving actual communication and timeout logic between independent processes. Relevant code is in scripts/network.py.
+
+
+\paragraph{Stage Conclusion} The motion source is the analytical reference, verifying timestamps, limits, timeouts, and recovery; these results cannot be interpreted as successful VLA network control.
+
+\stagecode{s16}
+
+\FloatBarrier

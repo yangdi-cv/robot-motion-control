@@ -1,0 +1,620 @@
+\chapter{State Measurement, Filtering, and Feedback Timing}
+Public data adopts TUM-VI \cite{tumvi}; the definition of filtering delay refers to the SciPy documentation \cite{scipy}.
+
+
+Record virtual sensors, publicly measured data, and self-collected data separately. Sampling, publishing, control, and physical integration occur at different frequencies, and filtering/smoothing may also introduce data latency.
+
+\section{Feedback Frequency and Virtual Sensor Links}
+
+\label{stage:s05}
+
+\subsection{Original Task Coverage and Source of Achievements}\label{s05-detail-1}
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2451}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3859}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3690}}@{}}
+\caption{Original task coverage and source of results: Settings and outcomes}\label{tab:s05-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Monthly Plan: Content for Week 2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Content completed in this phase
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Sources and Boundaries
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Monthly Plan: Content for Week 2
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Content completed in this phase
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Sources and Boundaries
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Read and publish multi-axis states & six-axis ROS2 IMU raw/filtered nodes with independent subscription verification; manufacturer's RAW serial read-only interface & publishing verification using clearly marked offline replay; real serial port branch has not yet been run \\
+Static/Motion original acquisition & Actual physical simulation recordings and readings of the official virtual IMU on Panda link7 & Simulation readings, not hardware board measurements \\
+Filtering and Smoothing Analysis & 5-point Moving Average, EMA, Second-order Butterworth; Error and Lag Comparison & Known Gaussian Noise Explicitly Injected on Virtual IMU, Parameters Not Estimated from Real Measurements \\
+Stability/delay under multiple feedback frequencies & 4 forward/backward balance experiments each at 25Hz, 50Hz, and 100Hz & Real ROS Bridge with two external ROS nodes; fixed physical timestep of 10ms \\
+Frequency impact comparison & Host frequency, inter-packet P95, message integrity, link latency, tracking error & Latency definition limited to link, does not claim complete end-to-end hardware response \\
+\end{longtable}\endgroup
+
+The main experiment is \path|runs/run002_balanced|. Pilot \texttt{run001} is retained but is not the main basis for frequency-accuracy conclusions. Its 9 phases had unbalanced motion directions, so 12 phases were rerun, with two positive and two negative motions at each frequency to reduce this confound. Repetitions remain few and use the same physical scene; cross-machine and load-condition statistics have not been collected.
+
+\subsection{Simulation and Real ROS2 Pipeline}\label{s05-detail-2}
+
+Reuse the Panda assets, quintic trajectories, and Isaac standalone environment from Week1, add dedicated topics, without overwriting the original workspace.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Isaac Panda PhysX 100Hz
+\item
+  Original joint feedback from Bridge
+\item
+  Independent ROS relay at 25/50/100 Hz
+\item
+  Independent ROS Trajectory Control and Recording Node
+\item
+  Bridge joint position command
+\item
+  link7 official virtual IMU 100Hz
+\item
+  25 Hz sampling with explicit noise injection
+\item
+  Six-axis Causal Filter Comparison
+\end{enumerate}
+
+Simulation uses a fixed step size of 10ms; the relay extracts feedback based on simulation timestamps, and the control node updates position targets upon receiving each feedback. Therefore, what is being compared is the \textbf{outer-loop state feedback/command update frequency}, not changing the internal control frequency of PhysX. States and commands use \path|/panda_week2/|, ROS domain 51, localhost, and FastDDS.
+
+Each phase comprises a 2-second hold, a 5-second quintic trajectory, and another 2-second hold, for 12 phases totaling about 108 seconds. The first three joint endpoints match Week1, alternating direction; other joint targets remain fixed. Commands are constant during holds, without assuming noise-free sensors. A total of 10798 raw feedback messages were received. The largest interval between adjacent simulation timestamps was 10ms, with no gaps over 15ms. Relay-to-control sequence numbers showed no missing or duplicate entries.
+
+The IMU is mounted at \path|/World/Panda/panda_link7/Week2IMU|, with local orientation represented as a unit quaternion, and it reads three-axis acceleration, angular velocity, and wxyz quaternion; internal filter bandwidths are all 1. The acceleration readings include gravity, and its projection varies with static posture, so it cannot be treated as translational acceleration. The sensor frequency must not exceed the physical frequency, hence the upper limit for this phase is 100 Hz.
+
+\subsection{Feedback Frequency, Error, and Response Results}\label{s05-detail-3}
+
+The values in the table are the arithmetic averages of 4-phase metrics at each frequency; "P95 average interval" does not refer to the P95 of all samples combined. Joint RMSE only considers the motion window from 2 to 7 seconds within each phase, comparing reference and actual positions at the same timestamp without lag compensation.
+
+\FloatBarrier\begingroup\footnotesize\setlength{\tabcolsep}{2pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1060}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1060}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1060}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1161}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1110}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1163}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1163}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1163}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1060}}@{}}
+\caption{Feedback Frequency, Error, and Response Results: Settings and Outcomes}\label{tab:s05-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Request Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Count
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mea\-sured host Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mean of re\-cep\-tion-interval P95 (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Relay link P95 average ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J1 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J2 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J3 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J1 fitting lag ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Request Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Count
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mea\-sured host Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Mean of re\-cep\-tion-interval P95 (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Relay link P95 average ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J1 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J2 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J3 RMSE rad
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+J1 fitting lag ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+25 & 4 & 24.891 & 40.964 & 0.259 & 0.021783 & 0.015586 & 0.016388 & 227.5 \\
+50 & 4 & 49.639 & 21.129 & 0.214 & 0.020832 & 0.014911 & 0.015675 & 217.5 \\
+100 & 4 & 99.270 & 10.891 & 0.166 & 0.020370 & 0.014582 & 0.015328 & 215.0 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch03/s05_frequency_comparison_d1863982.png}{Frequency Comparison of Feedback}{fig:s05-detail-1}
+
+\begin{itemize}
+\tightlist
+\item
+  Relay-link latency is measured on the same machine with a monotonic clock, from immediately before the relay publish call to reception by the control node. It includes DDS and scheduling, but excludes Isaac\(\rightarrow\)relay transport, so it is not the latency of the complete robot communication chain.
+\item
+  Fitting lag: Search for time shifts from 0 to 400 ms with 5 ms intervals along the reference trajectory to find the shift that best matches the actual joint positions; this is a descriptor formed jointly by the driving dynamics and the update chain, not pure network latency. The original RMSE in the table has not been adjusted for this shift.
+\item
+  The host frequency of 100 Hz is approximately 99.27 Hz, exhibiting scheduling jitter and thus cannot be claimed as hard real-time. Increasing the outer-loop frequency results in only a slight reduction in the average RMSE of J1, with limited magnitude; the default physical actuation still produces noticeable tracking lag. There is no evidence that merely increasing the frequency can eliminate the error.
+\item
+  Improvements are made only for the same simulation scenario, default actuation, and this trajectory. No force sensing, admittance control, pose fusion, or real robot control is introduced.
+\end{itemize}
+
+
+\paragraph{Stage Conclusion} Comparing 25/50/100 Hz, changing the outer-loop state and command update without altering the 100 Hz physical actuation; increasing frequency did not eliminate the default actuation lag.
+
+\stagecode{s05}
+
+\FloatBarrier
+
+\section{Causal Filtering and ROS2 Message Verification}
+
+\label{stage:s06}
+
+\subsection{Causal Filtering of Virtual IMU and Trade-off between Noise and Latency}\label{s06-detail-1}
+
+Every 4th frame of the actual 100Hz virtual-IMU stream is sampled to produce 25Hz data, close to the historical output rate of the physical board. The main experiment has 2782 samples; stationary and motion evaluation intervals are explicitly saved in the metrics JSON. Independent zero-mean Gaussian noise is added, with per-axis acceleration \(\sigma\)=0.15m/s² and angular velocity \(\sigma\)=0.02rad/s, using fixed seed20261013. This is a chosen noise model, not physical-IMU calibration.
+
+Using only current and historical samples:
+
+\begin{itemize}
+\tightlist
+\item
+  Moving average: over the last 5 samples, the linear-phase delay of the full window is approximately 80ms.
+\item
+  EMA: Cutoff frequency 3 Hz, \texttt{α=1-exp(-2πfcΔt)}; can be updated using actual sampling interval, no lookahead.
+\item
+  Second-order Butterworth: 3 Hz cutoff, 25 Hz design sampling rate, SOS form executed sample by sample; no causal filtfilt used. Coefficients should be redesigned when sampling rate changes.
+\end{itemize}
+
+The error is defined as the output minus the \textbf{clean virtual IMU readings at the same time instant}. The multi-axis RMSE in the table aggregates the three axes, and the denoising ratio is relative to the raw error with added noise; the smoothness of the filtered curves is not considered as a measure of accuracy. Dynamic errors are not time-aligned, preserving the cost of filter delay.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1326}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1563}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1326}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1566}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1326}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1566}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1326}}@{}}
+\caption{Causal filtering of virtual IMU and trade-off between noise and latency: setup and results}\label{tab:s06-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Algorithm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Static acceleration error RMSE m/s²
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Reduce
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Static angular velocity error RMSE rad/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Reduce
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Angular velocity error RMSE rad/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Angular velocity optimal shift ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Algorithm
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Static acceleration error RMSE m/s²
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Reduce
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Static angular velocity error RMSE rad/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Reduce
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Angular velocity error RMSE rad/s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Angular velocity optimal shift ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+raw & 0.14903 & 0.0\% & 0.01983 & 0.0\% & 0.02002 & 0 \\
+Mov\-ing Av\-er\-age & 0.06335 & 57.5\% & 0.00915 & 53.9\% & 0.00930 & 80 \\
+Ex\-po\-nen\-tial Mov\-ing Av\-er\-age & 0.08870 & 40.5\% & 0.01203 & 39.3\% & 0.01197 & 40 \\
+But\-ter\-worth & 0.07292 & 51.1\% & 0.01028 & 48.1\% & 0.01027 & 80 \\
+\end{longtable}\endgroup
+
+\stagefigure{figures/ch03/s06_imu_filter_comparison_e8e8c507.png}{Comparison of filtering during rest and motion}{fig:s06-detail-1}
+
+The moving average provides strong noise reduction under this noisy and slow trajectory condition but introduces approximately 80ms lag; EMA offers weaker noise reduction with a fitting shift of about 40ms. The shift is calculated using a 40ms sampling grid and is only for descriptive purposes, not to offset the errors in the table. Constant and step checks verify the absence of premature response before any motion occurs. Due to the coarse sampling resolution, EMA’s first change exceeding 50\% of the step does not imply zero-phase delay.
+
+For this round, EMA is prioritized as the default for demonstration release, with other algorithms retained for comparison; optimal parameters across all motion speeds are not provided, nor is there proof that real IMU data similarly improves performance. No modifications were made to existing HTML pose display or board mounting axes, no inappropriate per-component averaging was applied to quaternions, and the current six-axis filtering remains separate from pose fusion.
+
+\subsection{Verification of Actual ROS2 IMU Raw/Filtered Data Publication}\label{s06-detail-2}
+
+A noisy CSV from the pilot experiment was also replayed offline for 10 seconds. An independent publisher computed EMA online, and an independent subscriber recorded sensor\_msgs/Imu. The CSV contains no quaternion fields, so orientation was explicitly marked unavailable; no fused attitude is claimed.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2409}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1878}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1859}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1859}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1994}}@{}}
+\caption{Verification of Actual ROS2 IMU Raw/Filtered Publishing: Setup and Results}\label{tab:s06-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Topic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Send/Receive
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Missing / du\-pli\-cate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Host Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Published to receiver P95 ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Topic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Send/Receive
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Missing / du\-pli\-cate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Host Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Published to receiver P95 ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\path|/imu_week2/raw| & 249/249 & 0/0 & 25.000 & 0.864 \\
+\path|/imu_week2/filtered| & 249/249 & 0/0 & 25.000 & 0.969 \\
+\end{longtable}\endgroup
+
+The original and filtered messages use the fixed coordinate frame name imu\_sensor and are associated with identical ROS timestamps across independent transmit/receive records; the six-axis values differ from the publisher's record by at most 0, and both processes exit normally. The latency measurement starts at the moment sample processing begins, encompassing filter computation, message construction, DDS, and scheduling; it does not include CSV history generation, raw sensor sampling, or serial port latency. This validation demonstrates that the ROS interface can send and receive messages, not actual sensor hardware integration.
+
+The real serial branch has been implemented: using the original manufacturer's driver, receiving valid RAW packets at 115200 baud, g\(\rightarrow\)m/s² and rad/s preserved, capable of appending the received board quaternion; calibration, output frequency, or Flash writes are not performed. The current device is not connected; only code inspection has been completed, and this branch awaits real-world operational verification.
+
+
+\paragraph{Stage Conclusion} Moving average reduces setpoint noise but introduces approximately 80 milliseconds of latency; message replay confirms interface connectivity, with hardware sensor integration performed separately.
+
+\stagecode{s06}
+
+\FloatBarrier
+
+\section{Analysis of Public Real IMU and Noise}
+
+\label{stage:s07}
+
+\subsection{Public Real IMU and Six-Axis Filtering}\label{s07-detail-1}
+
+We first compared two publicly available visual-inertial datasets: EuRoC and TUM-VI. EuRoC provides a 200 Hz six-axis IMU from a drone, suitable for subsequent cross-device comparison; in this stage, we chose TUM-VI because it also includes independent static recordings and handheld device motion sequences, making it more convenient for separately validating static filtering and dynamic response. EuRoC was not downloaded or evaluated in this stage.
+
+TUM-VI was chosen because it provides three-axis acceleration and angular velocity data with original timestamps, as well as independent stationary recordings. The data was collected by the original authors and is licensed under CC BY4.0. The stationary data was extracted from the first 120001 rows of the original NPY file, approximately 602 seconds long; the filtered statistics were computed from the 60–90 second segment within it. The motion segment was taken from the middle fixed 30 seconds of the room1 sequence, without selecting waveforms based on results. The required IMU recordings were extracted via HTTP range requests from the official server, without downloading the entire set of camera images.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2359}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2359}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2437}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2845}}@{}}
+\caption{Public Real IMU and Six-Axis Filtering: Setup and Results}\label{tab:s07-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Data segment
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of samples
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual coverage / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Timestamp statistics frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Data segment
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Number of samples
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual coverage / s
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Timestamp statistics frequency / Hz
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Static & 5981 & 29.994 & 199.374 \\
+Motion & 5981 & 29.995 & 199.368 \\
+\end{longtable}\endgroup
+
+The six channels use causal averaging over the current and the previous four points, without using future data. Since the four-point window has not yet been fully established, the mean and standard deviation are relatively consistent, and these four points are excluded. Acceleration is kept in m/s², angular velocity in rad/s, and the static acceleration due to gravity is not treated as a zero offset to be removed.
+
+Statistics for the stationary phase are as follows:
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1598}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1598}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1710}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1710}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1692}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1692}}@{}}
+\caption{Public Real IMU and Six-Axis Filtering: Setup and Results}\label{tab:s07-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Channel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Filtered mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original standard deviation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Filter standard deviation
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Channel
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+unit
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Filtered mean
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Original standard deviation
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Filter standard deviation
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+ax & m/s² & -1.416228 & -1.416217 & 0.017933 & 0.008507 \\
+ay & m/s² & -0.396287 & -0.396288 & 0.013538 & 0.006626 \\
+az & m/s² & 10.487650 & 10.487644 & 0.020199 & 0.009757 \\
+gx & rad/s & 0.029597 & 0.029597 & 0.001105 & 0.000554 \\
+gy & rad/s & 0.006676 & 0.006676 & 0.000947 & 0.000481 \\
+gz & rad/s & 0.016164 & 0.016164 & 0.000988 & 0.000493 \\
+\end{longtable}\endgroup
+
+The standard deviations of the six channels decreased by approximately 49.2\%--52.6\%. The center of a 5-point moving average lags the latest sample by two sampling periods, about 10.03ms for the current raw data. At an input rate of only 25Hz, the same 5-point window corresponds to about 80ms. Smoothing must therefore be compared together with the input sampling rate.
+
+\stagefigure{figures/ch03/s07_static_six_axes_126abe0a.png}{Filtered six-axis forces at rest}{fig:s07-detail-1}
+
+\stagefigure{figures/ch03/s07_motion_six_axes_642cb4e5.png}{Six-axis motion filtering}{fig:s07-detail-2}
+
+The static mean is not treated as the calibrated bias; here, there is no separation of gravity, bias, and proportional error based on the true value of the current pose.
+
+The motion segments simultaneously save mean and standard deviation tables, but the motion signals themselves vary; a decrease in standard deviation cannot be directly interpreted as a reduction in noise or measurement error. Without synchronized ground truth motion, the filtered angular or displacement accuracy is not reported at this time.
+
+The relevant code is located at \path|scripts/download_public_imu.py|, \path|scripts/download_motion.py|, \path|scripts/analyze_imu.py|, \path|scripts/filter_csv.py|; motion segment statistics are in \path|runs/motion_filter_statistics.csv|.
+
+\subsection{Static Spectrum and Allan Curve}\label{s07-detail-2}
+
+On approximately 602 seconds of stationary data, supplement with spectral density and overlapping Allan deviation. The former observes the distribution of fluctuations across different frequencies; the latter observes the variation over different averaging times, with the longest averaging time approximately 30 seconds. The data also retains temperature, currently ranging from approximately 31.39°C to 33.00°C.
+
+\stagefigure{figures/ch03/s07_static_psd_21a3cffd.png}{Spectrum of static data}{fig:s07-detail-3}
+
+\stagefigure{figures/ch03/s07_static_allan_e2029130.png}{Allan deviation curve for static data}{fig:s07-detail-4}
+
+These figures are used to explore window length and long-term variations, and do not constitute sensor calibration. The current truncation length is limited, without fitting or reporting calibration parameters such as hardware noise density or bias instability, nor do they use publicly available sensor parameters for their own boards.
+
+The relevant code is located at \path|scripts/analyze_imu.py|.
+
+
+\paragraph{Stage Conclusion} The standard deviation of the six-axis static measurements for TUM-VI decreased by approximately 49.2\% to 52.6\%; since true motion data is unavailable, interpreting waveform flattening as improved measurement accuracy is not valid.
+
+\stagecode{s07}
+
+\FloatBarrier
+
+\section{Publication Frequency, Data Age, and Jetson Physical Data Collection}
+
+\label{stage:s08}
+
+\subsection{Feedback Test at 50/100/200Hz}\label{s08-detail-1}
+
+Three independent ROS processes are responsible for data replay, 5-point averaging and fixed-rate publishing, and state reception. Raw and filtered messages use \path|sensor_msgs/msg/Imu|, with topics \path|/imu/data_raw| and \path|/imu/data|. Additional messages record the input sequence number, publish sequence number, and a monotonic clock on the same host, facilitating differentiation between repeated measurements, active downsampling, and actual message loss.
+
+Input is set to nominal 200Hz or 25Hz, and output to 50, 100, or 200Hz, with each condition lasting about 30 seconds. Low-rate input takes 1 of every 8 points from public motion records, rather than measurements from our own IMU. Replay uses a software timer; the original recording rate is about 199.37Hz, so replay publication rate must not be treated as the original sensor rate. Statistics use the stable interval from seconds 1 to 29, excluding startup and stopping transitions.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\caption{Feedback Test at 50/100/200 Hz: Setup and Results}\label{tab:s08-1}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Input / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target Feedback / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured feedback / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interval standard de\-vi\-a\-tion / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Age P95 / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Repeated Measurement / \%
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Missing transmissions \(\rightarrow\) receptions
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Input / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Target Feedback / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Measured feedback / Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interval standard de\-vi\-a\-tion / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Data Age P95 / ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Repeated Measurement / \%
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Missing transmissions \(\rightarrow\) receptions
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+200 & 50 & 50.00 & 0.196 & 6.065 & 0.0 & 0 \\
+200 & 100 & 100.00 & 0.241 & 4.552 & 0.0 & 0 \\
+200 & 200 & 200.00 & 0.087 & 1.485 & 0.0 & 0 \\
+25 & 50 & 50.00 & 0.344 & 34.253 & 50.0 & 0 \\
+25 & 100 & 100.00 & 0.349 & 35.710 & 75.0 & 0 \\
+25 & 200 & 200.00 & 0.287 & 38.196 & 87.5 & 0 \\
+\end{longtable}\endgroup
+
+The "data age" refers to the time elapsed from when an input sample is retrieved during replay until the corresponding feedback is received by the receiving process; it does not include the lag from the 5-point moving average relative center, nor does it account for internal sensor delays or serial port latency. The separate publish-to-receive latency and P95 are stored in metrics.csv. The receiving node only checks and receives the state and does not contribute to the physical response time at the actuator end.
+
+After increasing the 25Hz input to 200Hz publishing, many messages repeatedly used the same measurement; the higher publishing rate did not introduce new sensor information. When the 200Hz input was reduced to 50Hz, some intermediate samples were not emitted as feedback, as the system actively took the latest value, which should not be regarded as network frame drops. The current results are only valid for the local wired software process under the specified QoS and cannot be generalized to wireless or Jetson performance.
+
+\stagefigure{figures/ch03/s08_feedback_rates_856eba1b.png}{Feedback Frequency and Data Freshness}{fig:s08-detail-1}
+
+The relevant code is located at \path|scripts/feedback_node.py|, \path|scripts/run_feedback.py|, and \path|scripts/analyze_feedback.py|; detailed results are in \path|runs/feedback001/metrics.csv|.
+
+\subsection{Jetson Physical IMU Test}\label{s08-detail-2}
+
+This time, the previous PC-side workflow was migrated to Jetson, completing stationary and moving data acquisition from the physical IMU and three-level ROS 2 publishing tests. The robotic arm was not activated, and no modifications were made to the sensor output configuration.
+
+\subsubsection{Environment and Methods}\label{s08-detail-3}
+
+Jetson Orin Nano, Ubuntu 22.04.5, L4T R36.4.7, ROS 2 Humble. Use system Python 3.10.12, do not modify the existing an-project Conda environment. Serial port is \path|/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0|, baud rate 115200.
+
+The acquisition program parses RAW six-axis data, converting acceleration to m/s² and angular velocity to rad/s; each new sample updates the 5-point causal moving average. One independent process publishes at the target frequency to \path|/imu/data|, while another process subscribes. All timing processes reside on the same Jetson, utilizing the same machine's monotonic clock. Attitude is not involved in this experiment; the ROS message sets orientation\_covariance{[}0{]} to -1.
+
+\subsubsection{Static and Motion Data Collection}\label{s08-detail-4}
+
+Two segments, each approximately 30 seconds long, totaling 749 samples. Estimated sampling rates: 25.131 Hz for stationary samples and 25.052 Hz for moving samples. Stationary acceleration magnitude is approximately 9.84 m/s². Motion includes rotation in three directions; absolute peak angular velocities along the three axes are approximately 4.948, 4.412, and 3.129 rad/s. Online-filtered values match offline recalculated values. Stationary gx and gy are zero, likely due to device quantization or internal processing, and cannot be interpreted as noise-free.
+
+\stagefigure{figures/ch03/s08_six_axes_39c424bd.png}{Six-axis at rest}{fig:s08-detail-2}
+
+\stagefigure{figures/ch03/s08_six_axes_b188f7b9.png}{Six-axis motion}{fig:s08-detail-3}
+
+\subsubsection{Publishing Frequency Test}\label{s08-detail-5}
+
+For each gear, directly read the entity IMU for approximately 30 seconds, analyze the intermediate stable interval, and exclude the startup and shutdown tail segments.
+
+\FloatBarrier\begingroup\small\setlength{\tabcolsep}{2.5pt}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1395}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1395}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1395}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1395}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1395}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1399}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1626}}@{}}
+\caption{Publishing Frequency Test: Setup and Results}\label{tab:s08-2}\tabularnewline
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Target Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+New measurement Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mea\-sure\-ment reuse
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interval standard de\-vi\-a\-tion (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Message transmission P95 ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Latest original sample age P95 ms
+\end{minipage} \\
+\midrule\noalign{}
+\endfirsthead
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Target Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Actual Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+New measurement Hz
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Mea\-sure\-ment reuse
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Interval standard de\-vi\-a\-tion (ms)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Message transmission P95 ms
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Latest original sample age P95 ms
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+50 & 50.000 & 24.967 & 50.04\% & 0.497 & 1.095 & 40.109 \\
+100 & 99.999 & 24.966 & 75.03\% & 0.520 & 0.816 & 39.605 \\
+200 & 200.001 & 24.968 & 87.52\% & 0.390 & 0.759 & 40.164 \\
+\end{longtable}\endgroup
+
+A total of 10494 feedback messages were published and received across three tiers, with metadata and IMU message counts consistent; no gaps were found in the sequence numbers from publication to reception. Since the board protocol does not parse device sample sequence numbers for this sensor, it is not possible to conclude that the sensor or USB link has zero sample loss based on this.
+
+The message transmission latency refers to the time from when relay publishes until sink callback receives; sample age is calculated from when the host parses the RAW packet. Neither represents the complete latency from sensor sampling to control execution, nor does it include the approximately 80 ms group delay of the 5-point filter. Increasing the publish frequency primarily reduces the waiting time until the next publish, but cannot compensate for new sensor information.
+
+\subsubsection{Files and Future Work}\label{s08-detail-6}
+
+The relevant code is located at \path|scripts/imu_serial_node.py|, \path|scripts/feedback_node.py|, \path|scripts/run_feedback.py|, \path|scripts/filter_csv.py|, and \path|scripts/analyze_feedback.py|; the environment startup is specified by \path|scripts/ros-python|. All relative paths are rooted at the directory of this report.
+
+Original data and analysis are located at \path|runs/jetson_20261020/|:
+
+\begin{Verbatim}[breaklines=true,breakanywhere=true,fontsize=\footnotesize]
+hardware_static_20261020_01/   Static CSV, original serial byte data, session information
+hardware_motion_20261020_02/ Motion CSV, original serial byte data, session information
+static_analysis_01/           Six-axis plots, mean and standard deviation, filtered CSV
+motion_analysis_02/           Six-axis plots, mean and standard deviation, filtered CSV
+hardware_feedback_20261020_01/
+  source25_feedback50/        Three-process logs, CSV, raw bytes
+  source25_feedback100/
+  source25_feedback200/
+  metrics.csv                Publication frequency, interval, latency, and repetition ratio
+  feedback_rates.png
+\end{Verbatim}
+
+The Jetson-named engineering directory retains original records; the aforementioned materials have been returned to the workstation. The previously paused motion\_01 is not used in this analysis. Subsequently, we will first discuss whether the device's 25 Hz output and 80 ms filtering delay are suitable for the target control task, and then decide whether to adjust the device configuration or filter window; currently, firmware parameters have not been modified, and the robotic arm has not been operated in closed-loop.
+
+
+\paragraph{Stage Conclusion} The physical IMU generates new measurements at approximately 25 Hz, with about 87.52\% repetition when published at 200 Hz; the transmission P95 is insufficient to represent the end-to-end latency including filtering.
+
+\stagecode{s08}
+
+\FloatBarrier

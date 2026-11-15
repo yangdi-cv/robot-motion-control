@@ -37,3 +37,8 @@
 [阶段代码](../experiments/unitree_g1_rl_baseline/validation/) · [接口检查](../experiments/unitree_g1_rl_baseline/tests/test_official_interface.py) · [结果与报告](../experiments/unitree_g1_rl_baseline/studies/command_validation_v1/)
 
 官方模型、预训练策略与BSD-3-Clause许可单独保留来源；不包含训练贡献。权重通过固定提交下载脚本恢复。
+
+
+## English report
+
+The [complete English engineering report](../reports/bytedance_engineering/english/build/main_en.pdf) follows the same chapter structure and code paths. Its [LaTeX sources](../reports/bytedance_engineering/english/) reuse the existing figures and videos.
