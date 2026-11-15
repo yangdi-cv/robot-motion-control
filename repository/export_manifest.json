@@ -14,8 +14,8 @@
   },
   {
     "path": "README.md",
-    "bytes": 4075,
-    "sha256": "d6c394ecd89a38d7411f5a7019d2fd5b533a7c1b289035f200dd49ca14e0749f",
+    "bytes": 4629,
+    "sha256": "67b75bcd031f12151939fbd0a2a0781176e08e625a80c32cd2a716bfc326bd28",
     "added_for_repository": true
   },
   {
@@ -29,6 +29,18 @@
     "bytes": 3191,
     "sha256": "bc330bc7b75932fac5bb30d03f6d24f6bf81768ed15e12dac7761a6df95ef320",
     "added_for_repository": true
+  },
+  {
+    "path": "docs/DEMOS.md",
+    "added_for_repository": true,
+    "bytes": 2950,
+    "sha256": "3562329b13c88b64083af61edbca6649969aa51558eec751d9065ab3ae6ea042"
+  },
+  {
+    "path": "docs/video_attachments.json",
+    "added_for_repository": true,
+    "bytes": 2799,
+    "sha256": "937587d0819f962c82f4a4c81340a363a0d7b9f31d48bc84a69fd6aa2b72ccf6"
   },
   {
     "path": "experiments/biped_feedback/README.md",
@@ -4476,8 +4488,8 @@
   },
   {
     "path": "repository/export_summary.json",
-    "bytes": 129,
-    "sha256": "dc9503e49229f455cd71db360b6659f6a59028cf7cba2c932937ac26508cbfca",
+    "bytes": 206,
+    "sha256": "ade53df0cca22bd09305c0cd5776a298c20ffe659f9fd33fd4ec2eb31dc2b469",
     "added_for_repository": true
   },
   {

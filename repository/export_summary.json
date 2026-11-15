@@ -4,5 +4,6 @@
   "excluded": {
     "weights_media_or_raw_arrays": 182,
     "installation_logs": 11
-  }
+  },
+  "stage": "initial_source_selection_before_test_inputs_and_readme_updates"
 }

@@ -1,0 +1,52 @@
+{
+  "repository": "yangdi-cv/robot-motion-control",
+  "issue": "https://github.com/yangdi-cv/robot-motion-control/issues/1",
+  "issue_number": 1,
+  "videos": [
+    {
+      "file": "reports/bytedance_engineering/videos/ch02/panda_joint_trajectory.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/87c43ed0-8514-4a5d-ad87-858b73644d87",
+      "sha256": "156b03114ad53c8462729cc30f927a6e4afaba9f0db32a456d2dd015729680b4"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch04/panda_position_contact.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/f672d926-d4c9-40ad-9681-1bc35e05dc6b",
+      "sha256": "ed275a5dff94db5f36639a6c5a86e335df3309a4e60ce9ceab6730ac14e5a928"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch04/panda_admittance_contact.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/1ac4f5eb-bd05-4b1c-9dcd-18ddfbfebe96",
+      "sha256": "fc557c315d1f0fd47d17a2e9f9dcfdd8b3ca9956680d509afd022fb079ef11b9"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch07/planar_biped_torque_comparison.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/963d74c6-ab3f-4f71-9169-1d0098133f8a",
+      "sha256": "14a171371e10b89bf2d09d1e182211c7646d1a34229ee261b06cccd99c6150a9"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch07/planar_biped_twenty_steps.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/19d22758-ef33-40cc-99b2-038baa6f736b",
+      "sha256": "82fe372249e73b154a10f5fbb7c0800a1cbf54178ab78e855344eabb24b6a4fb"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch08/g1_quasistatic_four_steps.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/5b7ebfc4-4973-46a6-9436-338076182817",
+      "sha256": "86218f4ab4f286de266fa07be8a7107d257f4bb9957e00b8f832e3b31f73cb4a"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch05/panda_gravity_contact_comparison.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/e6d07b9c-0beb-498b-b0da-dd4f7cb8c695",
+      "sha256": "33f7689ead265352774c09b85ae12425c0f432d6fae8fe5b7e9aff8d8934858f"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch06/lipm_model_comparison.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/b8834a26-531f-4ee6-b36d-da1b4582005f",
+      "sha256": "10c78fab50b72c0c5ec92f317ea5d7f3ffab93cabafa087bb30598c0096baaef"
+    },
+    {
+      "file": "reports/bytedance_engineering/videos/ch06/finite_foot_standing_comparison.mp4",
+      "attachment_url": "https://github.com/user-attachments/assets/6a1f6185-1a37-4517-8977-9007e5414b63",
+      "sha256": "07064e66541b7075a3f2520eac6f6fb2b8b8d051e88e62ab36e810bb2769ab35"
+    }
+  ]
+}

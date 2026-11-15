@@ -1,5 +1,23 @@
 # Robot Motion Control
 
+<!-- BEGIN INLINE DEMOS -->
+
+### G1三维准静态四步行走
+
+完整浮动基座、29个受限电机。四步约29秒、前进约0.210米，属于慢速准静态验证。
+
+https://github.com/user-attachments/assets/5b7ebfc4-4973-46a6-9436-338076182817
+
+### Panda带重力接触控制对照
+
+相同重力、手部碰撞、材质和内环下的位置控制与优化导纳；保留同步力记录。
+
+https://github.com/user-attachments/assets/e6d07b9c-0beb-498b-b0da-dd4f7cb8c695
+
+[查看全部可播放视频](docs/DEMOS.md)
+
+<!-- END INLINE DEMOS -->
+
 机器人运动控制与反馈系统：从Panda轨迹跟踪、IMU滤波与接触导纳，扩展到倒立摆平衡、平面双足连续行走和G1三维全身控制。
 
 这是个人控制算法实现与物理仿真记录。各阶段保留模型假设、参数、失败条件和原始统计口径，不把预设条件通过数当成真实部署成功概率。
